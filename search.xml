@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/08/17/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>蜂鸟的第一篇文章</title>
+    <url>/2024/08/17/%E8%9C%82%E9%B8%9F%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</url>
+    <content><![CDATA[<p>蜂鸟的碎碎念：第一篇文章不知道写些什么，于是直接把自己之前写的一篇ROBOCON2024视觉组方案贴上去啦</p>
+<h1 id="2024年”颗粒归仓”视觉组任务及方案"><a href="#2024年”颗粒归仓”视觉组任务及方案" class="headerlink" title="2024年”颗粒归仓”视觉组任务及方案"></a>2024年”颗粒归仓”视觉组任务及方案</h1><p><em><strong>written time:</strong></em> 2023&#x2F;11&#x2F;9</p>
+<p><em><strong>points:</strong></em> 仅用于R2在三区的任务</p>
+<h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p><em><strong>ideas:</strong></em></p>
+<ol>
+<li>着重考虑在 <strong>谷仓区</strong> 的 <strong>绝对定位</strong> ，暂存区的绝对定位暂不考虑，一方面是暂存区存在球的遮挡，另一方面是暂存区对绝对定位的要求并不高。</li>
+<li>暂不考虑使用 <strong>相对定位</strong> ，不过R2是在一区启动，如果存在 <strong>场地误差</strong> ，或许相对定位是一种更好的选择，或者考虑R2到达三区后进行一次 <strong>坐标修正</strong> （比如DT35）。</li>
+</ol>
+<h3 id="方案1：DT35-码盘定位"><a href="#方案1：DT35-码盘定位" class="headerlink" title="方案1：DT35+码盘定位"></a>方案1：DT35+码盘定位</h3><p><strong>设备：</strong> DT35若干</p>
+<p><strong>思路：</strong> 每次R2到达谷仓区后，使用DT35对码盘数据进行修正。</p>
+<p><strong>优点：</strong> 团队现有的方案，应用比较成熟。</p>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>由于码盘在上下坡过程中会出现误差，而DT35只能在谷仓区使用，所以该方案无法在暂存区进行精确的定位。</li>
+<li>如果姿态（偏航角）不能调整很准确，DT35的测距信息会出现失真。</li>
+</ol>
+<h3 id="方案2：2D雷达-码盘定位"><a href="#方案2：2D雷达-码盘定位" class="headerlink" title="方案2：2D雷达+码盘定位"></a>方案2：2D雷达+码盘定位</h3><p><strong>设备：</strong> 思岚A3雷达</p>
+<p><strong>思路：</strong> 每次R2到达谷仓区后，使用2D雷达扫描挡板-&gt;拟合出挡板-&gt;得出坐标信息，利用2D雷达的定位信息对码盘数据进行修正。</p>
+<p><strong>优点：</strong> 对R2的姿态不做要求，理论上只要在谷仓区就可以得到坐标信息。</p>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>雷达帧率最高只有15hz，单用雷达不足以用于底盘的跑动。 <em>（可以考虑使用SLAM里程计的方法进行码盘和雷达的数据融合，参考EKF）</em></li>
+<li>雷达数据会出现抖动（4mm左右），但是在用雷达数据刷新码盘数据的测试过程中却发现底盘的轨迹极其振荡，具体原因其实不太清楚。 <em>（可能一方面是雷达帧率太低，另一方面是雷达数据确实存在抖动）</em></li>
+</ol>
+<h3 id="方案3：开源SLAM算法"><a href="#方案3：开源SLAM算法" class="headerlink" title="方案3：开源SLAM算法"></a>方案3：开源SLAM算法</h3><p><strong>设备：</strong> MID360</p>
+<p><strong>思路：</strong> 使用DLO, FAST_LIO2, LIO_SAM等开源算法，得到R2在整个赛场上的坐标信息，该方法可以在整个三区实现定位。</p>
+<p><strong>优点：</strong> 工作量小，且可以实现在整个三区的定位。</p>
+<p><strong>缺点：</strong> 必须要很熟悉算法的实现原理和代码实现过程，明确算法的优缺点，如果出了问题可以debug。</p>
+<p><strong>实测情况：</strong></p>
+<ol>
+<li>目前进行测试了DLO和FAST_LIO2，DLO算法在MID360发布频率为10hz时与FAST_LIO2效果差不多，但是当MID360频率提到50hz时，DLO会出现很明显的振荡，基本上完全不能使用。</li>
+<li>FAST_LIO2的数据在底盘跑动中精度和频率都还不错，且不会在上下坡的过程中出现误差累积，不过误差仍然是存在的，在SLAM中应该叫做 <strong>回程误差</strong> ，大约在2mm以内。不过现在来看会出现累积。 <em>（FAST_LIO2的论文中说在10hz的测试情况下，160m的距离下回程误差为7cm）</em></li>
+</ol>
+<h3 id="方案4：自写SLAM"><a href="#方案4：自写SLAM" class="headerlink" title="方案4：自写SLAM"></a>方案4：自写SLAM</h3><p><strong>设备：</strong> MID360, IMU, 磁编码器。</p>
+<p><strong>思路：</strong> 采用动静态地图分离策略，离线构建静态地图并实时维护动态环境地图，基于多层地图策略实现动态环境下的准确的激光融合定位算法。</p>
+<p><em><strong>tips:</strong></em></p>
+<ol>
+<li>静态地图指的是不包含任何场地模型之外的任何特征物的3D点云地图。</li>
+<li>该方案其实是我的毕设，所以一定会去做，但实际上是否上场比赛有待测试。</li>
+</ol>
+<h3 id="个人想法"><a href="#个人想法" class="headerlink" title="个人想法"></a>个人想法</h3><p>截至目前（2023.11.16)，目前和控制组交流后的想法是使用 <em><strong>DT35+FAST_LIO2+码盘</strong></em> 进行数据融合定位，理论上可以实现在 <em><strong>整个三区的绝对定位</strong></em> ，且 <em><strong>理论精度高于三者的单独使用</strong></em> 。</p>
+<h2 id="识别球"><a href="#识别球" class="headerlink" title="识别球"></a>识别球</h2><p><em><strong>ideas:</strong></em></p>
+<ol>
+<li>可以按照远近和动静进行分类，交叉组合就会有四种状态的球需要识别：近处静态球，近处动态球，远处静态球，远处动态球。</li>
+<li>至少目前来看，要求识别精度要很高（个人觉得对精度要求低的方案更具有鲁棒性，才更适合ROBOCON）。</li>
+<li>暂时考虑使用两个相机，远处的球使用高速相机，只需要的得到球的大致方位即可，近处的球使用深度相机，得到准确的球心坐标。</li>
+</ol>
+<h3 id="方案1：OpenCV-PCL"><a href="#方案1：OpenCV-PCL" class="headerlink" title="方案1：OpenCV+PCL"></a>方案1：OpenCV+PCL</h3><p><strong>设备：</strong> 高速相机+深度相机</p>
+<p><strong>思路：</strong> 基于颜色对球进行提取，然后进行球的拟合和圆心至R2的坐标计算。</p>
+<p><strong>评价：</strong> 该方案我目前交给吴圣标和黄子亮去做了，基本思路是在LAB色域将球大致提取出来-&gt;Canny边缘检测-&gt;考虑高光补偿-&gt;霍夫圆拟合-&gt;筛选出优圆-&gt;结合深度图进行坐标转换-&gt;得到球心坐标。</p>
+<p>个人觉得这套方案有两个点需要着重注意：</p>
+<ol>
+<li>比较依赖于在LAB色域对球的提取，如果效果不好将会对后续的算法产生较大的影响。</li>
+<li>在Canny边缘检测后进行霍夫圆拟合，往往会由于一些噪点拟合出很多霍夫圆，噪点不可能完全避免，所以比较依赖于霍夫圆的筛选，而霍夫圆的筛选条件是否可以应对各种情况呢。</li>
+</ol>
+<h3 id="方案2：YOLOv5-深度图"><a href="#方案2：YOLOv5-深度图" class="headerlink" title="方案2：YOLOv5+深度图"></a>方案2：YOLOv5+深度图</h3><p><strong>设备：</strong> 高速相机+深度相机</p>
+<p><strong>思路：</strong> 首先利用YOLO对球进行识别，然后将识别框内对应的点云图进行球的拟合和圆心至R2的坐标计算。</p>
+<p><strong>评价：</strong> 目前（2023.11.16）算是已经基本完成的方案，帧率可以把深度相机的30帧跑满，精度大概1cm，不过还没有经过更为充分的测试。</p>
+<h3 id="个人想法-1"><a href="#个人想法-1" class="headerlink" title="个人想法"></a>个人想法</h3><p>我觉得YOLO相比于OpenCV是具有更高的鲁棒性的，其实两种方案都是可以试一下的，这周末球和框到了之后，可以做一个更好的数据集进行测试。</p>
+<h2 id="识别谷仓"><a href="#识别谷仓" class="headerlink" title="识别谷仓"></a>识别谷仓</h2><p><em><strong>ideas:</strong></em></p>
+<ol>
+<li>相机要有足够的视角，必须能够同时看到五个框。</li>
+<li>要考虑到对方三区的球和R2的干扰。</li>
+</ol>
+<h3 id="方案1：YOLOv5"><a href="#方案1：YOLOv5" class="headerlink" title="方案1：YOLOv5"></a>方案1：YOLOv5</h3><p><strong>设备：</strong> 高速相机</p>
+<p><strong>思路：</strong> 创建谷仓的数据集，利用YOLO实现对谷仓的识别，然后只识别谷仓内球的数量和颜色。</p>
+<p><em><strong>tips:</strong></em> 该方法可以避免对方三区的球和R2的干扰，但是前提是YOLO识别谷仓的效果足够好。</p>
+<p><strong>优点：</strong> 无需更改设备，可以延续使用识别球的高速相机+深度相机。</p>
+<p><strong>缺点：</strong> 需要测试谷仓的识别情况，如果谷仓识别效果不能满足比赛需要，则该方案pass。</p>
+<h3 id="方案2：直通点云拟合"><a href="#方案2：直通点云拟合" class="headerlink" title="方案2：直通点云拟合"></a>方案2：直通点云拟合</h3><p><strong>设备：</strong> 深度相机</p>
+<p><strong>思路：</strong> 利用深度相机或者激光雷达（雷达大概率点云太少），结合定位信息，过滤出在谷仓附近的点云，然后进行拟合（精度要求不高，只需要判断出有几个球即可），甚至不用判断球的颜色，因为己方的球是已知的，如果检测出了多的球，绝对是对方的球。</p>
+<p><em><strong>tips:</strong></em> 深度相机的视角大概率不能够看全五个谷仓，所以可能需要上多个深度相机。</p>
+<p><strong>缺点：</strong> 需要额外考虑添加设备，且点云的处理可能不会很快。</p>
+<h3 id="个人想法-2"><a href="#个人想法-2" class="headerlink" title="个人想法"></a>个人想法</h3><p>如果YOLO能够对谷仓进行比较好的识别，我觉得优先选用方案1比较合适。</p>
+<p>还有值得说的一点是，球和谷仓的数据集可以做在一起，对于谷仓，可以包含内有球和无球的两种情况；对于球，可以包含在地上和在谷仓内两种情况。</p>
+<p>另外，最好三区谷仓区后面可以用一块挡板或者镜子，因为在制作数据集时需要将环境也制作在数据集内，团队谷仓后的货架绝对在正式比赛的场地中是看不到的，该部分信息不应包含在数据集内。</p>
+]]></content>
+  </entry>
+</search>
