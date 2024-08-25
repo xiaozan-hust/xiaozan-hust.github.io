@@ -1,0 +1,21 @@
+/* @font-face{
+    font-family: 'SanJiJinSongJianTi';
+    font-display: swap;
+    src: url('../font/SanJiJinSongJianTi-Xi-2.ttf') format("truetype");
+} */
+/* @font-face{
+    font-family: 'huangkaihuaLawyerfont';
+    font-display: swap;
+    src: url('../font/huangkaihuaLawyerfont-2.ttf') format("truetype");
+} */
+@font-face{
+    font-family: 'QingNiaoHuaGuangJianFangSongEr';
+    font-display: swap;
+    src: url('../font/QingNiaoHuaGuangJianFangSongEr-2.ttf') format("truetype");
+}
+body {
+    font-family: 'QingNiaoHuaGuangJianFangSongEr';
+}
+/* body {
+    font-family: 'SanJiJinSongJianTi','huangkaihuaLawyerfont';
+} */

@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo文章图片引用方法</title>
-    <url>/2024/08/18/Hexo%E6%96%87%E7%AB%A0%E5%9B%BE%E7%89%87%E5%BC%95%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="如何“完美的”在本网站书写博客"><a href="#如何“完美的”在本网站书写博客" class="headerlink" title="如何“完美的”在本网站书写博客"></a>如何“完美的”在本网站书写博客</h1><p><em>该文章尚在书写中……</em></p>
-<h2 id="0-基本技能"><a href="#0-基本技能" class="headerlink" title="0. 基本技能"></a>0. 基本技能</h2><h2 id="1-如何在文章中引入图片"><a href="#1-如何在文章中引入图片" class="headerlink" title="1. 如何在文章中引入图片"></a>1. 如何在文章中引入图片</h2><h2 id="2-文章的创建、书写与发布"><a href="#2-文章的创建、书写与发布" class="headerlink" title="2. 文章的创建、书写与发布"></a>2. 文章的创建、书写与发布</h2><h2 id="3-高阶使用技巧"><a href="#3-高阶使用技巧" class="headerlink" title="3. 高阶使用技巧"></a>3. 高阶使用技巧</h2>]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PCL学习笔记</title>
     <url>/2024/08/18/PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="PCL点云库学习记录"><a href="#PCL点云库学习记录" class="headerlink" title="PCL点云库学习记录"></a>PCL点云库学习记录</h1><p><a href="https://blog.csdn.net/qq_36686437/article/details/114160640?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&utm_relevant_index=1">学习博客</a></p>
@@ -83,8 +74,11 @@
 <h3 id="点云图与深度图转换"><a href="#点云图与深度图转换" class="headerlink" title="点云图与深度图转换"></a>点云图与深度图转换</h3><p><strong>深度图像：</strong> 也被称为距离图像，是指将图像采集器到场景中各点的距离（深度）值作为像素值的图像，它直接反映了景物可见表面的几何形状。</p>
 <p><em><strong>tips:</strong></em> 深度图和点云图之间可以相互转换，但是可能在转换的过程中存在数据的丢失。</p>
 ]]></content>
+      <categories>
+        <category>技能学习</category>
+      </categories>
       <tags>
-        <tag>PCL学习</tag>
+        <tag>PCL</tag>
       </tags>
   </entry>
   <entry>
@@ -311,26 +305,71 @@
       </categories>
       <tags>
         <tag>YOLOv5</tag>
-        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/08/17/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>创建一个你自己的工程</title>
+    <url>/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="第一个可以运行的VSCode工程"><a href="#第一个可以运行的VSCode工程" class="headerlink" title="第一个可以运行的VSCode工程"></a>第一个可以运行的VSCode工程</h1><p><strong>写在前面</strong></p>
+<p><em>关于在Linux系统下的代码编辑器，大家应该都会听到一个词，那就是VsCode，坦白讲，这个软件的资源在我还是大二的时候，也就是一年前，还基本上在CSDN上找不到什么教程，B站上面的貌似也不是很多，而且大多数都是讲Windows下面的使用教程，其实坦白来说在Linux下面用的比较多的还有一个东西，那就是CMake，但是即使是用CMake，也十分有必要学会使用VsCode，因为CMake终究是个编译工具，而不是个编辑工具～～</em></p>
+<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong> 的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了 <strong>PCL库，realsense SDK</strong> ，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em> </p>
+<p><em>不得不说，VsCode配置完确实好用，后续再学习一下CMake语法，然后实现 <strong>VsCode+CMake</strong> 的开发环境，然后再给VsCode加上Markdown和git等其他的插件，现在一想就简直美滋滋～～</em></p>
+<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><ul>
+<li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04   VsCode</strong></li>
+<li>配置实例：<strong>OpenCV &amp; C++</strong></li>
+</ul>
+<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
+<p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code .（code和 .之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
+<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
+<p>是不是感觉单调的一批？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
+<p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
+<h3 id="1-3-第三步：生成并编辑配置文件"><a href="#1-3-第三步：生成并编辑配置文件" class="headerlink" title="1.3 第三步：生成并编辑配置文件"></a>1.3 第三步：生成并编辑配置文件</h3><p>这里的配置文件一般有四个：<strong>launch.json; task.json; setting.json; c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
+<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
+<p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个**.json<strong>文件，我们首先先把它们几个生成出来：生成</strong>launch.json<strong>文件：运行-&gt;添加配置，这时候生成的</strong>launch.json<strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成</strong>c_cpp_properties.json<strong>文件：</strong>Ctrl+shift+p<strong>打开搜索框，然后输入c++选择C&#x2F;C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个</strong>includepath**，也可以不用这个.json文件；</p>
+<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
+<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
+<p>这时候我们看到那个关于** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>&#x2F;usr&#x2F;include&#x2F;opencv4<strong>，然后我把</strong>&#x2F;usr&#x2F;include&#x2F;opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心嗨嗨嗨）。<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
+<p>不过这个时候呢，你去点击那个** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>“args”[]**后面开始添加东西：”-I”标明头文件所在路径（就是你在includepath里面添加的路径）; “-L”标明库文件所在路径; “-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
+<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是&#x2F;usr&#x2F;lib也可能是&#x2F;usr&#x2F;local&#x2F;lib也可能是lib里面的某个文件夹里面，具体方式可以直接在&#x2F;usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了**&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu<strong>里面，所以在task.json里面就这么写：</strong>“-L”,”&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu”<strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：</strong>“-l”,”opencv_dnn”**。配置好的task.json文件如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
+<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
+<p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
+<h2 id="2-写在最后"><a href="#2-写在最后" class="headerlink" title="2. 写在最后"></a>2. 写在最后</h2><p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
+<p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
+<h2 id="3-2023-9-8更新"><a href="#3-2023-9-8更新" class="headerlink" title="3. 2023.9.8更新"></a>3. 2023.9.8更新</h2><ol>
+<li><p>关于.so或者.a文件的寻找，其实&#x2F;usr文件夹下并不是全部的库，以ros为例，ros本身会被安装在&#x2F;opt下，然后&#x2F;opt&#x2F;ros&#x2F;noetic下又有include和lib等文件夹，所以如果要找一个第三方库的库，应该这么做：</p>
+<ul>
+<li>进入到你在includepath里面添加的路径的上一级，进入lib文件夹（以ros为例，应该是&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib&#x2F;）</li>
+<li>搜索你需要的库的名字，比如是ros的话，输入ros即可找到ros内的全部库</li>
+</ul>
+</li>
+<li><p>关于&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu和&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib二者中都有ros相关的库，二者的区别：</p>
+<ul>
+<li><strong>&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu：</strong></li>
+</ul>
+<ol>
+<li><em>这是系统共享库的默认存储位置。它包含了与操作系统和其他软件包共享的标准系统库</em></li>
+<li><em>ROS和其他软件包可能会在这个目录中寻找一些系统依赖项，以确保它们能够与操作系统正常交互</em></li>
+<li><em>ROS本身的核心库通常不会放在这个目录下，因为它们是ROS的一部分，而不是操作系统的一部分</em></li>
+</ol>
+<ul>
+<li><strong>&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib</strong></li>
+</ul>
+<ol>
+<li><em>这是ROS的安装目录，包含了ROS特定的库和二进制文件</em></li>
+<li><em>在这个目录中，您会找到ROS的核心库、ROS工具、ROS节点等等。这些库是ROS运行所必需的</em></li>
+<li><em>当编译和运行ROS程序时，链接器和运行时系统会查找这个目录中的库来确保ROS程序能够正常运行</em></li>
+</ol>
+</li>
+</ol>
+<h2 id="4-关于本文"><a href="#4-关于本文" class="headerlink" title="4. 关于本文"></a>4. 关于本文</h2><p>本文最初写作于幕布，用于记录使用VSCode进行代码调试运行的方法，由于网上关于此类问题的教程杂乱无章，特此记录。</p>
+<p>本文我曾经发给我的很多同学，并且作为团队视觉组的入门学习资料之一，好评多多~~</p>
 ]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>VSCode</tag>
+      </tags>
   </entry>
   <entry>
     <title>蜂鸟的第一篇文章</title>
@@ -414,17 +453,9 @@
 ]]></content>
       <categories>
         <category>教程</category>
-        <category>Hexo</category>
       </categories>
       <tags>
         <tag>Hexo</tag>
-        <tag>教程</tag>
-        <tag>尝试</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>我为什么要搭建这个网站？</title>
-    <url>/2024/08/18/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%90%AD%E5%BB%BA%E8%BF%99%E4%B8%AA%E7%BD%91%E7%AB%99%EF%BC%9F/</url>
-    <content><![CDATA[]]></content>
   </entry>
 </search>
