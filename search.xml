@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>PCL学习笔记</title>
-    <url>/2024/08/18/PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <title>技术笔记|HEXO网站开发教程</title>
+    <url>/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h1><p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
+<h1 id="1-开发环境搭建"><a href="#1-开发环境搭建" class="headerlink" title="1. 开发环境搭建"></a>1. 开发环境搭建</h1><p>开发平台支持Ubuntu&#x2F;Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
+<p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
+<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><h3 id="1-1-1-Git安装"><a href="#1-1-1-Git安装" class="headerlink" title="1.1.1 Git安装"></a>1.1.1 Git安装</h3><h3 id="1-1-2-Node-js安装"><a href="#1-1-2-Node-js安装" class="headerlink" title="1.1.2 Node.js安装"></a>1.1.2 Node.js安装</h3><h2 id="1-2-hexo安装"><a href="#1-2-hexo安装" class="headerlink" title="1.2 hexo安装"></a>1.2 hexo安装</h2><h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><h2 id="2-2-如何完美的插入图片"><a href="#2-2-如何完美的插入图片" class="headerlink" title="2.2 如何完美的插入图片"></a>2.2 如何完美的插入图片</h2><h3 id="2-2-1-在文章中插入图片"><a href="#2-2-1-在文章中插入图片" class="headerlink" title="2.2.1 在文章中插入图片"></a>2.2.1 在文章中插入图片</h3><p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
+<p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
+<p>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</p>
+<p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
+<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构"></p>
+<p>Ⅱ：引用图片</p>
+<p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">![图片描述](文章名称/图片名称.jpg)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-2-2-插入文章封面"><a href="#2-2-2-插入文章封面" class="headerlink" title="2.2.2 插入文章封面"></a>2.2.2 插入文章封面</h3><h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><h2 id="4-1-总结"><a href="#4-1-总结" class="headerlink" title="4.1 总结"></a>4.1 总结</h2><h2 id="4-2-展望"><a href="#4-2-展望" class="headerlink" title="4.2 展望"></a>4.2 展望</h2><p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
+<ol>
+<li>个人网站字体设置</li>
+<li>如何新增文章评论功能</li>
+<li>如何添加全局搜索功能</li>
+<li>…</li>
+</ol>
+<h1 id="参考文章或视频"><a href="#参考文章或视频" class="headerlink" title="参考文章或视频"></a>参考文章或视频</h1>]]></content>
+      <categories>
+        <category>教程</category>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>HEXO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>技术笔记|PCL学习笔记</title>
+    <url>/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="PCL点云库学习记录"><a href="#PCL点云库学习记录" class="headerlink" title="PCL点云库学习记录"></a>PCL点云库学习记录</h1><p><a href="https://blog.csdn.net/qq_36686437/article/details/114160640?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&utm_relevant_index=1">学习博客</a></p>
 <h2 id="滤波器"><a href="#滤波器" class="headerlink" title="滤波器"></a>滤波器</h2><h3 id="直通滤波器"><a href="#直通滤波器" class="headerlink" title="直通滤波器"></a>直通滤波器</h3><p><strong>作用</strong>： 过滤掉在指定维度方向上取值不在给定值域内的点。</p>
 <p><strong>实现原理：</strong> 指定一个维度以及在该维度下的值域，遍历点云数据点，保留在值域内的点，删除不在值域内的点。</p>
@@ -82,8 +115,8 @@
       </tags>
   </entry>
   <entry>
-    <title>YOLOv5使用教程</title>
-    <url>/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
+    <title>技术笔记|YOLOv5使用教程</title>
+    <url>/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="YOLOv5：一夜暴富"><a href="#YOLOv5：一夜暴富" class="headerlink" title="YOLOv5：一夜暴富"></a>YOLOv5：一夜暴富</h1><h2 id="1-关于YOLO"><a href="#1-关于YOLO" class="headerlink" title="1.关于YOLO"></a>1.关于YOLO</h2><h3 id="1-1-目标检测的概念与发展"><a href="#1-1-目标检测的概念与发展" class="headerlink" title="1.1 目标检测的概念与发展"></a>1.1 目标检测的概念与发展</h3><p>目标检测，也叫做目标提取，是一种基于目标几何和统计特征的图像分割。它将目标的分割和识别合二为一。在复杂的应用场景中，需要同时考虑对多个目标进行实时检测，其准确性和实时性是整个系统的一项重要能力。</p>
 <p>随着计算机技术的发展和计算机视觉原理的广泛应用，利用计算机图像处理技术对目标进行实施跟踪研究越来越热门，对目标进行动态实施跟踪定位在智能化交通系统，智能监控系统，军事目标检测及医学导航手术中手术器械定位等方面具有广泛的应用价值。</p>
 <h3 id="1-2-YOLO的发展与优势"><a href="#1-2-YOLO的发展与优势" class="headerlink" title="1.2 YOLO的发展与优势"></a>1.2 YOLO的发展与优势</h3><p><strong>YOLO（You Only Look Once）</strong>是一种用于实时目标检测的深度学习模型。</p>
@@ -170,7 +203,7 @@
 <li><em><strong>安装所需依赖：</strong></em> <code>pip install -r requirements.txt</code></li>
 </ul>
 <p>至此，你的计算机现在已经可以使用YOLOv5了，可以通过在yolov5文件夹打开终端运行python3 detect.py，该程序将会利用已经训练好的模型对&#x2F;data&#x2F;imgs&#x2F;下的图片进行目标检测，并且在&#x2F;runs&#x2F;detect&#x2F;exp文件夹查看检测后的结果。</p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" alt="F4"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" alt="F4"></p>
 <h3 id="2-3-GPU环境搭建及YOLOv5的使用"><a href="#2-3-GPU环境搭建及YOLOv5的使用" class="headerlink" title="2.3 GPU环境搭建及YOLOv5的使用"></a>2.3 GPU环境搭建及YOLOv5的使用</h3><p><strong>！！！！！！！！！！！！！！！安装过程中，全程不要挂梯子，并且退出后台。！！！！！！！！！！！！！！！！！！！！！！！！！！</strong></p>
 <h4 id="2-3-1-显卡驱动安装"><a href="#2-3-1-显卡驱动安装" class="headerlink" title="2.3.1 显卡驱动安装"></a>2.3.1 显卡驱动安装</h4><p>安装显卡驱动可以使用命令行安装，但是有一种比较方便的方式进行安装：</p>
 <ul>
@@ -179,32 +212,32 @@
 <li>终端输入nvidia-smi即可查看驱动信息</li>
 </ul>
 <p>例如我所选的驱动版本为：</p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" alt="驱动"></p>
-<p>显示信息为：<br><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" alt="smi"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" alt="驱动"></p>
+<p>显示信息为：<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" alt="smi"></p>
 <p>此外，可以看到，终端还显示了推荐的CUDA版本，可以选择推荐的版本，也可以自行选择版本安装。</p>
 <h4 id="2-3-2-CUDA安装"><a href="#2-3-2-CUDA安装" class="headerlink" title="2.3.2 CUDA安装"></a>2.3.2 CUDA安装</h4><p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">显卡驱动与CUDA版本对应</a></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" alt="CUDA与驱动版本"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" alt="CUDA与驱动版本"></p>
 <p><a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA版本选择与安装步骤</a></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" alt="CUDA安装"></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" alt="CUDA安装"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" alt="CUDA安装"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" alt="CUDA安装"></p>
 <p>根据自己的显卡驱动版本选择对应的CUDA版本，推荐不要下载太低版本的CUDA，因为后面的Pytorch对CUDA的版本也有要求，太低的CUDA版本可能导致你下载的Pytorch并不能满足比如yolov5对最低版本Pytorch的要求。</p>
 <p><em><strong>tips:</strong></em> 在安装的过程中，很大概率会在安装到99%时出现段错误（核心已转储），如下图所示：</p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" alt="段错误"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" alt="段错误"></p>
 <p>原因是栈太小，解决方法如下：</p>
 <ul>
 <li>查看栈大小：ulimit -a</li>
 <li>更改stack size：ulimit -s 102400</li>
 </ul>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" alt="段错误"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" alt="段错误"></p>
 <p><a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html#ubuntu-x86_64">添加环境变量</a></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" alt="环境变量"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" alt="环境变量"></p>
 <p>以上内容(注意改成自己版本的CUDA)在~&#x2F;.bashrc尾行中添加。</p>
 <p><em><strong>完成以上内容后，在终端输入：</strong></em></p>
 <ul>
 <li><em>nvcc -V</em></li>
 </ul>
 <p><em><strong>查看是否安装成功。</strong></em></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="查看">\</p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="查看">\</p>
 <p><strong>！！！！！！！安装完之后最好重启一次电脑，以验证是否能正确加载nvidia驱动，如果不能正确加载，则手动再装一次即可！！！！！！！！！！！！！</strong></p>
 <h4 id="2-3-3-安装torch"><a href="#2-3-3-安装torch" class="headerlink" title="2.3.3 安装torch"></a>2.3.3 安装torch</h4><p><a href="https://pytorch.org/get-started/previous-versions/">torch与CUDA版本对应及下载</a></p>
 <p>由于我装的CUDA为12.0，查看了一下，官网上没有直接支持cuda 12的torch版本，但是翻阅社区了解到，cuda是向下兼容的，cuda 12可以支持官网里面的CUDA 11.8。</p>
@@ -218,7 +251,7 @@
 <li>print(torch.cuda.is_available())</li>
 </ul>
 <p>返回true代表安装成功。</p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="查看"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="查看"></p>
 <p>安装成功但是warnning:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WARNING: The script isympy is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts cmake, cpack and ctest are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The script lit is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts convert-caffe2-to-onnx, convert-onnx-to-caffe2 and torchrun are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts f2py, f2py3 and f2py3.8 are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -226,7 +259,7 @@
 <h3 id="2-4-cuDNN与TensorRT"><a href="#2-4-cuDNN与TensorRT" class="headerlink" title="2.4 cuDNN与TensorRT"></a>2.4 cuDNN与TensorRT</h3><h4 id="2-4-1-cuDNN"><a href="#2-4-1-cuDNN" class="headerlink" title="2.4.1 cuDNN"></a>2.4.1 cuDNN</h4><p>NVIDIA CUDA 深度神经网络 （cuDNN） 是用于深度神经网络的 GPU 加速基元库</p>
 <p><a href="https://blog.csdn.net/h3c4lenovo/article/details/119003405">参考博客</a></p>
 <p><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">官方安装指引</a></p>
-<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a><br><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="查看"></p>
+<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="查看"></p>
 <p>下载对应CUDA的版本就好了，我的CUDA是12.0.0，所以我下载的是cuDNN8.9.0 .</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf cudnn-linux-x86_64-8.9.0.131_cuda12-archive.tar.xz</span><br><span class="line">sudo cp cudnn-linux-x86_64-8.9.0.131_cuda12-archive/include/cudnn*.h /usr/local/cuda/include </span><br><span class="line">sudo cp -P cudnn-linux-x86_64-8.9.0.131_cuda12-archive/lib/libcudnn* /usr/local/cuda/lib64 </span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*  </span><br></pre></td></tr></table></figure>
 
@@ -237,7 +270,7 @@
 <p><a href="https://developer.nvidia.com/nvidia-tensorrt-8x-download">官网下载地址</a></p>
 <p><a href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">官方安装指引</a></p>
 <p>这里注意最新版的TensorRT也只支持CUDA12.1 。<strong>所以CUDA不要超过12.1，例如我装的就是12.0.0</strong></p>
-<p><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="查看"></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="查看"></p>
 <p>我用的是Tar安装，版本是TensorRT8.6 。用tar安装的好处是，把解压好的文件和.bashrc里面的路径删除就可以很方便的删除TensorRT了。</p>
 <p>下载好之后，将这个移动到opt文件夹中： sudo mv TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz &#x2F;opt 方便管理</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf TensorRT-$&#123;version&#125;.Linux.$&#123;arch&#125;-gnu.$&#123;cuda&#125;.tar.gz</span><br><span class="line">cd TensorRT-$&#123;version&#125;/python</span><br><span class="line">python3 -m pip install tensorrt-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_lean-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_dispatch-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/uff</span><br><span class="line">python3 -m pip install uff-0.6.9-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/graphsurgeon</span><br><span class="line">python3 -m pip install graphsurgeon-0.4.6-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/onnx_graphsurgeon</span><br><span class="line">python3 -m pip install onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
@@ -284,10 +317,10 @@
 
 <h3 id="3-5-训练模型"><a href="#3-5-训练模型" class="headerlink" title="3.5 训练模型"></a>3.5 训练模型</h3><p>当做好以上工作后，可以直接在终端运行python3 train.py进行数据集训练。</p>
 <p><strong>训练过程可视化：</strong></p>
-<p>在yolo.py程序中找到<br><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="查看"></p>
+<p>在yolo.py程序中找到<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="查看"></p>
 <p>将该部分取消注释。</p>
-<p>在yolov5文件夹终端下输入：tensorboard –logdir&#x3D;.&#x2F;runs，然后在浏览器访问<a href="http://localhost:6006/%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E3%80%82">http://localhost:6006/即可查看训练过程。</a><br><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="查看"></p>
-<h3 id="3-6-训练结果"><a href="#3-6-训练结果" class="headerlink" title="3.6 训练结果"></a>3.6 训练结果</h3><p>训练后的结果会被保存在runs&#x2F;train&#x2F;exp_xx下<br><img src="/2024/08/17/YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" alt="查看"></p>
+<p>在yolov5文件夹终端下输入：tensorboard –logdir&#x3D;.&#x2F;runs，然后在浏览器访问<a href="http://localhost:6006/%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E3%80%82">http://localhost:6006/即可查看训练过程。</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="查看"></p>
+<h3 id="3-6-训练结果"><a href="#3-6-训练结果" class="headerlink" title="3.6 训练结果"></a>3.6 训练结果</h3><p>训练后的结果会被保存在runs&#x2F;train&#x2F;exp_xx下<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" alt="查看"></p>
 <ul>
 <li>weights文件夹下保存训练的模型参数，包括best.pt和last.pt</li>
 <li>result.png表示训练效果：<ul>
@@ -308,30 +341,30 @@
       </tags>
   </entry>
   <entry>
-    <title>创建一个你自己的工程</title>
-    <url>/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
+    <title>技术笔记|创建一个你自己的工程</title>
+    <url>/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="第一个可以运行的VSCode工程"><a href="#第一个可以运行的VSCode工程" class="headerlink" title="第一个可以运行的VSCode工程"></a>第一个可以运行的VSCode工程</h1><p><strong>写在前面</strong></p>
 <p><em>关于在Linux系统下的代码编辑器，大家应该都会听到一个词，那就是VsCode，坦白讲，这个软件的资源在我还是大二的时候，也就是一年前，还基本上在CSDN上找不到什么教程，B站上面的貌似也不是很多，而且大多数都是讲Windows下面的使用教程，其实坦白来说在Linux下面用的比较多的还有一个东西，那就是CMake，但是即使是用CMake，也十分有必要学会使用VsCode，因为CMake终究是个编译工具，而不是个编辑工具～～</em></p>
-<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong> 的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了 <strong>PCL库，realsense SDK</strong> ，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em> </p>
+<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong> 的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了 <strong>PCL库，realsense SDK</strong> ，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em></p>
 <p><em>不得不说，VsCode配置完确实好用，后续再学习一下CMake语法，然后实现 <strong>VsCode+CMake</strong> 的开发环境，然后再给VsCode加上Markdown和git等其他的插件，现在一想就简直美滋滋～～</em></p>
 <h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><ul>
 <li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04   VsCode</strong></li>
 <li>配置实例：<strong>OpenCV &amp; C++</strong></li>
 </ul>
-<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
+<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
 <p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code .（code和 .之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
-<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
-<p>是不是感觉单调的一批？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
+<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
+<p>是不是感觉单调的一批？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
 <p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
 <h3 id="1-3-第三步：生成并编辑配置文件"><a href="#1-3-第三步：生成并编辑配置文件" class="headerlink" title="1.3 第三步：生成并编辑配置文件"></a>1.3 第三步：生成并编辑配置文件</h3><p>这里的配置文件一般有四个：<strong>launch.json; task.json; setting.json; c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
-<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
+<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
 <p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个**.json<strong>文件，我们首先先把它们几个生成出来：生成</strong>launch.json<strong>文件：运行-&gt;添加配置，这时候生成的</strong>launch.json<strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成</strong>c_cpp_properties.json<strong>文件：</strong>Ctrl+shift+p<strong>打开搜索框，然后输入c++选择C&#x2F;C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个</strong>includepath**，也可以不用这个.json文件；</p>
-<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
-<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
-<p>这时候我们看到那个关于** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>&#x2F;usr&#x2F;include&#x2F;opencv4<strong>，然后我把</strong>&#x2F;usr&#x2F;include&#x2F;opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心嗨嗨嗨）。<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
+<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
+<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
+<p>这时候我们看到那个关于** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>&#x2F;usr&#x2F;include&#x2F;opencv4<strong>，然后我把</strong>&#x2F;usr&#x2F;include&#x2F;opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心嗨嗨嗨）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
 <p>不过这个时候呢，你去点击那个** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>“args”[]**后面开始添加东西：”-I”标明头文件所在路径（就是你在includepath里面添加的路径）; “-L”标明库文件所在路径; “-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
-<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是&#x2F;usr&#x2F;lib也可能是&#x2F;usr&#x2F;local&#x2F;lib也可能是lib里面的某个文件夹里面，具体方式可以直接在&#x2F;usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了**&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu<strong>里面，所以在task.json里面就这么写：</strong>“-L”,”&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu”<strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：</strong>“-l”,”opencv_dnn”**。配置好的task.json文件如下：<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
-<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
+<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是&#x2F;usr&#x2F;lib也可能是&#x2F;usr&#x2F;local&#x2F;lib也可能是lib里面的某个文件夹里面，具体方式可以直接在&#x2F;usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了**&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu<strong>里面，所以在task.json里面就这么写：</strong>“-L”,”&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu”<strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：</strong>“-l”,”opencv_dnn”**。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
+<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
 <p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
 <h2 id="2-写在最后"><a href="#2-写在最后" class="headerlink" title="2. 写在最后"></a>2. 写在最后</h2><p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
 <p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
@@ -369,93 +402,6 @@
       </categories>
       <tags>
         <tag>VSCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蜂鸟的第一篇文章</title>
-    <url>/2024/08/17/%E8%9C%82%E9%B8%9F%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</url>
-    <content><![CDATA[<p>蜂鸟的碎碎念：第一篇文章不知道写些什么，于是直接把自己之前写的一篇ROBOCON2024视觉组方案贴上去啦</p>
-<h1 id="2024年”颗粒归仓”视觉组任务及方案"><a href="#2024年”颗粒归仓”视觉组任务及方案" class="headerlink" title="2024年”颗粒归仓”视觉组任务及方案"></a>2024年”颗粒归仓”视觉组任务及方案</h1><p><em><strong>written time:</strong></em> 2023&#x2F;11&#x2F;9</p>
-<p><em><strong>points:</strong></em> 仅用于R2在三区的任务</p>
-<h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p><em><strong>ideas:</strong></em></p>
-<ol>
-<li>着重考虑在 <strong>谷仓区</strong> 的 <strong>绝对定位</strong> ，暂存区的绝对定位暂不考虑，一方面是暂存区存在球的遮挡，另一方面是暂存区对绝对定位的要求并不高。</li>
-<li>暂不考虑使用 <strong>相对定位</strong> ，不过R2是在一区启动，如果存在 <strong>场地误差</strong> ，或许相对定位是一种更好的选择，或者考虑R2到达三区后进行一次 <strong>坐标修正</strong> （比如DT35）。</li>
-</ol>
-<h3 id="方案1：DT35-码盘定位"><a href="#方案1：DT35-码盘定位" class="headerlink" title="方案1：DT35+码盘定位"></a>方案1：DT35+码盘定位</h3><p><strong>设备：</strong> DT35若干</p>
-<p><strong>思路：</strong> 每次R2到达谷仓区后，使用DT35对码盘数据进行修正。</p>
-<p><strong>优点：</strong> 团队现有的方案，应用比较成熟。</p>
-<p><strong>缺点：</strong></p>
-<ol>
-<li>由于码盘在上下坡过程中会出现误差，而DT35只能在谷仓区使用，所以该方案无法在暂存区进行精确的定位。</li>
-<li>如果姿态（偏航角）不能调整很准确，DT35的测距信息会出现失真。</li>
-</ol>
-<h3 id="方案2：2D雷达-码盘定位"><a href="#方案2：2D雷达-码盘定位" class="headerlink" title="方案2：2D雷达+码盘定位"></a>方案2：2D雷达+码盘定位</h3><p><strong>设备：</strong> 思岚A3雷达</p>
-<p><strong>思路：</strong> 每次R2到达谷仓区后，使用2D雷达扫描挡板-&gt;拟合出挡板-&gt;得出坐标信息，利用2D雷达的定位信息对码盘数据进行修正。</p>
-<p><strong>优点：</strong> 对R2的姿态不做要求，理论上只要在谷仓区就可以得到坐标信息。</p>
-<p><strong>缺点：</strong></p>
-<ol>
-<li>雷达帧率最高只有15hz，单用雷达不足以用于底盘的跑动。 <em>（可以考虑使用SLAM里程计的方法进行码盘和雷达的数据融合，参考EKF）</em></li>
-<li>雷达数据会出现抖动（4mm左右），但是在用雷达数据刷新码盘数据的测试过程中却发现底盘的轨迹极其振荡，具体原因其实不太清楚。 <em>（可能一方面是雷达帧率太低，另一方面是雷达数据确实存在抖动）</em></li>
-</ol>
-<h3 id="方案3：开源SLAM算法"><a href="#方案3：开源SLAM算法" class="headerlink" title="方案3：开源SLAM算法"></a>方案3：开源SLAM算法</h3><p><strong>设备：</strong> MID360</p>
-<p><strong>思路：</strong> 使用DLO, FAST_LIO2, LIO_SAM等开源算法，得到R2在整个赛场上的坐标信息，该方法可以在整个三区实现定位。</p>
-<p><strong>优点：</strong> 工作量小，且可以实现在整个三区的定位。</p>
-<p><strong>缺点：</strong> 必须要很熟悉算法的实现原理和代码实现过程，明确算法的优缺点，如果出了问题可以debug。</p>
-<p><strong>实测情况：</strong></p>
-<ol>
-<li>目前进行测试了DLO和FAST_LIO2，DLO算法在MID360发布频率为10hz时与FAST_LIO2效果差不多，但是当MID360频率提到50hz时，DLO会出现很明显的振荡，基本上完全不能使用。</li>
-<li>FAST_LIO2的数据在底盘跑动中精度和频率都还不错，且不会在上下坡的过程中出现误差累积，不过误差仍然是存在的，在SLAM中应该叫做 <strong>回程误差</strong> ，大约在2mm以内。不过现在来看会出现累积。 <em>（FAST_LIO2的论文中说在10hz的测试情况下，160m的距离下回程误差为7cm）</em></li>
-</ol>
-<h3 id="方案4：自写SLAM"><a href="#方案4：自写SLAM" class="headerlink" title="方案4：自写SLAM"></a>方案4：自写SLAM</h3><p><strong>设备：</strong> MID360, IMU, 磁编码器。</p>
-<p><strong>思路：</strong> 采用动静态地图分离策略，离线构建静态地图并实时维护动态环境地图，基于多层地图策略实现动态环境下的准确的激光融合定位算法。</p>
-<p><em><strong>tips:</strong></em></p>
-<ol>
-<li>静态地图指的是不包含任何场地模型之外的任何特征物的3D点云地图。</li>
-<li>该方案其实是我的毕设，所以一定会去做，但实际上是否上场比赛有待测试。</li>
-</ol>
-<h3 id="个人想法"><a href="#个人想法" class="headerlink" title="个人想法"></a>个人想法</h3><p>截至目前（2023.11.16)，目前和控制组交流后的想法是使用 <em><strong>DT35+FAST_LIO2+码盘</strong></em> 进行数据融合定位，理论上可以实现在 <em><strong>整个三区的绝对定位</strong></em> ，且 <em><strong>理论精度高于三者的单独使用</strong></em> 。</p>
-<h2 id="识别球"><a href="#识别球" class="headerlink" title="识别球"></a>识别球</h2><p><em><strong>ideas:</strong></em></p>
-<ol>
-<li>可以按照远近和动静进行分类，交叉组合就会有四种状态的球需要识别：近处静态球，近处动态球，远处静态球，远处动态球。</li>
-<li>至少目前来看，要求识别精度要很高（个人觉得对精度要求低的方案更具有鲁棒性，才更适合ROBOCON）。</li>
-<li>暂时考虑使用两个相机，远处的球使用高速相机，只需要的得到球的大致方位即可，近处的球使用深度相机，得到准确的球心坐标。</li>
-</ol>
-<h3 id="方案1：OpenCV-PCL"><a href="#方案1：OpenCV-PCL" class="headerlink" title="方案1：OpenCV+PCL"></a>方案1：OpenCV+PCL</h3><p><strong>设备：</strong> 高速相机+深度相机</p>
-<p><strong>思路：</strong> 基于颜色对球进行提取，然后进行球的拟合和圆心至R2的坐标计算。</p>
-<p><strong>评价：</strong> 该方案我目前交给吴圣标和黄子亮去做了，基本思路是在LAB色域将球大致提取出来-&gt;Canny边缘检测-&gt;考虑高光补偿-&gt;霍夫圆拟合-&gt;筛选出优圆-&gt;结合深度图进行坐标转换-&gt;得到球心坐标。</p>
-<p>个人觉得这套方案有两个点需要着重注意：</p>
-<ol>
-<li>比较依赖于在LAB色域对球的提取，如果效果不好将会对后续的算法产生较大的影响。</li>
-<li>在Canny边缘检测后进行霍夫圆拟合，往往会由于一些噪点拟合出很多霍夫圆，噪点不可能完全避免，所以比较依赖于霍夫圆的筛选，而霍夫圆的筛选条件是否可以应对各种情况呢。</li>
-</ol>
-<h3 id="方案2：YOLOv5-深度图"><a href="#方案2：YOLOv5-深度图" class="headerlink" title="方案2：YOLOv5+深度图"></a>方案2：YOLOv5+深度图</h3><p><strong>设备：</strong> 高速相机+深度相机</p>
-<p><strong>思路：</strong> 首先利用YOLO对球进行识别，然后将识别框内对应的点云图进行球的拟合和圆心至R2的坐标计算。</p>
-<p><strong>评价：</strong> 目前（2023.11.16）算是已经基本完成的方案，帧率可以把深度相机的30帧跑满，精度大概1cm，不过还没有经过更为充分的测试。</p>
-<h3 id="个人想法-1"><a href="#个人想法-1" class="headerlink" title="个人想法"></a>个人想法</h3><p>我觉得YOLO相比于OpenCV是具有更高的鲁棒性的，其实两种方案都是可以试一下的，这周末球和框到了之后，可以做一个更好的数据集进行测试。</p>
-<h2 id="识别谷仓"><a href="#识别谷仓" class="headerlink" title="识别谷仓"></a>识别谷仓</h2><p><em><strong>ideas:</strong></em></p>
-<ol>
-<li>相机要有足够的视角，必须能够同时看到五个框。</li>
-<li>要考虑到对方三区的球和R2的干扰。</li>
-</ol>
-<h3 id="方案1：YOLOv5"><a href="#方案1：YOLOv5" class="headerlink" title="方案1：YOLOv5"></a>方案1：YOLOv5</h3><p><strong>设备：</strong> 高速相机</p>
-<p><strong>思路：</strong> 创建谷仓的数据集，利用YOLO实现对谷仓的识别，然后只识别谷仓内球的数量和颜色。</p>
-<p><em><strong>tips:</strong></em> 该方法可以避免对方三区的球和R2的干扰，但是前提是YOLO识别谷仓的效果足够好。</p>
-<p><strong>优点：</strong> 无需更改设备，可以延续使用识别球的高速相机+深度相机。</p>
-<p><strong>缺点：</strong> 需要测试谷仓的识别情况，如果谷仓识别效果不能满足比赛需要，则该方案pass。</p>
-<h3 id="方案2：直通点云拟合"><a href="#方案2：直通点云拟合" class="headerlink" title="方案2：直通点云拟合"></a>方案2：直通点云拟合</h3><p><strong>设备：</strong> 深度相机</p>
-<p><strong>思路：</strong> 利用深度相机或者激光雷达（雷达大概率点云太少），结合定位信息，过滤出在谷仓附近的点云，然后进行拟合（精度要求不高，只需要判断出有几个球即可），甚至不用判断球的颜色，因为己方的球是已知的，如果检测出了多的球，绝对是对方的球。</p>
-<p><em><strong>tips:</strong></em> 深度相机的视角大概率不能够看全五个谷仓，所以可能需要上多个深度相机。</p>
-<p><strong>缺点：</strong> 需要额外考虑添加设备，且点云的处理可能不会很快。</p>
-<h3 id="个人想法-2"><a href="#个人想法-2" class="headerlink" title="个人想法"></a>个人想法</h3><p>如果YOLO能够对谷仓进行比较好的识别，我觉得优先选用方案1比较合适。</p>
-<p>还有值得说的一点是，球和谷仓的数据集可以做在一起，对于谷仓，可以包含内有球和无球的两种情况；对于球，可以包含在地上和在谷仓内两种情况。</p>
-<p>另外，最好三区谷仓区后面可以用一块挡板或者镜子，因为在制作数据集时需要将环境也制作在数据集内，团队谷仓后的货架绝对在正式比赛的场地中是看不到的，该部分信息不应包含在数据集内。</p>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
 </search>
