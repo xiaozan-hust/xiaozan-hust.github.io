@@ -6,18 +6,42 @@
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h1><p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
 <h1 id="1-开发环境搭建"><a href="#1-开发环境搭建" class="headerlink" title="1. 开发环境搭建"></a>1. 开发环境搭建</h1><p>开发平台支持Ubuntu&#x2F;Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
 <p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
-<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><h3 id="1-1-1-Git安装"><a href="#1-1-1-Git安装" class="headerlink" title="1.1.1 Git安装"></a>1.1.1 Git安装</h3><h3 id="1-1-2-Node-js安装"><a href="#1-1-2-Node-js安装" class="headerlink" title="1.1.2 Node.js安装"></a>1.1.2 Node.js安装</h3><h2 id="1-2-hexo安装"><a href="#1-2-hexo安装" class="headerlink" title="1.2 hexo安装"></a>1.2 hexo安装</h2><h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><h2 id="2-2-如何完美的插入图片"><a href="#2-2-如何完美的插入图片" class="headerlink" title="2.2 如何完美的插入图片"></a>2.2 如何完美的插入图片</h2><h3 id="2-2-1-在文章中插入图片"><a href="#2-2-1-在文章中插入图片" class="headerlink" title="2.2.1 在文章中插入图片"></a>2.2.1 在文章中插入图片</h3><p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
+<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><h3 id="1-1-1-Git安装"><a href="#1-1-1-Git安装" class="headerlink" title="1.1.1 Git安装"></a>1.1.1 Git安装</h3><h3 id="1-1-2-Node-js安装"><a href="#1-1-2-Node-js安装" class="headerlink" title="1.1.2 Node.js安装"></a>1.1.2 Node.js安装</h3><h2 id="1-2-hexo安装"><a href="#1-2-hexo安装" class="headerlink" title="1.2 hexo安装"></a>1.2 hexo安装</h2><h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><p><strong>Ⅰ：hexo new “文章名称”</strong></p>
+<p>在终端输入该命令，将会在路径source&#x2F;_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
+<p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
+<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置"></p>
+<p><strong>Ⅱ：书写文章</strong></p>
+<p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 | MarkDown官方教程</a></p>
+<p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
+<p>hexo g: 生成网页</p>
+<p>hexo s: 运行网站</p>
+<p>至此，可以在<code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
+<p>hexo d: 部署网站</p>
+<p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3 网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
+<h2 id="2-2-如何完美的插入图片"><a href="#2-2-如何完美的插入图片" class="headerlink" title="2.2 如何完美的插入图片"></a>2.2 如何完美的插入图片</h2><h3 id="2-2-1-在文章中插入图片"><a href="#2-2-1-在文章中插入图片" class="headerlink" title="2.2.1 在文章中插入图片"></a>2.2.1 在文章中插入图片</h3><p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
 <p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
-<p>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</p>
+<p><strong>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</strong></p>
 <p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
 <p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构"></p>
-<p>Ⅱ：引用图片</p>
+<p><strong>Ⅱ：引用图片</strong></p>
 <p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">![图片描述](文章名称/图片名称.jpg)</span><br></pre></td></tr></table></figure>
 
+<p>至此，即可在文章中优雅的插入图片。</p>
+<h3 id="2-2-2-插入文章封面"><a href="#2-2-2-插入文章封面" class="headerlink" title="2.2.2 插入文章封面"></a>2.2.2 插入文章封面</h3><p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
+<p>下述方法为在本人进行网站搭建时自行摸索发现的，方法非常简单。</p>
+<p><strong>Ⅰ：添加封面图片至主题img文件夹</strong></p>
+<p>以我使用的butterfly主题为例，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
+<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放"></p>
+<p><strong>Ⅱ：引用图片</strong></p>
+<p>在每一篇文章的最前面，会有一些关于该文章的描述，其中可以添加如下行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cover: /img/文章封面图名称.jpg</span><br></pre></td></tr></table></figure>
 
-
-<h3 id="2-2-2-插入文章封面"><a href="#2-2-2-插入文章封面" class="headerlink" title="2.2.2 插入文章封面"></a>2.2.2 插入文章封面</h3><h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><h2 id="4-1-总结"><a href="#4-1-总结" class="headerlink" title="4.1 总结"></a>4.1 总结</h2><h2 id="4-2-展望"><a href="#4-2-展望" class="headerlink" title="4.2 展望"></a>4.2 展望</h2><p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
+<p>当运行hexo g命令发布网站时，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下的图片将会在public&#x2F;img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
+<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public"></p>
+<p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
+<h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><p><a href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 文檔(一) 快速開始 | Butterfly</a></p>
+<h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><h2 id="4-1-总结"><a href="#4-1-总结" class="headerlink" title="4.1 总结"></a>4.1 总结</h2><h2 id="4-2-展望"><a href="#4-2-展望" class="headerlink" title="4.2 展望"></a>4.2 展望</h2><p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
 <ol>
 <li>个人网站字体设置</li>
 <li>如何新增文章评论功能</li>
@@ -402,6 +426,14 @@
       </categories>
       <tags>
         <tag>VSCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生活随笔|新的开始：关于我的研究生生活</title>
+    <url>/2024/10/21/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94-%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%88%91%E7%9A%84%E7%A0%94%E7%A9%B6%E7%94%9F%E7%94%9F%E6%B4%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
