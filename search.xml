@@ -6,7 +6,31 @@
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h1><p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
 <h1 id="1-开发环境搭建"><a href="#1-开发环境搭建" class="headerlink" title="1. 开发环境搭建"></a>1. 开发环境搭建</h1><p>开发平台支持Ubuntu&#x2F;Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
 <p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
-<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><h3 id="1-1-1-Git安装"><a href="#1-1-1-Git安装" class="headerlink" title="1.1.1 Git安装"></a>1.1.1 Git安装</h3><h3 id="1-1-2-Node-js安装"><a href="#1-1-2-Node-js安装" class="headerlink" title="1.1.2 Node.js安装"></a>1.1.2 Node.js安装</h3><h2 id="1-2-hexo安装"><a href="#1-2-hexo安装" class="headerlink" title="1.2 hexo安装"></a>1.2 hexo安装</h2><h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><p><strong>Ⅰ：hexo new “文章名称”</strong></p>
+<p>值得一提的是，下面我写的安装步骤比较偏向于技巧部分，更加简单清晰的教程大家可以参考一个B站视频：<a href="https://www.bilibili.com/video/BV1Ju4m1c7WR/?spm_id_from=333.337.search-card.all.click&vd_source=a3ce7565d1e7532a49f56b5a3ebd1d61">HEXO开发环境搭建</a></p>
+<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><p>参考： <a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85">官方安装教程</a></p>
+<p><strong>1. Git安装：</strong> ubuntu系统打开终端后执行：<code>&lt;pip install git&gt;</code>; windows端：与一般exe文件安装方式一致，请点击<a href="https://git-scm.com/downloads/win">下载链接</a></p>
+<p><strong>2. Node.js安装：</strong> 进入<a href="https://nodejs.org/zh-cn/download/package-manager">Node.js安装界面</a>，选择适用于你电脑版本的选项，根据网页内容依次执行命令即可。</p>
+<p><strong>3. hexo安装： <code>npm install hexo</code></strong></p>
+<p><em><strong>TIPS:</strong></em></p>
+<ul>
+<li>ubuntu用户安装Node.js时：需要注意一下的是，第一步其实就是在安装nvm，在安装完后直接运行第二行命令可能会出错，需要更新一下环境变量：source ~&#x2F;.bashrc</li>
+<li>安装完hexo后，对于linux用户来说依然需要添加环境变量，并且通过source ~&#x2F;.profile更新</li>
+</ul>
+<h2 id="1-2-本地文件夹初始化"><a href="#1-2-本地文件夹初始化" class="headerlink" title="1.2 本地文件夹初始化"></a>1.2 本地文件夹初始化</h2><p>利用HEXO开发网站的好处在于你的网站的全部内容其实本质上一个本地的文件夹，所谓的部署网站即可以让别人在网络上检索并看到你的网站，其实是将该本地文件夹的部分内容上传至你所依赖的发布工具（如github，gitee等）。你可以通过对本地文件夹的修改直接实现对网站的修改。</p>
+<p>不过这个文件夹并不是一个简单的文件夹，它有些类似于git的仓库，同样的，它也要进行一些初始化，以让我们知道：这是一个属于hexo的网站文件夹。</p>
+<p>初始化具体步骤如下：</p>
+<ul>
+<li>hexo init <code>&lt;网站文件夹名称&gt;</code>：进入一个文件夹，并且在该文件夹下打开终端输入以上命令，则会在该文件夹下生成一个网站文件夹，以后你的所有开发步骤都是在这个文件夹中进行的</li>
+<li>npm install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
+</ul>
+<p>正确执行以上命令后，输入hexo s，即可在浏览器中通过 <code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
+<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹"></p>
+<p><em><strong>TIPS:</strong></em></p>
+<ul>
+<li>在进行npm init <code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
+<li>如果你想删除重新试一次，那么你应该删除整个blog文件夹，然后重新初始化一个blog，而不是单纯的删除掉里面的内容</li>
+</ul>
+<h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><p><strong>Ⅰ：hexo new “文章名称”</strong></p>
 <p>在终端输入该命令，将会在路径source&#x2F;_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
 <p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
 <p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置"></p>
@@ -15,7 +39,7 @@
 <p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
 <p>hexo g: 生成网页</p>
 <p>hexo s: 运行网站</p>
-<p>至此，可以在<code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
+<p>至此，可以在 <code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
 <p>hexo d: 部署网站</p>
 <p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3 网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
 <h2 id="2-2-如何完美的插入图片"><a href="#2-2-如何完美的插入图片" class="headerlink" title="2.2 如何完美的插入图片"></a>2.2 如何完美的插入图片</h2><h3 id="2-2-1-在文章中插入图片"><a href="#2-2-1-在文章中插入图片" class="headerlink" title="2.2.1 在文章中插入图片"></a>2.2.1 在文章中插入图片</h3><p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
@@ -40,15 +64,48 @@
 <p>当运行hexo g命令发布网站时，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下的图片将会在public&#x2F;img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
 <p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public"></p>
 <p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
-<h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><p><a href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 文檔(一) 快速開始 | Butterfly</a></p>
-<h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><h2 id="4-1-总结"><a href="#4-1-总结" class="headerlink" title="4.1 总结"></a>4.1 总结</h2><h2 id="4-2-展望"><a href="#4-2-展望" class="headerlink" title="4.2 展望"></a>4.2 展望</h2><p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
+<h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/"> Butterfly 文檔(一) 快速開始 | Butterfly</a></p>
+<p>在HEXO中自己从零开始搭建一个具备较为完善的功能的网站是比较麻烦且需要一定的编程基础的，不过，对于大多数人来说，其实是可以参考别人已经开源的模板的，然后按照自己的喜好进行修改。这类似于你去做一份PPT，你当然可以从一张一张的空白页开始，慢慢的插入线条，设置背景，添加动画等等，但是，我相信大家其实都更倾向于先从一个别人已经做好的PPT模板开始，按照自己的需求进行修改。</p>
+<p>HEXO官网提供了模板的功能，里面汇集了几乎所有的热门的网站模板：<a href="https://hexo.io/themes/"> HEXO主题</a></p>
+<p>每一个模板的安装方式类似，一般在主题github仓库内会写该如何安装，其实就是下载到blog内的theme文件夹下，然后打开blog文件夹下的_config.yaml文件，将最下面的theme换成你要用的主题的名字（theme文件夹下）</p>
+<h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
+<h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><p>目前gitee pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
+<p>Ⅰ：创建一个github仓库</p>
+<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
+<p>Ⅱ：建立本地电脑与远程仓库的连接</p>
+<p>这部分其实对于经常使用git的人来说并不陌生。平时我们在github上找别人的代码时，那么别人的仓库一定是公开的，但是我们只具备访问这个仓库的权限，却无法对仓库的内容进行修改。同理，如果你是这个仓库的开发者，你又该如何使自己能够对这个仓库进行修改呢？答案就是：添加密钥。</p>
+<p>如何添加密钥呢？这其实分三步：一是生成一份与本地电脑挂钩的密钥；二是将该密钥添加到远程仓库中，使本地电脑具备对该仓库的修改权限；三是绑定邮箱。</p>
+<p>①生成密钥：</p>
+<p>在git终端下输入 <code>ssh-keygen -t rsa -C &quot;注册时的邮箱地址&quot;</code>然后即会在一个名为~&#x2F;.ssh&#x2F;id_rsa下生成一份密钥。</p>
+<p>同样在git终端下输入 <code>cat ~/.ssh/id_rsa.pub</code>，即会在终端打印出密钥。</p>
+<p>②添加密钥：</p>
+<p>进入github的Setting-&gt;SSH and GPG keys，点击New SSH key，然后将复制的密钥粘贴到github中即可。</p>
+<p>可以在git终端下输入 <code>ssh -T git@github.com</code>以验证是否成功。</p>
+<p>③绑定邮箱：</p>
+<p>在git终端下输入两个命令：</p>
+<p><code>git config --global user.name &quot;注册时用户名&quot;</code></p>
+<p><code>git config --global user.email &quot;注册时邮箱&quot;</code></p>
+<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
+<p>Ⅲ：建立博客与仓库的连接并上传博客</p>
+<p>还记得当时创建仓库时生成的HTTPS或者SSH链接吗？你可以认为它们就是仓库的身份证，此时我们只需要将这个链接添加到我们的本地博客文件夹中，即告诉你的博客：部署网站时就往这个仓库里面上传就行啦！</p>
+<p>可以在如下位置找到该链接，这里推荐使用SSH：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
+<p>找到你的网站文件夹，里面有一个我们前面提到过的_config.yml文件，在该文件的最末尾处添加以下内容（以我的这个仓库的SSH为例）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: &#x27;git&#x27;</span><br><span class="line">  repository: git@github.com:xiaozan-hust/xiaozan-hust.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code><br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
+<p>可以看到，hexo d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
+<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
+<h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
+<p>这一部分暂时搁置吧，感兴趣的朋友可以直接参考git的教程：<a href="https://liaoxuefeng.com/books/git/introduction/index.html">廖雪峰Git教程</a></p>
+<h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><p>现在是2024&#x2F;11&#x2F;26 15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
+<p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
 <ol>
 <li>个人网站字体设置</li>
 <li>如何新增文章评论功能</li>
 <li>如何添加全局搜索功能</li>
 <li>…</li>
 </ol>
-<h1 id="参考文章或视频"><a href="#参考文章或视频" class="headerlink" title="参考文章或视频"></a>参考文章或视频</h1>]]></content>
+]]></content>
       <categories>
         <category>教程</category>
         <category>技能学习</category>
@@ -365,6 +422,14 @@
       </tags>
   </entry>
   <entry>
+    <title>生活随笔|新的开始：关于我的研究生生活</title>
+    <url>/2024/10/21/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94-%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%88%91%E7%9A%84%E7%A0%94%E7%A9%B6%E7%94%9F%E7%94%9F%E6%B4%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>技术笔记|创建一个你自己的工程</title>
     <url>/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="第一个可以运行的VSCode工程"><a href="#第一个可以运行的VSCode工程" class="headerlink" title="第一个可以运行的VSCode工程"></a>第一个可以运行的VSCode工程</h1><p><strong>写在前面</strong></p>
@@ -426,14 +491,6 @@
       </categories>
       <tags>
         <tag>VSCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生活随笔|新的开始：关于我的研究生生活</title>
-    <url>/2024/10/21/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94-%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%88%91%E7%9A%84%E7%A0%94%E7%A9%B6%E7%94%9F%E7%94%9F%E6%B4%BB/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
