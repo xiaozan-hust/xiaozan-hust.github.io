@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="[&quot;zh-CN&quot;,&quot;en&quot;,&quot;zh-TW&quot;,&quot;default&quot;]" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>技术笔记-ROS1核心编程 | xiaozan</title><meta name="author" content="蜂鸟"><meta name="copyright" content="蜂鸟"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ROS1核心编程0. 前言ROS的教程推荐绝对会是古月居： 【古月居】古月·ROS入门21讲 | 一学就会的ROS机器人入门教程_哔哩哔哩_bilibili 关于此篇文章的写法我不想按照如ROS通信机制、节点句柄、回调函数、发布者与订阅者等来写，关于这些内容，在古月居的ROS21讲中有非常详细的讲解。 ROS的最大作用其实是话题的发布与接收，尤其是自定义话题，其实网上教程很多，但是当你真正需要用R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术笔记-ROS1核心编程">
+<meta property="og:url" content="http://example.com/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="xiaozan">
+<meta property="og:description" content="ROS1核心编程0. 前言ROS的教程推荐绝对会是古月居： 【古月居】古月·ROS入门21讲 | 一学就会的ROS机器人入门教程_哔哩哔哩_bilibili 关于此篇文章的写法我不想按照如ROS通信机制、节点句柄、回调函数、发布者与订阅者等来写，关于这些内容，在古月居的ROS21讲中有非常详细的讲解。 ROS的最大作用其实是话题的发布与接收，尤其是自定义话题，其实网上教程很多，但是当你真正需要用R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/ros.png">
+<meta property="article:published_time" content="2025-04-23T03:15:14.000Z">
+<meta property="article:modified_time" content="2025-04-23T03:49:10.238Z">
+<meta property="article:author" content="蜂鸟">
+<meta property="article:tag" content="ROS">
+<meta property="article:tag" content="技能学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/ros.png"><link rel="shortcut icon" href="/img/friend_404.gif"><link rel="canonical" href="http://example.com/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.0.0-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>(()=>{
+      const saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+      
+      window.btf = {
+        saveToLocal: saveToLocal,
+        getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.src = url
+          script.async = true
+          script.onerror = reject
+          script.onload = script.onreadystatechange = function() {
+            const loadState = this.readyState
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+            script.onload = script.onreadystatechange = null
+            resolve()
+          }
+
+          Object.keys(attr).forEach(key => {
+            script.setAttribute(key, attr[key])
+          })
+
+          document.head.appendChild(script)
+        }),
+
+        getCSS: (url, id = false) => new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+          link.rel = 'stylesheet'
+          link.href = url
+          if (id) link.id = id
+          link.onerror = reject
+          link.onload = link.onreadystatechange = function() {
+            const loadState = this.readyState
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+            link.onload = link.onreadystatechange = null
+            resolve()
+          }
+          document.head.appendChild(link)
+        }),
+
+        addGlobalFn: (key, fn, name = false, parent = window) => {
+          const pjaxEnable = false
+          if (!pjaxEnable && key.startsWith('pjax')) return
+
+          const globalFn = parent.globalFn || {}
+          const keyObj = globalFn[key] || {}
+    
+          if (name && keyObj[name]) return
+    
+          name = name || Object.keys(keyObj).length
+          keyObj[name] = fn
+          globalFn[key] = keyObj
+          parent.globalFn = globalFn
+        }
+      }
+    
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+      
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '技术笔记-ROS1核心编程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-23 11:49:10'
+}</script><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', () => { preloader.initLoading() }, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', () => { preloader.endLoading() }, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #91ebec;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/imgwall/"><i class="fa-fw fas fas fa-image"></i><span> 图片</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 待开发</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/ros.png);"><nav id="nav"><span id="blog-info"><a href="/" title="xiaozan"><span class="site-name">xiaozan</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/imgwall/"><i class="fa-fw fas fas fa-image"></i><span> 图片</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 待开发</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">技术笔记-ROS1核心编程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-23T03:15:14.000Z" title="发表于 2025-04-23 11:15:14">2025-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-23T03:49:10.238Z" title="更新于 2025-04-23 11:49:10">2025-04-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="技术笔记-ROS1核心编程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/#post-comment"><span class="gitalk-comment-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ROS1核心编程"><a href="#ROS1核心编程" class="headerlink" title="ROS1核心编程"></a>ROS1核心编程</h1><h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><p>ROS的教程推荐绝对会是古月居：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zt411G7Vn/?spm_id_from=333.337.search-card.all.click">【古月居】古月·ROS入门21讲 | 一学就会的ROS机器人入门教程_哔哩哔哩_bilibili</a></p>
+<p>关于此篇文章的写法我不想按照如ROS通信机制、节点句柄、回调函数、发布者与订阅者等来写，关于这些内容，在古月居的ROS21讲中有非常详细的讲解。</p>
+<p>ROS的最大作用其实是话题的发布与接收，尤其是自定义话题，其实网上教程很多，但是当你真正需要用ROS进行项目开发时，最核心的一个问题在于： <strong>如何自定义话题并且完成其消息的接收与发布</strong> 。</p>
+<p><strong>因此，本文将记录，该如何利用ROS实现话题通信。</strong></p>
+<h2 id="1-工作空间与功能包的创建"><a href="#1-工作空间与功能包的创建" class="headerlink" title="1. 工作空间与功能包的创建"></a>1. 工作空间与功能包的创建</h2><h3 id="1-1-工作空间的创建"><a href="#1-1-工作空间的创建" class="headerlink" title="1.1 工作空间的创建"></a>1.1 工作空间的创建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 依次建立两个文件夹，分别为工作空间文件夹和src文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/ros_ws/src</span><br><span class="line"><span class="comment"># 进入src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ~/ros_ws/src</span><br><span class="line"><span class="comment"># 初始化工作空间</span></span><br><span class="line">catkin_init_workspace</span><br></pre></td></tr></table></figure>
+
+<p>以上命令执行完后将会在src文件夹下生成CMakeLists.txt文件，该文件一般不可修改，该文件的生成表示工作空间的成功创建，如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(4).png" alt="haha"></p>
+<p>可以执行以下命令对工作空间进行编译，以进一步验证工作空间是否创建成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间根目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/</span><br><span class="line"><span class="comment"># 编译工作空间</span></span><br><span class="line">catkin_make</span><br><span class="line"><span class="comment"># 该命令执行后应无报错信息出现</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-功能包的创建"><a href="#1-2-功能包的创建" class="headerlink" title="1.2 功能包的创建"></a>1.2 功能包的创建</h3><p>创建功能包的命令为：<code>catkin_create_pkg &lt;功能包名&gt; [依赖1] [依赖2] …</code></p>
+<p>我们实操如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间内src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/src</span><br><span class="line"><span class="comment"># 创建功能包并添加必需的依赖</span></span><br><span class="line">catkin_create_pkg test_pkg std_msgs rospy roscpp</span><br></pre></td></tr></table></figure>
+
+<p>此时，工作空间结构如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(5).png" alt="haha"></p>
+<h2 id="2-自定义消息内容"><a href="#2-自定义消息内容" class="headerlink" title="2. 自定义消息内容"></a>2. 自定义消息内容</h2><h3 id="2-1-创建msg文件"><a href="#2-1-创建msg文件" class="headerlink" title="2.1 创建msg文件"></a>2.1 创建msg文件</h3><p>可以在功能包目录下创建一个msg文件夹，用于存储自定义的消息文件，如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(6).png" alt="haha"></p>
+<p>接着，在msg文件中定义你想在话题中传输的内容，即消息的内容，比如我在这里创建了一个消息话题内容包含：名字，力矩，长度，速度：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(7).png" alt="haha"></p>
+<h3 id="2-2-修改package-xml文件"><a href="#2-2-修改package-xml文件" class="headerlink" title="2.2 修改package.xml文件"></a>2.2 修改package.xml文件</h3><p>在所创建的功能包文件夹内，包含两个文件package.xml文件和CMakeLists.txt文件，我们首先修改package.xml文件，在该文件内添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;build_export_depend&gt;message_generation&lt;/build_export_depend&gt;</span><br><span class="line">&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-修改CMakeLists-txt文件"><a href="#2-3-修改CMakeLists-txt文件" class="headerlink" title="2.3 修改CMakeLists.txt文件"></a>2.3 修改CMakeLists.txt文件</h3><p>CMakeLists.txt文件一共有三处需要修改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在find_package()内添加message_generation，如下：</span></span><br><span class="line">find_package(catkin REQUIRED COMPONENTS</span><br><span class="line">  roscpp</span><br><span class="line">  rospy</span><br><span class="line">  std_msgs</span><br><span class="line">  message_generation</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在add_message_files()内添加(FILE 消息文件名.msg)和在generate_messages()内添加(DEPENDENCIES std_msgs），如下：</span></span><br><span class="line">add_message_files(</span><br><span class="line">  FILES</span><br><span class="line">  test_msg.msg</span><br><span class="line">)</span><br><span class="line">generate_messages(</span><br><span class="line">  DEPENDENCIES</span><br><span class="line">  std_msgs</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在catkin_package()添加message_runtiome，如下：</span></span><br><span class="line">catkin_package(</span><br><span class="line"> CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-编译生成消息对应头文件"><a href="#2-4-编译生成消息对应头文件" class="headerlink" title="2.4 编译生成消息对应头文件"></a>2.4 编译生成消息对应头文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws</span><br><span class="line"><span class="comment"># 编译生成消息头文件</span></span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
+
+<p>此时，在工作空间中即可搜索到以刚才创建的消息文件命名的头文件，如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(8).png" alt="haha"></p>
+<h2 id="3-消息的发布与接收"><a href="#3-消息的发布与接收" class="headerlink" title="3. 消息的发布与接收"></a>3. 消息的发布与接收</h2><h3 id="3-1-消息的发布"><a href="#3-1-消息的发布" class="headerlink" title="3.1 消息的发布"></a>3.1 消息的发布</h3><p>在这里我直接附上一份写有详细注释的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的发布</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_pub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_pub的发布者，发布名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Publisher test_msg_pub = nh.<span class="built_in">advertise</span>&lt;test_pkg::test_msg&gt;(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="comment">// 设置循环的频率10Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 循环发布消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 初始化消息变量</span></span><br><span class="line">        test_pkg::test_msg test_msg;</span><br><span class="line">        test_msg.name = <span class="string">&quot;test_msg&quot;</span>;</span><br><span class="line">        test_msg.torque = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.length = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.speed = <span class="number">100.0</span> + count;</span><br><span class="line">        <span class="comment">// 发布消息</span></span><br><span class="line">        test_msg_pub.<span class="built_in">publish</span>(test_msg);</span><br><span class="line">        <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Publish test_msg: %d&quot;</span>, count);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在功能包内创建任何一个新程序，都需要在CMakeLists.txt文件中添加相关内容，以实现对其的编译，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 添加可执行文件</span><br><span class="line"><span class="built_in">add_executable</span>(test_message_pub </span><br><span class="line">src/test_message_pub.cpp)</span><br><span class="line"><span class="built_in">target_link_libraries</span>(test_message_pub PUBLIC $&#123;catkin_LIBRARIES&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>对该程序进行编译，并且运行，查看如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(9).png" alt="haha"></p>
+<h3 id="3-2-消息的接收"><a href="#3-2-消息的接收" class="headerlink" title="3.2 消息的接收"></a>3.2 消息的接收</h3><p>同样的，在这里我直接附上一份写有详细注释的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的订阅</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"><span class="comment">// 定义一些用于存储消息的变量</span></span><br><span class="line">std::string global_name = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="type">int</span> global_torque = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> global_length = <span class="number">0</span>;</span><br><span class="line"><span class="type">float</span> global_speed = <span class="number">0.0</span>;</span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testMsgCallback</span><span class="params">(<span class="type">const</span> test_pkg::test_msg::ConstPtr&amp; msg)</span> </span>&#123;</span><br><span class="line">    global_name = msg-&gt;name;</span><br><span class="line">    global_torque = msg-&gt;torque;</span><br><span class="line">    global_length = msg-&gt;length;</span><br><span class="line">    global_speed = msg-&gt;speed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UseData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg name: %s&quot;</span>, global_name.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg torque: %d&quot;</span>, global_torque);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg length: %d&quot;</span>, global_length);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg speed: %f&quot;</span>, global_speed);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;----------------------------------&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_sub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_sub的订阅者，订阅名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Subscriber test_msg_sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>, testMsgCallback);</span><br><span class="line">    <span class="comment">// 设置循环的频率1Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 循环订阅消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 使用数据</span></span><br><span class="line">        <span class="built_in">UseData</span>();</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">        <span class="comment">// 处理ROS回调函数--该函数至关重要！！！！</span></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改CMakeLists.txt文件，并且编译运行，如下：</p>
+<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(10).png" alt="haha"></p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>本文面向工程开发，讲述实操内容，中间关于ROS的很多概念没有展开细讲，比如 <code>ros::spin()</code>和 <code>ros::spinonce()</code>的区别，比如自定义消息时使用的何种语言，比如何为话题何为句柄等等。</p>
+<p>若需要进一步对ROS进行学习，仍然是推荐大家返回去本文最初推荐的《古月居ROS21讲》。</p>
+<hr>
+<p><strong>更新日志</strong></p>
+<p>2025.3.10 20:48：文章初次完成</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">蜂鸟</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/">http://example.com/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">xiaozan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ROS/">ROS</a><a class="post-meta__tags" href="/tags/%E6%8A%80%E8%83%BD%E5%AD%A6%E4%B9%A0/">技能学习</a></div><div class="post-share"><div class="social-share" data-image="/img/ros.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="next-post pull-full" href="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/" title="技术笔记|HEXO网站开发教程"><img class="cover" src="/img/HEXO%E6%95%99%E7%A8%8B_%E5%B0%81%E9%9D%A2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">技术笔记|HEXO网站开发教程</div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">蜂鸟</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/xiaozan-hust" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2045927977@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/feng-niao-27-37" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #065fa2;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">ROS1核心编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">0. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B7%A5%E4%BD%9C%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%8C%85%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.2.</span> <span class="toc-text">1. 工作空间与功能包的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%B7%A5%E4%BD%9C%E7%A9%BA%E9%97%B4%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 工作空间的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%8A%9F%E8%83%BD%E5%8C%85%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 功能包的创建</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B6%88%E6%81%AF%E5%86%85%E5%AE%B9"><span class="toc-number">1.3.</span> <span class="toc-text">2. 自定义消息内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%9B%E5%BB%BAmsg%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 创建msg文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BF%AE%E6%94%B9package-xml%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 修改package.xml文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%BF%AE%E6%94%B9CMakeLists-txt%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 修改CMakeLists.txt文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90%E6%B6%88%E6%81%AF%E5%AF%B9%E5%BA%94%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.4.</span> <span class="toc-text">2.4 编译生成消息对应头文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%91%E5%B8%83%E4%B8%8E%E6%8E%A5%E6%94%B6"><span class="toc-number">1.4.</span> <span class="toc-text">3. 消息的发布与接收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%91%E5%B8%83"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 消息的发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%B6%88%E6%81%AF%E7%9A%84%E6%8E%A5%E6%94%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 消息的接收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">4. 总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" title="技术笔记-ROS1核心编程"><img src="/img/ros.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="技术笔记-ROS1核心编程"/></a><div class="content"><a class="title" href="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/" title="技术笔记-ROS1核心编程">技术笔记-ROS1核心编程</a><time datetime="2025-04-23T03:15:14.000Z" title="发表于 2025-04-23 11:15:14">2025-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/" title="技术笔记|HEXO网站开发教程"><img src="/img/HEXO%E6%95%99%E7%A8%8B_%E5%B0%81%E9%9D%A2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="技术笔记|HEXO网站开发教程"/></a><div class="content"><a class="title" href="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/" title="技术笔记|HEXO网站开发教程">技术笔记|HEXO网站开发教程</a><time datetime="2024-10-21T05:32:40.000Z" title="发表于 2024-10-21 13:32:40">2024-10-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/" title="技术笔记|创建一个你自己的工程"><img src="/img/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B_%E5%B0%81%E9%9D%A2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="技术笔记|创建一个你自己的工程"/></a><div class="content"><a class="title" href="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/" title="技术笔记|创建一个你自己的工程">技术笔记|创建一个你自己的工程</a><time datetime="2024-08-24T13:00:27.000Z" title="发表于 2024-08-24 21:00:27">2024-08-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="技术笔记|PCL学习笔记"><img src="/img/mid360%E5%BB%BA%E5%9B%BE1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="技术笔记|PCL学习笔记"/></a><div class="content"><a class="title" href="/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="技术笔记|PCL学习笔记">技术笔记|PCL学习笔记</a><time datetime="2024-08-17T16:06:12.000Z" title="发表于 2024-08-18 00:06:12">2024-08-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" title="技术笔记|YOLOv5使用教程"><img src="/img/YOLOv5%E6%95%99%E7%A8%8B_%E5%B0%81%E9%9D%A2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="技术笔记|YOLOv5使用教程"/></a><div class="content"><a class="title" href="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" title="技术笔记|YOLOv5使用教程">技术笔记|YOLOv5使用教程</a><time datetime="2024-08-16T21:43:16.000Z" title="发表于 2024-08-17 05:43:16">2024-08-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By 蜂鸟</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.0.0-b1"></script><script src="/js/main.js?v=5.0.0-b1"></script><div class="js-pjax"><script>(() => {
+  const initGitalk = () => {
+    const gitalk = new Gitalk(Object.assign({
+      clientID: 'Ov23liAljDERGwRc5of6',
+      clientSecret: 'bd27219d38708d9a946f0910e9f21a11a70e2f7d',
+      repo: 'xiaozan-hust.github.io',
+      owner: 'xiaozan-hust',
+      admin: ['xiaozan-hust'],
+      id: 'beb94e5231d6b3799d4f9c03d897df51',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async() => {
+    if (typeof Gitalk === 'function') initGitalk()
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js')
+      initGitalk()
+    }
+  }
+  
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  if ('Gitalk' === 'Gitalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
