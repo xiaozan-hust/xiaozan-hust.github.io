@@ -24,7 +24,8 @@
 <li>npm install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
 </ul>
 <p>正确执行以上命令后，输入hexo s，即可在浏览器中通过 <code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹"></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" class title="初始化本地文件夹">
+
 <p><em><strong>TIPS:</strong></em></p>
 <ul>
 <li>在进行npm init <code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
@@ -33,7 +34,8 @@
 <h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><p><strong>Ⅰ：hexo new “文章名称”</strong></p>
 <p>在终端输入该命令，将会在路径source&#x2F;_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
 <p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置"></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" class title="文章设置">
+
 <p><strong>Ⅱ：书写文章</strong></p>
 <p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 | MarkDown官方教程</a></p>
 <p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
@@ -46,23 +48,26 @@
 <p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
 <p><strong>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</strong></p>
 <p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构"></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" class title="文章结构">
+
 <p><strong>Ⅱ：引用图片</strong></p>
 <p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">![图片描述](文章名称/图片名称.jpg)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">{% asset_img "图片名称.jpg" "图片描述" %}</span><br></pre></td></tr></table></figure>
 
 <p>至此，即可在文章中优雅的插入图片。</p>
 <h3 id="2-2-2-插入文章封面"><a href="#2-2-2-插入文章封面" class="headerlink" title="2.2.2 插入文章封面"></a>2.2.2 插入文章封面</h3><p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
 <p>下述方法为在本人进行网站搭建时自行摸索发现的，方法非常简单。</p>
 <p><strong>Ⅰ：添加封面图片至主题img文件夹</strong></p>
 <p>以我使用的butterfly主题为例，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放"></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" class title="图片存放">
+
 <p><strong>Ⅱ：引用图片</strong></p>
 <p>在每一篇文章的最前面，会有一些关于该文章的描述，其中可以添加如下行：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cover: /img/文章封面图名称.jpg</span><br></pre></td></tr></table></figure>
 
 <p>当运行hexo g命令发布网站时，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下的图片将会在public&#x2F;img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public"></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" class title="public">
+
 <p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
 <h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/"> Butterfly 文檔(一) 快速開始 | Butterfly</a></p>
 <p>在HEXO中自己从零开始搭建一个具备较为完善的功能的网站是比较麻烦且需要一定的编程基础的，不过，对于大多数人来说，其实是可以参考别人已经开源的模板的，然后按照自己的喜好进行修改。这类似于你去做一份PPT，你当然可以从一张一张的空白页开始，慢慢的插入线条，设置背景，添加动画等等，但是，我相信大家其实都更倾向于先从一个别人已经做好的PPT模板开始，按照自己的需求进行修改。</p>
@@ -71,7 +76,9 @@
 <h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
 <h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><p>目前gitee pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
 <p><strong>Ⅰ：创建一个github仓库</strong></p>
-<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
+<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：</p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" class title="初始化本地文件夹">
+
 <p><strong>Ⅱ：建立本地电脑与远程仓库的连接</strong></p>
 <p>这部分其实对于经常使用git的人来说并不陌生。平时我们在github上找别人的代码时，那么别人的仓库一定是公开的，但是我们只具备访问这个仓库的权限，却无法对仓库的内容进行修改。同理，如果你是这个仓库的开发者，你又该如何使自己能够对这个仓库进行修改呢？答案就是：添加密钥。</p>
 <p>如何添加密钥呢？这其实分三步：一是生成一份与本地电脑挂钩的密钥；二是将该密钥添加到远程仓库中，使本地电脑具备对该仓库的修改权限；三是绑定邮箱。</p>
@@ -85,16 +92,24 @@
 <p>在git终端下输入两个命令：</p>
 <p><code>git config --global user.name &quot;注册时用户名&quot;</code></p>
 <p><code>git config --global user.email &quot;注册时邮箱&quot;</code></p>
-<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
+<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：</p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" class title="初始化本地文件夹">
+
 <p><strong>Ⅲ：建立博客与仓库的连接并上传博客</strong></p>
 <p>还记得当时创建仓库时生成的HTTPS或者SSH链接吗？你可以认为它们就是仓库的身份证，此时我们只需要将这个链接添加到我们的本地博客文件夹中，即告诉你的博客：部署网站时就往这个仓库里面上传就行啦！</p>
-<p>可以在如下位置找到该链接，这里推荐使用SSH：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
+<p>可以在如下位置找到该链接，这里推荐使用SSH：</p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" class title="初始化本地文件夹">
+
 <p>找到你的网站文件夹，里面有一个我们前面提到过的_config.yml文件，在该文件的最末尾处添加以下内容（以我的这个仓库的SSH为例）：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: &#x27;git&#x27;</span><br><span class="line">  repository: git@github.com:xiaozan-hust/xiaozan-hust.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code><br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
+<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code></p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" class title="初始化本地文件夹">
+
 <p>可以看到，hexo d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
-<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
+<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：</p>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" class title="初始化本地文件夹">
+
 <h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
 <p>这一部分暂时搁置吧，感兴趣的朋友可以直接参考git的教程：<a href="https://liaoxuefeng.com/books/git/introduction/index.html">廖雪峰Git教程</a></p>
 <h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><p>现在是2024&#x2F;11&#x2F;26 15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
@@ -206,7 +221,8 @@
 <h2 id="1-工作空间与功能包的创建"><a href="#1-工作空间与功能包的创建" class="headerlink" title="1. 工作空间与功能包的创建"></a>1. 工作空间与功能包的创建</h2><h3 id="1-1-工作空间的创建"><a href="#1-1-工作空间的创建" class="headerlink" title="1.1 工作空间的创建"></a>1.1 工作空间的创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 依次建立两个文件夹，分别为工作空间文件夹和src文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/ros_ws/src</span><br><span class="line"><span class="comment"># 进入src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ~/ros_ws/src</span><br><span class="line"><span class="comment"># 初始化工作空间</span></span><br><span class="line">catkin_init_workspace</span><br></pre></td></tr></table></figure>
 
 <p>以上命令执行完后将会在src文件夹下生成CMakeLists.txt文件，该文件一般不可修改，该文件的生成表示工作空间的成功创建，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(4).png" alt="haha"></p>
+
+
 <p>可以执行以下命令对工作空间进行编译，以进一步验证工作空间是否创建成功：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间根目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/</span><br><span class="line"><span class="comment"># 编译工作空间</span></span><br><span class="line">catkin_make</span><br><span class="line"><span class="comment"># 该命令执行后应无报错信息出现</span></span><br></pre></td></tr></table></figure>
 
@@ -215,11 +231,14 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间内src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/src</span><br><span class="line"><span class="comment"># 创建功能包并添加必需的依赖</span></span><br><span class="line">catkin_create_pkg test_pkg std_msgs rospy roscpp</span><br></pre></td></tr></table></figure>
 
 <p>此时，工作空间结构如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(5).png" alt="haha"></p>
+
+
 <h2 id="2-自定义消息内容"><a href="#2-自定义消息内容" class="headerlink" title="2. 自定义消息内容"></a>2. 自定义消息内容</h2><h3 id="2-1-创建msg文件"><a href="#2-1-创建msg文件" class="headerlink" title="2.1 创建msg文件"></a>2.1 创建msg文件</h3><p>可以在功能包目录下创建一个msg文件夹，用于存储自定义的消息文件，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(6).png" alt="haha"></p>
+
+
 <p>接着，在msg文件中定义你想在话题中传输的内容，即消息的内容，比如我在这里创建了一个消息话题内容包含：名字，力矩，长度，速度：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(7).png" alt="haha"></p>
+
+
 <h3 id="2-2-修改package-xml文件"><a href="#2-2-修改package-xml文件" class="headerlink" title="2.2 修改package.xml文件"></a>2.2 修改package.xml文件</h3><p>在所创建的功能包文件夹内，包含两个文件package.xml文件和CMakeLists.txt文件，我们首先修改package.xml文件，在该文件内添加以下内容：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;build_export_depend&gt;message_generation&lt;/build_export_depend&gt;</span><br><span class="line">&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;</span><br></pre></td></tr></table></figure>
 
@@ -229,7 +248,8 @@
 <h3 id="2-4-编译生成消息对应头文件"><a href="#2-4-编译生成消息对应头文件" class="headerlink" title="2.4 编译生成消息对应头文件"></a>2.4 编译生成消息对应头文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws</span><br><span class="line"><span class="comment"># 编译生成消息头文件</span></span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
 
 <p>此时，在工作空间中即可搜索到以刚才创建的消息文件命名的头文件，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(8).png" alt="haha"></p>
+
+
 <h2 id="3-消息的发布与接收"><a href="#3-消息的发布与接收" class="headerlink" title="3. 消息的发布与接收"></a>3. 消息的发布与接收</h2><h3 id="3-1-消息的发布"><a href="#3-1-消息的发布" class="headerlink" title="3.1 消息的发布"></a>3.1 消息的发布</h3><p>在这里我直接附上一份写有详细注释的代码：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的发布</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_pub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_pub的发布者，发布名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Publisher test_msg_pub = nh.<span class="built_in">advertise</span>&lt;test_pkg::test_msg&gt;(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="comment">// 设置循环的频率10Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 循环发布消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 初始化消息变量</span></span><br><span class="line">        test_pkg::test_msg test_msg;</span><br><span class="line">        test_msg.name = <span class="string">&quot;test_msg&quot;</span>;</span><br><span class="line">        test_msg.torque = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.length = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.speed = <span class="number">100.0</span> + count;</span><br><span class="line">        <span class="comment">// 发布消息</span></span><br><span class="line">        test_msg_pub.<span class="built_in">publish</span>(test_msg);</span><br><span class="line">        <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Publish test_msg: %d&quot;</span>, count);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -237,12 +257,14 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"># 添加可执行文件</span><br><span class="line"><span class="built_in">add_executable</span>(test_message_pub </span><br><span class="line">src/test_message_pub.cpp)</span><br><span class="line"><span class="built_in">target_link_libraries</span>(test_message_pub PUBLIC $&#123;catkin_LIBRARIES&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>对该程序进行编译，并且运行，查看如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(9).png" alt="haha"></p>
+
+
 <h3 id="3-2-消息的接收"><a href="#3-2-消息的接收" class="headerlink" title="3.2 消息的接收"></a>3.2 消息的接收</h3><p>同样的，在这里我直接附上一份写有详细注释的代码：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的订阅</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"><span class="comment">// 定义一些用于存储消息的变量</span></span><br><span class="line">std::string global_name = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="type">int</span> global_torque = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> global_length = <span class="number">0</span>;</span><br><span class="line"><span class="type">float</span> global_speed = <span class="number">0.0</span>;</span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testMsgCallback</span><span class="params">(<span class="type">const</span> test_pkg::test_msg::ConstPtr&amp; msg)</span> </span>&#123;</span><br><span class="line">    global_name = msg-&gt;name;</span><br><span class="line">    global_torque = msg-&gt;torque;</span><br><span class="line">    global_length = msg-&gt;length;</span><br><span class="line">    global_speed = msg-&gt;speed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UseData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg name: %s&quot;</span>, global_name.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg torque: %d&quot;</span>, global_torque);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg length: %d&quot;</span>, global_length);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg speed: %f&quot;</span>, global_speed);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;----------------------------------&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_sub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_sub的订阅者，订阅名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Subscriber test_msg_sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>, testMsgCallback);</span><br><span class="line">    <span class="comment">// 设置循环的频率1Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 循环订阅消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 使用数据</span></span><br><span class="line">        <span class="built_in">UseData</span>();</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">        <span class="comment">// 处理ROS回调函数--该函数至关重要！！！！</span></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>修改CMakeLists.txt文件，并且编译运行，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(10).png" alt="haha"></p>
+
+
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>本文面向工程开发，讲述实操内容，中间关于ROS的很多概念没有展开细讲，比如 <code>ros::spin()</code>和 <code>ros::spinonce()</code>的区别，比如自定义消息时使用的何种语言，比如何为话题何为句柄等等。</p>
 <p>若需要进一步对ROS进行学习，仍然是推荐大家返回去本文最初推荐的《古月居ROS21讲》。</p>
 <hr>
@@ -344,7 +366,8 @@
 <li><em><strong>安装所需依赖：</strong></em> <code>pip install -r requirements.txt</code></li>
 </ul>
 <p>至此，你的计算机现在已经可以使用YOLOv5了，可以通过在yolov5文件夹打开终端运行python3 detect.py，该程序将会利用已经训练好的模型对&#x2F;data&#x2F;imgs&#x2F;下的图片进行目标检测，并且在&#x2F;runs&#x2F;detect&#x2F;exp文件夹查看检测后的结果。</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" alt="F4"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" class title="F4">
+
 <h3 id="2-3-GPU环境搭建及YOLOv5的使用"><a href="#2-3-GPU环境搭建及YOLOv5的使用" class="headerlink" title="2.3 GPU环境搭建及YOLOv5的使用"></a>2.3 GPU环境搭建及YOLOv5的使用</h3><p><strong>！！！！！！！！！！！！！！！安装过程中，全程不要挂梯子，并且退出后台。！！！！！！！！！！！！！！！！！！！！！！！！！！</strong></p>
 <h4 id="2-3-1-显卡驱动安装"><a href="#2-3-1-显卡驱动安装" class="headerlink" title="2.3.1 显卡驱动安装"></a>2.3.1 显卡驱动安装</h4><p>安装显卡驱动可以使用命令行安装，但是有一种比较方便的方式进行安装：</p>
 <ul>
@@ -353,32 +376,42 @@
 <li>终端输入nvidia-smi即可查看驱动信息</li>
 </ul>
 <p>例如我所选的驱动版本为：</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" alt="驱动"></p>
-<p>显示信息为：<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" alt="smi"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" class title="驱动">
+
+<p>显示信息为：</p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" class title="smi">
+
 <p>此外，可以看到，终端还显示了推荐的CUDA版本，可以选择推荐的版本，也可以自行选择版本安装。</p>
 <h4 id="2-3-2-CUDA安装"><a href="#2-3-2-CUDA安装" class="headerlink" title="2.3.2 CUDA安装"></a>2.3.2 CUDA安装</h4><p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">显卡驱动与CUDA版本对应</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" alt="CUDA与驱动版本"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" class title="CUDA与驱动版本">
+
 <p><a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA版本选择与安装步骤</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" alt="CUDA安装"></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" alt="CUDA安装"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" class title="CUDA安装">
+
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" class title="CUDA安装">
+
 <p>根据自己的显卡驱动版本选择对应的CUDA版本，推荐不要下载太低版本的CUDA，因为后面的Pytorch对CUDA的版本也有要求，太低的CUDA版本可能导致你下载的Pytorch并不能满足比如yolov5对最低版本Pytorch的要求。</p>
 <p><em><strong>tips:</strong></em> 在安装的过程中，很大概率会在安装到99%时出现段错误（核心已转储），如下图所示：</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" alt="段错误"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" class title="段错误">
+
 <p>原因是栈太小，解决方法如下：</p>
 <ul>
 <li>查看栈大小：ulimit -a</li>
 <li>更改stack size：ulimit -s 102400</li>
 </ul>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" alt="段错误"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" class title="段错误">
+
 <p><a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html#ubuntu-x86_64">添加环境变量</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" alt="环境变量"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" class title="环境变量">
+
 <p>以上内容(注意改成自己版本的CUDA)在~&#x2F;.bashrc尾行中添加。</p>
 <p><em><strong>完成以上内容后，在终端输入：</strong></em></p>
 <ul>
 <li><em>nvcc -V</em></li>
 </ul>
 <p><em><strong>查看是否安装成功。</strong></em></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="查看">\</p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" class title="查看">\
+
 <p><strong>！！！！！！！安装完之后最好重启一次电脑，以验证是否能正确加载nvidia驱动，如果不能正确加载，则手动再装一次即可！！！！！！！！！！！！！</strong></p>
 <h4 id="2-3-3-安装torch"><a href="#2-3-3-安装torch" class="headerlink" title="2.3.3 安装torch"></a>2.3.3 安装torch</h4><p><a href="https://pytorch.org/get-started/previous-versions/">torch与CUDA版本对应及下载</a></p>
 <p>由于我装的CUDA为12.0，查看了一下，官网上没有直接支持cuda 12的torch版本，但是翻阅社区了解到，cuda是向下兼容的，cuda 12可以支持官网里面的CUDA 11.8。</p>
@@ -392,7 +425,8 @@
 <li>print(torch.cuda.is_available())</li>
 </ul>
 <p>返回true代表安装成功。</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="查看"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" class title="查看">
+
 <p>安装成功但是warnning:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WARNING: The script isympy is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts cmake, cpack and ctest are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The script lit is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts convert-caffe2-to-onnx, convert-onnx-to-caffe2 and torchrun are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts f2py, f2py3 and f2py3.8 are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -400,7 +434,9 @@
 <h3 id="2-4-cuDNN与TensorRT"><a href="#2-4-cuDNN与TensorRT" class="headerlink" title="2.4 cuDNN与TensorRT"></a>2.4 cuDNN与TensorRT</h3><h4 id="2-4-1-cuDNN"><a href="#2-4-1-cuDNN" class="headerlink" title="2.4.1 cuDNN"></a>2.4.1 cuDNN</h4><p>NVIDIA CUDA 深度神经网络 （cuDNN） 是用于深度神经网络的 GPU 加速基元库</p>
 <p><a href="https://blog.csdn.net/h3c4lenovo/article/details/119003405">参考博客</a></p>
 <p><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">官方安装指引</a></p>
-<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="查看"></p>
+<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" class title="查看">
+
 <p>下载对应CUDA的版本就好了，我的CUDA是12.0.0，所以我下载的是cuDNN8.9.0 .</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf cudnn-linux-x86_64-8.9.0.131_cuda12-archive.tar.xz</span><br><span class="line">sudo cp cudnn-linux-x86_64-8.9.0.131_cuda12-archive/include/cudnn*.h /usr/local/cuda/include </span><br><span class="line">sudo cp -P cudnn-linux-x86_64-8.9.0.131_cuda12-archive/lib/libcudnn* /usr/local/cuda/lib64 </span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*  </span><br></pre></td></tr></table></figure>
 
@@ -411,7 +447,8 @@
 <p><a href="https://developer.nvidia.com/nvidia-tensorrt-8x-download">官网下载地址</a></p>
 <p><a href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">官方安装指引</a></p>
 <p>这里注意最新版的TensorRT也只支持CUDA12.1 。<strong>所以CUDA不要超过12.1，例如我装的就是12.0.0</strong></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="查看"></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" class title="查看">
+
 <p>我用的是Tar安装，版本是TensorRT8.6 。用tar安装的好处是，把解压好的文件和.bashrc里面的路径删除就可以很方便的删除TensorRT了。</p>
 <p>下载好之后，将这个移动到opt文件夹中： sudo mv TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz &#x2F;opt 方便管理</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf TensorRT-$&#123;version&#125;.Linux.$&#123;arch&#125;-gnu.$&#123;cuda&#125;.tar.gz</span><br><span class="line">cd TensorRT-$&#123;version&#125;/python</span><br><span class="line">python3 -m pip install tensorrt-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_lean-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_dispatch-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/uff</span><br><span class="line">python3 -m pip install uff-0.6.9-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/graphsurgeon</span><br><span class="line">python3 -m pip install graphsurgeon-0.4.6-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/onnx_graphsurgeon</span><br><span class="line">python3 -m pip install onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
@@ -458,10 +495,16 @@
 
 <h3 id="3-5-训练模型"><a href="#3-5-训练模型" class="headerlink" title="3.5 训练模型"></a>3.5 训练模型</h3><p>当做好以上工作后，可以直接在终端运行python3 train.py进行数据集训练。</p>
 <p><strong>训练过程可视化：</strong></p>
-<p>在yolo.py程序中找到<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="查看"></p>
+<p>在yolo.py程序中找到</p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" class title="查看">
+
 <p>将该部分取消注释。</p>
-<p>在yolov5文件夹终端下输入：tensorboard –logdir&#x3D;.&#x2F;runs，然后在浏览器访问<a href="http://localhost:6006/%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E3%80%82">http://localhost:6006/即可查看训练过程。</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="查看"></p>
-<h3 id="3-6-训练结果"><a href="#3-6-训练结果" class="headerlink" title="3.6 训练结果"></a>3.6 训练结果</h3><p>训练后的结果会被保存在runs&#x2F;train&#x2F;exp_xx下<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" alt="查看"></p>
+<p>在yolov5文件夹终端下输入：tensorboard –logdir&#x3D;.&#x2F;runs，然后在浏览器访问<a href="http://localhost:6006/%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E3%80%82">http://localhost:6006/即可查看训练过程。</a></p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" class title="查看">
+
+<h3 id="3-6-训练结果"><a href="#3-6-训练结果" class="headerlink" title="3.6 训练结果"></a>3.6 训练结果</h3><p>训练后的结果会被保存在runs&#x2F;train&#x2F;exp_xx下</p>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" class title="查看">
+
 <ul>
 <li>weights文件夹下保存训练的模型参数，包括best.pt和last.pt</li>
 <li>result.png表示训练效果：<ul>
@@ -492,20 +535,20 @@
 <li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04   VsCode</strong></li>
 <li>配置实例：<strong>OpenCV &amp; C++</strong></li>
 </ul>
-<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
+<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" class title="img"></p>
 <p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code .（code和 .之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
-<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
-<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
+<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" class title="img"></p>
+<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" class title="img"></p>
 <p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
 <h3 id="1-3-第三步：生成并编辑配置文件"><a href="#1-3-第三步：生成并编辑配置文件" class="headerlink" title="1.3 第三步：生成并编辑配置文件"></a>1.3 第三步：生成并编辑配置文件</h3><p>这里的配置文件一般有四个：<strong>launch.json; task.json; setting.json; c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
-<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
+<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" class title="img"></p>
 <p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个**.json<strong>文件，我们首先先把它们几个生成出来：生成</strong>launch.json<strong>文件：运行-&gt;添加配置，这时候生成的</strong>launch.json<strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成</strong>c_cpp_properties.json<strong>文件：</strong>Ctrl+shift+p<strong>打开搜索框，然后输入c++选择C&#x2F;C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个</strong>includepath**，也可以不用这个.json文件；</p>
-<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
-<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
+<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" class title="img"></p>
+<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" class title="img"></p>
 <p>这时候我们看到那个关于** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>&#x2F;usr&#x2F;include&#x2F;opencv4<strong>，然后我把</strong>&#x2F;usr&#x2F;include&#x2F;opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心！！）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
 <p>不过这个时候呢，你去点击那个** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>“args”[]**后面开始添加东西：”-I”标明头文件所在路径（就是你在includepath里面添加的路径）; “-L”标明库文件所在路径; “-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
 <p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是&#x2F;usr&#x2F;lib也可能是&#x2F;usr&#x2F;local&#x2F;lib也可能是lib里面的某个文件夹里面，具体方式可以直接在&#x2F;usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了**&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu<strong>里面，所以在task.json里面就这么写：</strong>“-L”,”&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu”<strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：</strong>“-l”,”opencv_dnn”**。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
-<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
+<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" class title="img"></p>
 <p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
 <h2 id="2-写在最后"><a href="#2-写在最后" class="headerlink" title="2. 写在最后"></a>2. 写在最后</h2><p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
 <p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
@@ -544,6 +587,28 @@
       </categories>
       <tags>
         <tag>VSCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生活记录|分享一组生活的照片</title>
+    <url>/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/</url>
+    <content><![CDATA[<p>最近好喜欢到处拍拍拍，如果能通过相机表达出看到那些景色时的心情真的是一件很能令我满足的事情。</p>
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/001.jpg" class width="001">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/002.jpg" class width="002">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/003.jpg" class width="003">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/004.jpg" class width="004">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/005.jpg" class width="005">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/006.jpg" class width="006">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/007.jpg" class width="007">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/008.jpg" class width="008">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/009.jpg" class width="009">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/010.jpg" class width="010">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/011.jpg" class width="011">
+<img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/012.jpg" class width="012">
+]]></content>
+      <tags>
+        <tag>生活记录</tag>
+        <tag>摄影</tag>
       </tags>
   </entry>
 </search>
