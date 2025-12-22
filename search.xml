@@ -1,6 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>技术笔记|HEXO网站开发教程</title>
+    <url>/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="前言">0. 前言</h1>
+<p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
+<h1 id="开发环境搭建">1. 开发环境搭建</h1>
+<p>开发平台支持Ubuntu/Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
+<p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
+<p>值得一提的是，下面我写的安装步骤比较偏向于技巧部分，更加简单清晰的教程大家可以参考一个B站视频：<a href="https://www.bilibili.com/video/BV1Ju4m1c7WR/?spm_id_from=333.337.search-card.all.click&amp;vd_source=a3ce7565d1e7532a49f56b5a3ebd1d61">HEXO开发环境搭建</a></p>
+<h2 id="工具安装">1.1 工具安装</h2>
+<p>参考： <a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85">官方安装教程</a></p>
+<p><strong>1. Git安装：</strong>
+ubuntu系统打开终端后执行：<code>&lt;pip install git&gt;</code>;
+windows端：与一般exe文件安装方式一致，请点击<a href="https://git-scm.com/downloads/win">下载链接</a></p>
+<p><strong>2. Node.js安装：</strong> 进入<a href="https://nodejs.org/zh-cn/download/package-manager">Node.js安装界面</a>，选择适用于你电脑版本的选项，根据网页内容依次执行命令即可。</p>
+<p><strong>3. hexo安装： <code>npm install hexo</code></strong></p>
+<p><strong><em>TIPS:</em></strong></p>
+<ul>
+<li>ubuntu用户安装Node.js时：需要注意一下的是，第一步其实就是在安装nvm，在安装完后直接运行第二行命令可能会出错，需要更新一下环境变量：source
+~/.bashrc</li>
+<li>安装完hexo后，对于linux用户来说依然需要添加环境变量，并且通过source
+~/.profile更新</li>
+</ul>
+<h2 id="本地文件夹初始化">1.2 本地文件夹初始化</h2>
+<p>利用HEXO开发网站的好处在于你的网站的全部内容其实本质上一个本地的文件夹，所谓的部署网站即可以让别人在网络上检索并看到你的网站，其实是将该本地文件夹的部分内容上传至你所依赖的发布工具（如github，gitee等）。你可以通过对本地文件夹的修改直接实现对网站的修改。</p>
+<p>不过这个文件夹并不是一个简单的文件夹，它有些类似于git的仓库，同样的，它也要进行一些初始化，以让我们知道：这是一个属于hexo的网站文件夹。</p>
+<p>初始化具体步骤如下：</p>
+<ul>
+<li>hexo init
+<code>&lt;网站文件夹名称&gt;</code>：进入一个文件夹，并且在该文件夹下打开终端输入以上命令，则会在该文件夹下生成一个网站文件夹，以后你的所有开发步骤都是在这个文件夹中进行的</li>
+<li>npm
+install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
+</ul>
+<p>正确执行以上命令后，输入hexo s，即可在浏览器中通过
+<code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹">
+<figcaption aria-hidden="true">初始化本地文件夹</figcaption>
+</figure>
+<p><strong><em>TIPS:</em></strong></p>
+<ul>
+<li>在进行npm init
+<code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm
+install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
+<li>如果你想删除重新试一次，那么你应该删除整个blog文件夹，然后重新初始化一个blog，而不是单纯的删除掉里面的内容</li>
+</ul>
+<h1 id="个人博客教程">2. 个人博客教程</h1>
+<h2 id="创建一篇自己的博客">2.1 创建一篇自己的博客</h2>
+<p><strong>Ⅰ：hexo new “文章名称”</strong></p>
+<p>在终端输入该命令，将会在路径source/_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
+<p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置">
+<figcaption aria-hidden="true">文章设置</figcaption>
+</figure>
+<p><strong>Ⅱ：书写文章</strong></p>
+<p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 |
+MarkDown官方教程</a></p>
+<p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
+<p>hexo g: 生成网页</p>
+<p>hexo s: 运行网站</p>
+<p>至此，可以在
+<code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
+<p>hexo d: 部署网站</p>
+<p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3
+网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
+<h2 id="如何完美的插入图片">2.2 如何完美的插入图片</h2>
+<h3 id="在文章中插入图片">2.2.1 在文章中插入图片</h3>
+<p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
+<p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
+<p><strong>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</strong></p>
+<p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构">
+<figcaption aria-hidden="true">文章结构</figcaption>
+</figure>
+<p><strong>Ⅱ：引用图片</strong></p>
+<p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/插入图片.png" alt="图片描述">
+<figcaption aria-hidden="true">图片描述</figcaption>
+</figure>
+<p>至此，即可在文章中优雅的插入图片。(后面hexo-image-link这个插件似乎升级了，导致语法发生了改变，需要在“文章名称”前加“/”，即“/文章名称/图片名称.jpg”))</p>
+<h3 id="插入文章封面">2.2.2 插入文章封面</h3>
+<p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
+<p>下述方法为在本人进行网站搭建时自行摸索发现的，方法非常简单。</p>
+<p><strong>Ⅰ：添加封面图片至主题img文件夹</strong></p>
+<p>以我使用的butterfly主题为例，在路径themes/butterfly/source/img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放">
+<figcaption aria-hidden="true">图片存放</figcaption>
+</figure>
+<p><strong>Ⅱ：引用图片</strong></p>
+<p>在每一篇文章的最前面，会有一些关于该文章的描述，其中可以添加如下行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cover: /img/文章封面图名称.jpg</span><br></pre></td></tr></table></figure>
+<p>当运行hexo
+g命令发布网站时，在路径themes/butterfly/source/img下的图片将会在public/img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public">
+<figcaption aria-hidden="true">public</figcaption>
+</figure>
+<p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
+<h2 id="选择一个舒服的主题">2.3 选择一个舒服的主题</h2>
+<p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 文檔(一)
+快速開始 | Butterfly</a></p>
+<p>在HEXO中自己从零开始搭建一个具备较为完善的功能的网站是比较麻烦且需要一定的编程基础的，不过，对于大多数人来说，其实是可以参考别人已经开源的模板的，然后按照自己的喜好进行修改。这类似于你去做一份PPT，你当然可以从一张一张的空白页开始，慢慢的插入线条，设置背景，添加动画等等，但是，我相信大家其实都更倾向于先从一个别人已经做好的PPT模板开始，按照自己的需求进行修改。</p>
+<p>HEXO官网提供了模板的功能，里面汇集了几乎所有的热门的网站模板：<a href="https://hexo.io/themes/">HEXO主题</a></p>
+<p>每一个模板的安装方式类似，一般在主题github仓库内会写该如何安装，其实就是下载到blog内的theme文件夹下，然后打开blog文件夹下的_config.yaml文件，将最下面的theme换成你要用的主题的名字（theme文件夹下）</p>
+<h1 id="网站的发布">3. 网站的发布</h1>
+<p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
+<h2 id="必须项基于github的网站部署与发布">3.1
+必须项：基于github的网站部署与发布</h2>
+<p>目前gitee
+pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
+<p><strong>Ⅰ：创建一个github仓库</strong></p>
+<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
+<p><strong>Ⅱ：建立本地电脑与远程仓库的连接</strong></p>
+<p>这部分其实对于经常使用git的人来说并不陌生。平时我们在github上找别人的代码时，那么别人的仓库一定是公开的，但是我们只具备访问这个仓库的权限，却无法对仓库的内容进行修改。同理，如果你是这个仓库的开发者，你又该如何使自己能够对这个仓库进行修改呢？答案就是：添加密钥。</p>
+<p>如何添加密钥呢？这其实分三步：一是生成一份与本地电脑挂钩的密钥；二是将该密钥添加到远程仓库中，使本地电脑具备对该仓库的修改权限；三是绑定邮箱。</p>
+<p>①生成密钥：</p>
+<p>在git终端下输入
+<code>ssh-keygen -t rsa -C "注册时的邮箱地址"</code>然后即会在一个名为~/.ssh/id_rsa下生成一份密钥。</p>
+<p>同样在git终端下输入
+<code>cat ~/.ssh/id_rsa.pub</code>，即会在终端打印出密钥。</p>
+<p>②添加密钥：</p>
+<p>进入github的Setting-&gt;SSH and GPG keys，点击New SSH
+key，然后将复制的密钥粘贴到github中即可。</p>
+<p>可以在git终端下输入
+<code>ssh -T git@github.com</code>以验证是否成功。</p>
+<p>③绑定邮箱：</p>
+<p>在git终端下输入两个命令：</p>
+<p><code>git config --global user.name "注册时用户名"</code></p>
+<p><code>git config --global user.email "注册时邮箱"</code></p>
+<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
+<p><strong>Ⅲ：建立博客与仓库的连接并上传博客</strong></p>
+<p>还记得当时创建仓库时生成的HTTPS或者SSH链接吗？你可以认为它们就是仓库的身份证，此时我们只需要将这个链接添加到我们的本地博客文件夹中，即告诉你的博客：部署网站时就往这个仓库里面上传就行啦！</p>
+<p>可以在如下位置找到该链接，这里推荐使用SSH： <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
+<p>找到你的网站文件夹，里面有一个我们前面提到过的_config.yml文件，在该文件的最末尾处添加以下内容（以我的这个仓库的SSH为例）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: &#x27;git&#x27;</span><br><span class="line">  repository: git@github.com:xiaozan-hust/xiaozan-hust.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code> <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
+<p>可以看到，hexo
+d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
+<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
+<h2 id="可选项基于仓库的多终端下的网站更新">3.2
+可选项：基于仓库的多终端下的网站更新</h2>
+<p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
+<p>这一部分暂时搁置吧，感兴趣的朋友可以直接参考git的教程：<a href="https://liaoxuefeng.com/books/git/introduction/index.html">廖雪峰Git教程</a></p>
+<h1 id="总结与展望">4. 总结与展望</h1>
+<p>现在是2024/11/26
+15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
+<p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
+<ol type="1">
+<li>个人网站字体设置</li>
+<li>如何新增文章评论功能</li>
+<li>如何添加全局搜索功能</li>
+<li>…</li>
+</ol>
+]]></content>
+      <categories>
+        <category>教程</category>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>HEXO</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>技术笔记|PCL学习笔记</title>
     <url>/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="pcl点云库学习记录">PCL点云库学习记录</h1>
@@ -515,6 +684,95 @@ train.py进行数据集训练。</p>
       </tags>
   </entry>
   <entry>
+    <title>技术笔记|创建一个你自己的工程</title>
+    <url>/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="第一个可以运行的vscode工程">第一个可以运行的VSCode工程</h1>
+<p><strong>写在前面</strong></p>
+<p><em>关于在Linux系统下的代码编辑器，大家应该都会听到一个词，那就是VsCode，坦白讲，这个软件的资源在我还是大二的时候，也就是一年前，还基本上在CSDN上找不到什么教程，B站上面的貌似也不是很多，而且大多数都是讲Windows下面的使用教程，其实坦白来说在Linux下面用的比较多的还有一个东西，那就是CMake，但是即使是用CMake，也十分有必要学会使用VsCode，因为CMake终究是个编译工具，单独的依靠CMakeLists.txt文件是无法实现调试功能的。</em></p>
+<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong>
+的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了
+<strong>PCL库，realsense SDK</strong>
+，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em></p>
+<p><em>不得不说，VsCode配置完确实好用，后续可以考虑实现
+<strong>VsCode+CMake</strong>
+的开发环境，以实现更加简便高效的代码编译与调试功能，还可以给VsCode加上Markdown和git等其他的插件，进一步提高生产力。</em></p>
+<h2 id="前言">0. 前言</h2>
+<ul>
+<li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04 VsCode</strong></li>
+<li>配置实例：<strong>OpenCV &amp; C++</strong></li>
+</ul>
+<h2 id="创建一个你自己的工程">1. 创建一个你自己的工程</h2>
+<h3 id="第一步创建你的工程文件夹">1.1 第一步：创建你的工程文件夹</h3>
+<p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份
+<strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
+<p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code
+.（code和
+.之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
+<h3 id="第二步安装c拓展">1.3 第二步：安装C++拓展</h3>
+<p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
+<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如<strong><code>&lt;iostream&gt;</code></strong>时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
+<p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
+<h3 id="第三步生成并编辑配置文件">1.3 第三步：生成并编辑配置文件</h3>
+<p>这里的配置文件一般有四个：<strong>launch.json; task.json;
+setting.json;
+c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
+<p>在你写了一个Hell
+World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C/C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
+<p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个<strong>.json</strong>文件，我们首先先把它们几个生成出来：生成<strong>launch.json</strong>文件：运行-&gt;添加配置，这时候生成的<strong>launch.json</strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成<strong>c_cpp_properties.json</strong>文件：<strong>Ctrl+shift+p</strong>打开搜索框，然后输入c++选择C/C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个<strong>includepath</strong>，也可以不用这个.json文件；</p>
+<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
+<h3 id="第四步开始配置第三方库以opencv为例">1.4
+第四步：开始配置第三方库，以OpenCV为例</h3>
+<p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
+<p>这时候我们看到那个关于** #include
+&lt;opencv2/opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>/usr/include/opencv4<strong>，然后我把</strong>/usr/include/opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心！！）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
+<p>不过这个时候呢，你去点击那个** #include
+&lt;opencv2/opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>”args”[]**后面开始添加东西：“-I”标明头文件所在路径（就是你在includepath里面添加的路径）;
+“-L”标明库文件所在路径;
+“-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
+<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是/usr/lib也可能是/usr/local/lib也可能是lib里面的某个文件夹里面，具体方式可以直接在/usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了<strong>/usr/lib/x86_64-linux-gnu</strong>里面，所以在task.json里面就这么写：<strong>“-L”,“/usr/lib/x86_64-linux-gnu”</strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：<strong>“-l”,“opencv_dnn”</strong>。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
+<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
+<p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
+<h2 id="写在最后">2. 写在最后</h2>
+<p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
+<p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
+<h2 id="更新">3. 2023.9.8更新</h2>
+<ol type="1">
+<li><p>关于.so或者.a文件的寻找，其实/usr文件夹下并不是全部的库，以ros为例，ros本身会被安装在/opt下，然后/opt/ros/noetic下又有include和lib等文件夹，所以如果要找一个第三方库的库，应该这么做：</p>
+<ul>
+<li>进入到你在includepath里面添加的路径的上一级，进入lib文件夹（以ros为例，应该是/opt/ros/noetic/lib/）</li>
+<li>搜索你需要的库的名字，比如是ros的话，输入ros即可找到ros内的全部库</li>
+</ul></li>
+<li><p>关于/usr/lib/x86_64-linux-gnu和/opt/ros/noetic/lib二者中都有ros相关的库，二者的区别：</p>
+<ul>
+<li><strong>/usr/lib/x86_64-linux-gnu：</strong></li>
+</ul>
+<ol type="1">
+<li><em>这是系统共享库的默认存储位置。它包含了与操作系统和其他软件包共享的标准系统库</em></li>
+<li><em>ROS和其他软件包可能会在这个目录中寻找一些系统依赖项，以确保它们能够与操作系统正常交互</em></li>
+<li><em>ROS本身的核心库通常不会放在这个目录下，因为它们是ROS的一部分，而不是操作系统的一部分</em></li>
+</ol>
+<ul>
+<li><strong>/opt/ros/noetic/lib</strong></li>
+</ul>
+<ol type="1">
+<li><em>这是ROS的安装目录，包含了ROS特定的库和二进制文件</em></li>
+<li><em>在这个目录中，您会找到ROS的核心库、ROS工具、ROS节点等等。这些库是ROS运行所必需的</em></li>
+<li><em>当编译和运行ROS程序时，链接器和运行时系统会查找这个目录中的库来确保ROS程序能够正常运行</em></li>
+</ol></li>
+</ol>
+<h2 id="关于本文">4. 关于本文</h2>
+<p>本文最初写作于幕布，用于记录使用VSCode进行代码调试运行的方法，由于网上关于此类问题的教程杂乱无章，特此记录。</p>
+<p>本文的写作风格非常稚嫩，写作本文时我接触Ubuntu系统不久，现在看来其实有很多不够深入的地方，但是对于当时的我来说，这篇文章确实对我以及我的同学们起到了一定的帮助作用。</p>
+<p>最后，希望大家多走debug之路，其实自己的能力就是在解决bug中一点点进步的。</p>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>VSCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>技术笔记|卡尔曼滤波</title>
     <url>/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
     <content><![CDATA[<h1 id="状态估计---卡尔曼滤波器-state-estimation---kalman-filter">状态估计 -
@@ -826,264 +1084,6 @@ Expansion)</strong> 对非线性函数 <span class="math inline"><mjx-container 
       <tags>
         <tag>阅读</tag>
         <tag>村上春树</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>技术笔记|HEXO网站开发教程</title>
-    <url>/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="前言">0. 前言</h1>
-<p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
-<h1 id="开发环境搭建">1. 开发环境搭建</h1>
-<p>开发平台支持Ubuntu/Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
-<p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
-<p>值得一提的是，下面我写的安装步骤比较偏向于技巧部分，更加简单清晰的教程大家可以参考一个B站视频：<a href="https://www.bilibili.com/video/BV1Ju4m1c7WR/?spm_id_from=333.337.search-card.all.click&amp;vd_source=a3ce7565d1e7532a49f56b5a3ebd1d61">HEXO开发环境搭建</a></p>
-<h2 id="工具安装">1.1 工具安装</h2>
-<p>参考： <a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85">官方安装教程</a></p>
-<p><strong>1. Git安装：</strong>
-ubuntu系统打开终端后执行：<code>&lt;pip install git&gt;</code>;
-windows端：与一般exe文件安装方式一致，请点击<a href="https://git-scm.com/downloads/win">下载链接</a></p>
-<p><strong>2. Node.js安装：</strong> 进入<a href="https://nodejs.org/zh-cn/download/package-manager">Node.js安装界面</a>，选择适用于你电脑版本的选项，根据网页内容依次执行命令即可。</p>
-<p><strong>3. hexo安装： <code>npm install hexo</code></strong></p>
-<p><strong><em>TIPS:</em></strong></p>
-<ul>
-<li>ubuntu用户安装Node.js时：需要注意一下的是，第一步其实就是在安装nvm，在安装完后直接运行第二行命令可能会出错，需要更新一下环境变量：source
-~/.bashrc</li>
-<li>安装完hexo后，对于linux用户来说依然需要添加环境变量，并且通过source
-~/.profile更新</li>
-</ul>
-<h2 id="本地文件夹初始化">1.2 本地文件夹初始化</h2>
-<p>利用HEXO开发网站的好处在于你的网站的全部内容其实本质上一个本地的文件夹，所谓的部署网站即可以让别人在网络上检索并看到你的网站，其实是将该本地文件夹的部分内容上传至你所依赖的发布工具（如github，gitee等）。你可以通过对本地文件夹的修改直接实现对网站的修改。</p>
-<p>不过这个文件夹并不是一个简单的文件夹，它有些类似于git的仓库，同样的，它也要进行一些初始化，以让我们知道：这是一个属于hexo的网站文件夹。</p>
-<p>初始化具体步骤如下：</p>
-<ul>
-<li>hexo init
-<code>&lt;网站文件夹名称&gt;</code>：进入一个文件夹，并且在该文件夹下打开终端输入以上命令，则会在该文件夹下生成一个网站文件夹，以后你的所有开发步骤都是在这个文件夹中进行的</li>
-<li>npm
-install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
-</ul>
-<p>正确执行以上命令后，输入hexo s，即可在浏览器中通过
-<code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹">
-<figcaption aria-hidden="true">初始化本地文件夹</figcaption>
-</figure>
-<p><strong><em>TIPS:</em></strong></p>
-<ul>
-<li>在进行npm init
-<code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm
-install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
-<li>如果你想删除重新试一次，那么你应该删除整个blog文件夹，然后重新初始化一个blog，而不是单纯的删除掉里面的内容</li>
-</ul>
-<h1 id="个人博客教程">2. 个人博客教程</h1>
-<h2 id="创建一篇自己的博客">2.1 创建一篇自己的博客</h2>
-<p><strong>Ⅰ：hexo new “文章名称”</strong></p>
-<p>在终端输入该命令，将会在路径source/_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
-<p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置">
-<figcaption aria-hidden="true">文章设置</figcaption>
-</figure>
-<p><strong>Ⅱ：书写文章</strong></p>
-<p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 |
-MarkDown官方教程</a></p>
-<p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
-<p>hexo g: 生成网页</p>
-<p>hexo s: 运行网站</p>
-<p>至此，可以在
-<code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
-<p>hexo d: 部署网站</p>
-<p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3
-网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
-<h2 id="如何完美的插入图片">2.2 如何完美的插入图片</h2>
-<h3 id="在文章中插入图片">2.2.1 在文章中插入图片</h3>
-<p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
-<p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
-<p><strong>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</strong></p>
-<p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构">
-<figcaption aria-hidden="true">文章结构</figcaption>
-</figure>
-<p><strong>Ⅱ：引用图片</strong></p>
-<p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/插入图片.png" alt="图片描述">
-<figcaption aria-hidden="true">图片描述</figcaption>
-</figure>
-<p>至此，即可在文章中优雅的插入图片。(后面hexo-image-link这个插件似乎升级了，导致语法发生了改变，需要在“文章名称”前加“/”，即“/文章名称/图片名称.jpg”))</p>
-<h3 id="插入文章封面">2.2.2 插入文章封面</h3>
-<p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
-<p>下述方法为在本人进行网站搭建时自行摸索发现的，方法非常简单。</p>
-<p><strong>Ⅰ：添加封面图片至主题img文件夹</strong></p>
-<p>以我使用的butterfly主题为例，在路径themes/butterfly/source/img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放">
-<figcaption aria-hidden="true">图片存放</figcaption>
-</figure>
-<p><strong>Ⅱ：引用图片</strong></p>
-<p>在每一篇文章的最前面，会有一些关于该文章的描述，其中可以添加如下行：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cover: /img/文章封面图名称.jpg</span><br></pre></td></tr></table></figure>
-<p>当运行hexo
-g命令发布网站时，在路径themes/butterfly/source/img下的图片将会在public/img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
-<figure>
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public">
-<figcaption aria-hidden="true">public</figcaption>
-</figure>
-<p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
-<h2 id="选择一个舒服的主题">2.3 选择一个舒服的主题</h2>
-<p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 文檔(一)
-快速開始 | Butterfly</a></p>
-<p>在HEXO中自己从零开始搭建一个具备较为完善的功能的网站是比较麻烦且需要一定的编程基础的，不过，对于大多数人来说，其实是可以参考别人已经开源的模板的，然后按照自己的喜好进行修改。这类似于你去做一份PPT，你当然可以从一张一张的空白页开始，慢慢的插入线条，设置背景，添加动画等等，但是，我相信大家其实都更倾向于先从一个别人已经做好的PPT模板开始，按照自己的需求进行修改。</p>
-<p>HEXO官网提供了模板的功能，里面汇集了几乎所有的热门的网站模板：<a href="https://hexo.io/themes/">HEXO主题</a></p>
-<p>每一个模板的安装方式类似，一般在主题github仓库内会写该如何安装，其实就是下载到blog内的theme文件夹下，然后打开blog文件夹下的_config.yaml文件，将最下面的theme换成你要用的主题的名字（theme文件夹下）</p>
-<h1 id="网站的发布">3. 网站的发布</h1>
-<p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
-<h2 id="必须项基于github的网站部署与发布">3.1
-必须项：基于github的网站部署与发布</h2>
-<p>目前gitee
-pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
-<p><strong>Ⅰ：创建一个github仓库</strong></p>
-<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
-<p><strong>Ⅱ：建立本地电脑与远程仓库的连接</strong></p>
-<p>这部分其实对于经常使用git的人来说并不陌生。平时我们在github上找别人的代码时，那么别人的仓库一定是公开的，但是我们只具备访问这个仓库的权限，却无法对仓库的内容进行修改。同理，如果你是这个仓库的开发者，你又该如何使自己能够对这个仓库进行修改呢？答案就是：添加密钥。</p>
-<p>如何添加密钥呢？这其实分三步：一是生成一份与本地电脑挂钩的密钥；二是将该密钥添加到远程仓库中，使本地电脑具备对该仓库的修改权限；三是绑定邮箱。</p>
-<p>①生成密钥：</p>
-<p>在git终端下输入
-<code>ssh-keygen -t rsa -C "注册时的邮箱地址"</code>然后即会在一个名为~/.ssh/id_rsa下生成一份密钥。</p>
-<p>同样在git终端下输入
-<code>cat ~/.ssh/id_rsa.pub</code>，即会在终端打印出密钥。</p>
-<p>②添加密钥：</p>
-<p>进入github的Setting-&gt;SSH and GPG keys，点击New SSH
-key，然后将复制的密钥粘贴到github中即可。</p>
-<p>可以在git终端下输入
-<code>ssh -T git@github.com</code>以验证是否成功。</p>
-<p>③绑定邮箱：</p>
-<p>在git终端下输入两个命令：</p>
-<p><code>git config --global user.name "注册时用户名"</code></p>
-<p><code>git config --global user.email "注册时邮箱"</code></p>
-<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
-<p><strong>Ⅲ：建立博客与仓库的连接并上传博客</strong></p>
-<p>还记得当时创建仓库时生成的HTTPS或者SSH链接吗？你可以认为它们就是仓库的身份证，此时我们只需要将这个链接添加到我们的本地博客文件夹中，即告诉你的博客：部署网站时就往这个仓库里面上传就行啦！</p>
-<p>可以在如下位置找到该链接，这里推荐使用SSH： <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
-<p>找到你的网站文件夹，里面有一个我们前面提到过的_config.yml文件，在该文件的最末尾处添加以下内容（以我的这个仓库的SSH为例）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: &#x27;git&#x27;</span><br><span class="line">  repository: git@github.com:xiaozan-hust/xiaozan-hust.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code> <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
-<p>可以看到，hexo
-d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
-<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：
-<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
-<h2 id="可选项基于仓库的多终端下的网站更新">3.2
-可选项：基于仓库的多终端下的网站更新</h2>
-<p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
-<p>这一部分暂时搁置吧，感兴趣的朋友可以直接参考git的教程：<a href="https://liaoxuefeng.com/books/git/introduction/index.html">廖雪峰Git教程</a></p>
-<h1 id="总结与展望">4. 总结与展望</h1>
-<p>现在是2024/11/26
-15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
-<p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
-<ol type="1">
-<li>个人网站字体设置</li>
-<li>如何新增文章评论功能</li>
-<li>如何添加全局搜索功能</li>
-<li>…</li>
-</ol>
-]]></content>
-      <categories>
-        <category>教程</category>
-        <category>技能学习</category>
-      </categories>
-      <tags>
-        <tag>HEXO</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>技术笔记|创建一个你自己的工程</title>
-    <url>/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="第一个可以运行的vscode工程">第一个可以运行的VSCode工程</h1>
-<p><strong>写在前面</strong></p>
-<p><em>关于在Linux系统下的代码编辑器，大家应该都会听到一个词，那就是VsCode，坦白讲，这个软件的资源在我还是大二的时候，也就是一年前，还基本上在CSDN上找不到什么教程，B站上面的貌似也不是很多，而且大多数都是讲Windows下面的使用教程，其实坦白来说在Linux下面用的比较多的还有一个东西，那就是CMake，但是即使是用CMake，也十分有必要学会使用VsCode，因为CMake终究是个编译工具，单独的依靠CMakeLists.txt文件是无法实现调试功能的。</em></p>
-<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong>
-的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了
-<strong>PCL库，realsense SDK</strong>
-，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em></p>
-<p><em>不得不说，VsCode配置完确实好用，后续可以考虑实现
-<strong>VsCode+CMake</strong>
-的开发环境，以实现更加简便高效的代码编译与调试功能，还可以给VsCode加上Markdown和git等其他的插件，进一步提高生产力。</em></p>
-<h2 id="前言">0. 前言</h2>
-<ul>
-<li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04 VsCode</strong></li>
-<li>配置实例：<strong>OpenCV &amp; C++</strong></li>
-</ul>
-<h2 id="创建一个你自己的工程">1. 创建一个你自己的工程</h2>
-<h3 id="第一步创建你的工程文件夹">1.1 第一步：创建你的工程文件夹</h3>
-<p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份
-<strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
-<p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code
-.（code和
-.之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
-<h3 id="第二步安装c拓展">1.3 第二步：安装C++拓展</h3>
-<p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
-<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如<strong><code>&lt;iostream&gt;</code></strong>时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
-<p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
-<h3 id="第三步生成并编辑配置文件">1.3 第三步：生成并编辑配置文件</h3>
-<p>这里的配置文件一般有四个：<strong>launch.json; task.json;
-setting.json;
-c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
-<p>在你写了一个Hell
-World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C/C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
-<p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个<strong>.json</strong>文件，我们首先先把它们几个生成出来：生成<strong>launch.json</strong>文件：运行-&gt;添加配置，这时候生成的<strong>launch.json</strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成<strong>c_cpp_properties.json</strong>文件：<strong>Ctrl+shift+p</strong>打开搜索框，然后输入c++选择C/C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个<strong>includepath</strong>，也可以不用这个.json文件；</p>
-<p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
-<h3 id="第四步开始配置第三方库以opencv为例">1.4
-第四步：开始配置第三方库，以OpenCV为例</h3>
-<p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
-<p>这时候我们看到那个关于** #include
-&lt;opencv2/opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>/usr/include/opencv4<strong>，然后我把</strong>/usr/include/opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心！！）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
-<p>不过这个时候呢，你去点击那个** #include
-&lt;opencv2/opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>”args”[]**后面开始添加东西：“-I”标明头文件所在路径（就是你在includepath里面添加的路径）;
-“-L”标明库文件所在路径;
-“-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
-<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是/usr/lib也可能是/usr/local/lib也可能是lib里面的某个文件夹里面，具体方式可以直接在/usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了<strong>/usr/lib/x86_64-linux-gnu</strong>里面，所以在task.json里面就这么写：<strong>“-L”,“/usr/lib/x86_64-linux-gnu”</strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：<strong>“-l”,“opencv_dnn”</strong>。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
-<p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
-<p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
-<h2 id="写在最后">2. 写在最后</h2>
-<p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
-<p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
-<h2 id="更新">3. 2023.9.8更新</h2>
-<ol type="1">
-<li><p>关于.so或者.a文件的寻找，其实/usr文件夹下并不是全部的库，以ros为例，ros本身会被安装在/opt下，然后/opt/ros/noetic下又有include和lib等文件夹，所以如果要找一个第三方库的库，应该这么做：</p>
-<ul>
-<li>进入到你在includepath里面添加的路径的上一级，进入lib文件夹（以ros为例，应该是/opt/ros/noetic/lib/）</li>
-<li>搜索你需要的库的名字，比如是ros的话，输入ros即可找到ros内的全部库</li>
-</ul></li>
-<li><p>关于/usr/lib/x86_64-linux-gnu和/opt/ros/noetic/lib二者中都有ros相关的库，二者的区别：</p>
-<ul>
-<li><strong>/usr/lib/x86_64-linux-gnu：</strong></li>
-</ul>
-<ol type="1">
-<li><em>这是系统共享库的默认存储位置。它包含了与操作系统和其他软件包共享的标准系统库</em></li>
-<li><em>ROS和其他软件包可能会在这个目录中寻找一些系统依赖项，以确保它们能够与操作系统正常交互</em></li>
-<li><em>ROS本身的核心库通常不会放在这个目录下，因为它们是ROS的一部分，而不是操作系统的一部分</em></li>
-</ol>
-<ul>
-<li><strong>/opt/ros/noetic/lib</strong></li>
-</ul>
-<ol type="1">
-<li><em>这是ROS的安装目录，包含了ROS特定的库和二进制文件</em></li>
-<li><em>在这个目录中，您会找到ROS的核心库、ROS工具、ROS节点等等。这些库是ROS运行所必需的</em></li>
-<li><em>当编译和运行ROS程序时，链接器和运行时系统会查找这个目录中的库来确保ROS程序能够正常运行</em></li>
-</ol></li>
-</ol>
-<h2 id="关于本文">4. 关于本文</h2>
-<p>本文最初写作于幕布，用于记录使用VSCode进行代码调试运行的方法，由于网上关于此类问题的教程杂乱无章，特此记录。</p>
-<p>本文的写作风格非常稚嫩，写作本文时我接触Ubuntu系统不久，现在看来其实有很多不够深入的地方，但是对于当时的我来说，这篇文章确实对我以及我的同学们起到了一定的帮助作用。</p>
-<p>最后，希望大家多走debug之路，其实自己的能力就是在解决bug中一点点进步的。</p>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>VSCode</tag>
       </tags>
   </entry>
 </search>
