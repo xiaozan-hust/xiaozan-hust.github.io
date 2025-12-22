@@ -556,7 +556,7 @@
 <li><strong>测量传感器存在误差：</strong> 噪声是常态，传感器的读数总在跳变。</li>
 </ol>
 <p><strong>核心定义：</strong><br>一种最优化的递归数字处理算法，在存在噪声的数据中估计系统的最优状态。</p>
-<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 $Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
+<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 \\$Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
 <p><strong>测量数据示例：</strong></p>
 <div align="center">
 
@@ -587,7 +587,7 @@
 </div>
 
 <p><strong>如何得到真实直径？</strong><br>一个很自然的做法是：<strong>取平均值</strong>。</p>
-<p>$$<br>\hat{x}_{k} &#x3D; \frac{1}{k}(z_{1} + z_{2} + \dots + z_{k})<br>$$</p>
+<p>$$<br>\hat{x}<em>{k} &#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k})<br>$$</p>
 <p>将其转化为<strong>递归形式</strong>：</p>
 <p>$$<br>\begin{aligned}<br>\hat{x}<em>{k} &amp;&#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{1}{k} \cdot \frac{k-1}{k-1}(z_{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{k-1}{k}\hat{x}<em>{k-1} + \frac{1}{k}z</em>{k} \<br>&amp;&#x3D; \hat{x}<em>{k-1} + \frac{1}{k}(z</em>{k} - \hat{x}_{k-1})<br>\end{aligned}<br>$$</p>
 <p><strong>化为更一般的形式：</strong></p>
@@ -673,9 +673,7 @@
 <p><strong>验证标准差：</strong></p>
 <p>$$<br>\sigma_{\hat{z}} &#x3D; \sqrt{(1-0.2)^2 \cdot 2^2 + 0.2^2 \cdot 4^2} &#x3D; \sqrt{3.2} &#x3D; 1.79<br>$$</p>
 <p>结果小于 $\sigma_{vo}$ (2) 和 $\sigma_{io}$ (4)，说明融合后的精度提高了。</p>
-<hr>
-<p><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.png" alt="查看"></p>
-<h2 id="03-协方差矩阵与状态空间-Covariance-Matrix-State-Space"><a href="#03-协方差矩阵与状态空间-Covariance-Matrix-State-Space" class="headerlink" title="03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)"></a>03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2><h3 id="3-1-协方差矩阵"><a href="#3-1-协方差矩阵" class="headerlink" title="3.1 协方差矩阵"></a>3.1 协方差矩阵</h3><p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.png" alt="查看"></h2><h2 id="03-协方差矩阵与状态空间-Covariance-Matrix-State-Space"><a href="#03-协方差矩阵与状态空间-Covariance-Matrix-State-Space" class="headerlink" title="03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)"></a>03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2><h3 id="3-1-协方差矩阵"><a href="#3-1-协方差矩阵" class="headerlink" title="3.1 协方差矩阵"></a>3.1 协方差矩阵</h3><p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
 <ul>
 <li>在刚才的例子中，VO 与 IO 互相独立，所以在融合时只考虑它们各自的方差即可。</li>
 <li>但若在数据融合时二者（或更多）存在关联，在融合时就必须考虑这种关联，具体的联动关系则以协方差矩阵来描述。</li>
