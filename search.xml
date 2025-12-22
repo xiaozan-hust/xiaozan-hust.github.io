@@ -574,4 +574,222 @@
         <tag>村上春树</tag>
       </tags>
   </entry>
+  <entry>
+    <title>技术笔记-卡尔曼滤波</title>
+    <url>/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
+    <content><![CDATA[<h1 id="状态估计-卡尔曼滤波器-State-Estimation-Kalman-Filter"><a href="#状态估计-卡尔曼滤波器-State-Estimation-Kalman-Filter" class="headerlink" title="状态估计 - 卡尔曼滤波器 (State Estimation - Kalman Filter)"></a>状态估计 - 卡尔曼滤波器 (State Estimation - Kalman Filter)</h1><hr>
+<h2 id="01-概述"><a href="#01-概述" class="headerlink" title="01. 概述"></a>01. 概述</h2><h3 id="1-1-为什么要使用卡尔曼滤波器"><a href="#1-1-为什么要使用卡尔曼滤波器" class="headerlink" title="1.1 为什么要使用卡尔曼滤波器?"></a>1.1 为什么要使用卡尔曼滤波器?</h3><p>工程中面临的“不确定性”主要体现在以下三个方面：</p>
+<ol>
+<li><strong>不存在完美的数学模型：</strong> 物理世界太复杂，模型总是基于各种前提进行简化的。</li>
+<li><strong>系统的扰动不可控：</strong> 如风、摩擦、打滑、电流波动等。</li>
+<li><strong>测量传感器存在误差：</strong> 噪声是常态，传感器的读数总在跳变。</li>
+</ol>
+<p><strong>核心定义：</strong><br>一种最优化的递归数字处理算法，在存在噪声的数据中估计系统的最优状态。</p>
+<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 $Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
+<p><strong>测量数据示例：</strong></p>
+<div align="center">
+
+<table>
+<thead>
+<tr>
+<th align="center">测量次数</th>
+<th align="center">测量结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">50.1 mm</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">50.2 mm</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">49.8 mm</td>
+</tr>
+<tr>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+</div>
+
+<p><strong>如何得到真实直径？</strong><br>一个很自然的做法是：<strong>取平均值</strong>。</p>
+<p>$$<br>\hat{x}<em>{k} &#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k})<br>$$</p>
+<p>将其转化为<strong>递归形式</strong>：</p>
+<p>$$<br>\begin{aligned}<br>\hat{x}<em>{k} &amp;&#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{1}{k} \cdot \frac{k-1}{k-1}(z_{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{k-1}{k}\hat{x}<em>{k-1} + \frac{1}{k}z</em>{k} \<br>&amp;&#x3D; \hat{x}<em>{k-1} + \frac{1}{k}(z</em>{k} - \hat{x}_{k-1})<br>\end{aligned}<br>$$</p>
+<p><strong>化为更一般的形式：</strong></p>
+<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + K_{k}(z_{k} - \hat{x}_{k-1})<br>$$</p>
+<ul>
+<li><strong>含义：</strong> 当前的估计值 &#x3D; 上一次的估计值 + 系数 $\times$ (当前的测量值 - 上一次的估计值)。</li>
+<li><strong>系数 $K_k$：</strong> Kalman Gain，即卡尔曼增益&#x2F;因数。</li>
+<li>在上述硬币例子中，$K_k &#x3D; 1&#x2F;k$，即对应均值滤波。</li>
+</ul>
+<hr>
+<h2 id="02-初识卡尔曼滤波"><a href="#02-初识卡尔曼滤波" class="headerlink" title="02. 初识卡尔曼滤波"></a>02. 初识卡尔曼滤波</h2><h3 id="2-1-单变量卡尔曼滤波的一般流程"><a href="#2-1-单变量卡尔曼滤波的一般流程" class="headerlink" title="2.1 单变量卡尔曼滤波的一般流程"></a>2.1 单变量卡尔曼滤波的一般流程</h3><p><strong>定义：</strong></p>
+<ul>
+<li><strong>估计误差：</strong> $e_{EST}$</li>
+<li><strong>测量误差：</strong> $e_{MEA}$</li>
+<li><strong>卡尔曼增益：</strong> $K_{k} &#x3D; \frac{e_{EST_{k-1}}}{e_{EST_{k-1}} + e_{MEA_{k}}}$</li>
+</ul>
+<p><strong>分析：</strong></p>
+<ol>
+<li>若 $e_{EST} \gg e_{MEA}$，则 $K_k \rightarrow 1$，此时 $\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + z_{k} - \hat{x}<em>{k-1} &#x3D; z</em>{k}$（更相信测量值）。</li>
+<li>若 $e_{EST} \ll e_{MEA}$，则 $K_k \rightarrow 0$，此时 $\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1}$（更相信上一次的估计值）。</li>
+</ol>
+<p><strong>计算步骤：</strong></p>
+<ol>
+<li>计算卡尔曼增益 $K_k$。</li>
+<li>计算当前估计值：$\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + K_{k}(z_{k} - \hat{x}_{k-1})$。</li>
+<li>更新估计误差：$e_{EST_k} &#x3D; (1 - K_{k})e_{EST_{k-1}}$。</li>
+</ol>
+<h3 id="2-2-例1：硬币测量计算"><a href="#2-2-例1：硬币测量计算" class="headerlink" title="2.2 例1：硬币测量计算"></a>2.2 例1：硬币测量计算</h3><p>设定：实际长度 $x&#x3D;50mm$，初始估计 $\hat{x}<em>0&#x3D;40mm$，初始估计误差 $e</em>{EST_0}&#x3D;5mm$，测量误差 $e_{MEA}&#x3D;3mm$。</p>
+<table>
+<thead>
+<tr>
+<th>k</th>
+<th>测量值$z_k$</th>
+<th>卡尔曼增益$K_k$</th>
+<th>估计值$\hat{x}_k$</th>
+<th>估计误差$e_{EST_k}$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>40</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>51</td>
+<td>$5&#x2F;(5+3)&#x3D;0.625$</td>
+<td>$40+0.625(51-40)&#x3D;46.875$</td>
+<td>$(1-0.625) \times 5 &#x3D; 1.875$</td>
+</tr>
+<tr>
+<td>2</td>
+<td>48</td>
+<td>$1.875&#x2F;(1.875+3)&#x3D;0.385$</td>
+<td>$46.875+0.385(48-46.875)&#x3D;47.320$</td>
+<td>$(1-0.385) \times 1.875 &#x3D; 1.153$</td>
+</tr>
+<tr>
+<td>3</td>
+<td>52</td>
+<td>$1.153&#x2F;(1.153+3)&#x3D;0.278$</td>
+<td>$47.320+0.278(52-47.320)&#x3D;48.621$</td>
+<td>$(1-0.278) \times 1.153 &#x3D; 0.832$</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-例2：数据融合-Data-Fusion"><a href="#2-3-例2：数据融合-Data-Fusion" class="headerlink" title="2.3 例2：数据融合 (Data Fusion)"></a>2.3 例2：数据融合 (Data Fusion)</h3><p>假设使用视觉里程计 (VO) 和惯性里程计 (IO) 分别进行机器人定位。</p>
+<ul>
+<li>$Z_{vo} &#x3D; 30, \sigma_{vo} &#x3D; 2$</li>
+<li>$Z_{io} &#x3D; 32, \sigma_{io} &#x3D; 4$</li>
+</ul>
+<p><strong>问题分析：</strong><br>以 VO 数据为测量，IO 数据为预测（假设 IO 频率更高）。<br>根据卡尔曼滤波公式：$\hat{z} &#x3D; z_{vo} + K(z_{io} - z_{vo})$，其中 $K \in [0, 1]$。</p>
+<p><strong>目标：</strong> 求 $K$ 使 $\sigma_{\hat{z}}^2$（即 $Var(\hat{z})$）最小。</p>
+<p><strong>推导过程：</strong></p>
+<p>$$<br>\begin{aligned}<br>\sigma_{\hat{z}}^2 &amp;&#x3D; Var(\hat{z}) &#x3D; Var(z_{vo} + K(z_{io} - z_{vo})) \<br>&amp;&#x3D; Var((1-K)z_{vo} + Kz_{io}) \<br>&amp;&#x3D; (1-K)^2\sigma_{vo}^2 + K^2\sigma_{io}^2<br>\end{aligned}<br>$$</p>
+<p>令 $\frac{d\sigma_{\hat{z}}^2}{dK} &#x3D; 0$，有：</p>
+<p>$$<br>2(1-K)(-1)\sigma_{vo}^2 + 2K\sigma_{io}^2 &#x3D; 0 \<br>2\sigma_{io}^2 K - (1-K)2\sigma_{vo}^2 &#x3D; 0<br>$$</p>
+<p>解得：</p>
+<p>$$<br>K &#x3D; \frac{\sigma_{vo}^2}{\sigma_{vo}^2 + \sigma_{io}^2} &#x3D; \frac{2^2}{2^2+4^2} &#x3D; 0.2<br>$$</p>
+<p><strong>计算结果：</strong></p>
+<p>$$<br>\hat{z} &#x3D; 30 + 0.2 \times (32-30) &#x3D; 30.4<br>$$</p>
+<p><strong>验证标准差：</strong></p>
+<p>$$<br>\sigma_{\hat{z}} &#x3D; \sqrt{(1-0.2)^2 \cdot 2^2 + 0.2^2 \cdot 4^2} &#x3D; \sqrt{3.2} &#x3D; 1.79<br>$$</p>
+<p>结果小于 $\sigma_{vo}$ (2) 和 $\sigma_{io}$ (4)，说明融合后的精度提高了。</p>
+<hr>
+<p><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.png" alt="查看"></p>
+<h2 id="03-协方差矩阵与状态空间-Covariance-Matrix-State-Space"><a href="#03-协方差矩阵与状态空间-Covariance-Matrix-State-Space" class="headerlink" title="03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)"></a>03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2><h3 id="3-1-协方差矩阵"><a href="#3-1-协方差矩阵" class="headerlink" title="3.1 协方差矩阵"></a>3.1 协方差矩阵</h3><p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
+<ul>
+<li>在刚才的例子中，VO 与 IO 互相独立，所以在融合时只考虑它们各自的方差即可。</li>
+<li>但若在数据融合时二者（或更多）存在关联，在融合时就必须考虑这种关联，具体的联动关系则以协方差矩阵来描述。</li>
+</ul>
+<p><strong>定义公式：</strong></p>
+<p>$$<br>\sigma_{x_1 x_2} &#x3D; Cov(x_1, x_2) &#x3D; E[(x_1 - E(x_1))(x_2 - E(x_2))] &#x3D; E(x_1 x_2) - E(x_1)E(x_2)<br>$$</p>
+<p><strong>矩阵形式：</strong><br>对于随机变量向量 $X &#x3D; \begin{bmatrix} x_1 \ x_2 \end{bmatrix}$，协方差矩阵为：</p>
+<p>$$<br>C(X) &#x3D; E[(X - E(X))(X - E(X))^T] &#x3D; \begin{bmatrix} \sigma_{x_1}^2 &amp; \sigma_{x_1 x_2} \ \sigma_{x_2 x_1} &amp; \sigma_{x_2}^2 \end{bmatrix}<br>$$</p>
+<h3 id="3-2-状态空间表达"><a href="#3-2-状态空间表达" class="headerlink" title="3.2 状态空间表达"></a>3.2 状态空间表达</h3><p><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E5%BC%B9%E7%B0%A7%E9%98%BB%E5%B0%BC%E7%B3%BB%E7%BB%9F.png" alt="查看"></p>
+<p>以弹簧-阻尼-质量块系统为例，通过受力分析建立系统的数学表达：</p>
+<p>$$<br>m\ddot{x} + B\dot{x} + kx &#x3D; F(u:input)<br>$$</p>
+<p>即：</p>
+<p>$$<br>\ddot{x} &#x3D; \frac{1}{m}u - \frac{B}{m}\dot{x} - \frac{k}{m}x<br>$$</p>
+<p><strong>选取状态变量：</strong><br>令 $x_1 &#x3D; x$ (位移)，$x_2 &#x3D; \dot{x}$ (速度)。<br>则一阶微分方程组为：</p>
+<p>$$<br>\begin{cases}<br>\dot{x}_1 &#x3D; x_2 \<br>\dot{x}_2 &#x3D; \frac{1}{m}u - \frac{B}{m}x_2 - \frac{k}{m}x_1<br>\end{cases}<br>$$</p>
+<p><strong>矩阵形式 (连续系统)：</strong></p>
+<p>$$<br>\begin{bmatrix} \dot{x}_1 \ \dot{x}_2 \end{bmatrix} &#x3D;<br>\begin{bmatrix} 0 &amp; 1 \ -\frac{k}{m} &amp; -\frac{B}{m} \end{bmatrix}<br>\begin{bmatrix} x_1 \ x_2 \end{bmatrix} +<br>\begin{bmatrix} 0 \ \frac{1}{m} \end{bmatrix} u<br>$$</p>
+<p>即 $\dot{X}(t) &#x3D; AX(t) + Bu(t)$。</p>
+<p><strong>对应的离散形式：</strong></p>
+<p>$$<br>\begin{cases}<br>X_k &#x3D; AX_{k-1} + Bu_{k-1} + w_{k-1} \<br>Z_k &#x3D; HX_k + v_k<br>\end{cases}<br>$$</p>
+<p>该方程体现了上一步到当前的变化。</p>
+<p><strong>噪声定义：</strong></p>
+<ul>
+<li><strong>过程噪声：</strong> $w \sim N(0, Q)$</li>
+<li><strong>测量噪声：</strong> $v \sim N(0, R)$<br>其中 $Q$ 和 $R$ 分别为对应的协方差矩阵。卡尔曼滤波器的目的就是从不太准确的估计结果 $X_k$ 和也不太准确的测量结果 $Z_k$ 中，估计得到一个相对较准的结果。</li>
+</ul>
+<h2 id="04-卡尔曼滤波的数学推导-Mathematical-Derivation-of-Kalman-Filter"><a href="#04-卡尔曼滤波的数学推导-Mathematical-Derivation-of-Kalman-Filter" class="headerlink" title="04. 卡尔曼滤波的数学推导 (Mathematical Derivation of Kalman Filter)"></a>04. 卡尔曼滤波的数学推导 (Mathematical Derivation of Kalman Filter)</h2><h3 id="4-1-卡尔曼增益的推导-Derivation-of-Kalman-Gain"><a href="#4-1-卡尔曼增益的推导-Derivation-of-Kalman-Gain" class="headerlink" title="4.1 卡尔曼增益的推导 (Derivation of Kalman Gain)"></a>4.1 卡尔曼增益的推导 (Derivation of Kalman Gain)</h3><p>对于状态空间方程:</p>
+<p>$$<br>\begin{cases}<br>X_{k} &#x3D; AX_{k-1} + Bu_{k-1} + w_{k-1}, &amp; P(w) \sim (0, Q) \<br>Z_{k} &#x3D; HX_{k} + v_{k}, &amp; P(v) \sim (0, R)<br>\end{cases}<br>$$</p>
+<p><strong>过程噪声协方差矩阵 $Q$ (以二维为例):</strong></p>
+<p>$$<br>Q &#x3D; E(ww^{T}) &#x3D; \begin{bmatrix} \sigma_{w_{1}}^{2} &amp; 0 \ 0 &amp; \sigma_{w_{2}}^{2} \end{bmatrix}<br>$$</p>
+<p>(假设变量间相互独立，且期望为0)</p>
+<p><strong>测量噪声协方差矩阵 $R$:</strong></p>
+<p>$$<br>R &#x3D; \begin{bmatrix} \sigma_{v_{1}}^{2} &amp; 0 \ 0 &amp; \sigma_{v_{2}}^{2} \end{bmatrix}<br>$$</p>
+<p><strong>先验与后验状态估计:</strong><br>由于噪声项无法建模，我们需要定义：</p>
+<ul>
+<li><strong>先验状态估计 (Predicted&#x2F;A Priori):</strong> $\hat{x}<em>{k}^{-} &#x3D; A\hat{x}</em>{k-1} + Bu_{k-1}$<ul>
+<li>这是“算出来”的值，基于上一时刻的后验估计进行预测。</li>
+</ul>
+</li>
+<li><strong>测量估计:</strong> $\hat{x}<em>{k</em>{mea}} &#x3D; H^{-1}z_{k}$ (理想化表达，实际通过增益融合)</li>
+</ul>
+<p><strong>后验状态估计 (Corrected&#x2F;A Posteriori):</strong><br>沿用递归思想，定义后验状态估计为预测值与测量新息(Innovation)的加权和：</p>
+<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k}^{-} + K_{k}(Z_{k} - H\hat{x}_{k}^{-})<br>$$</p>
+<p>其中 $K_k$ 为待求的卡尔曼增益。</p>
+<p>[cite_start]<strong>目标:</strong> 寻找 $K_k$，使得估计值 $\hat{x}_k$ 逼近真实值 $x_k$，即误差 $e_k &#x3D; x_k - \hat{x}_k$ 的方差最小 [cite: 202, 207]。</p>
+<p>[cite_start]<strong>寻找最优增益 $K_k$[cite: 213, 217]:</strong><br>定义误差的协方差矩阵 $P_k &#x3D; E[e_k e_k^T]$。若要误差最小，则需矩阵 $P_k$ 的迹 $tr(P_k)$ 最小。</p>
+<p>展开 $P_k$:</p>
+<p>$$<br>\begin{aligned}<br>P_{k} &amp;&#x3D; E[(x_{k} - \hat{x}<em>{k})(x</em>{k} - \hat{x}<em>{k})^{T}] \<br>&amp;&#x3D; (I - K</em>{k}H)P_{k}^{-}(I - K_{k}H)^{T} + K_{k}RK_{k}^{T}<br>\end{aligned}<br>$$</p>
+<p>对 $K_k$ 求导并令其为 0:<br>利用矩阵求导公式 $\frac{d tr(ABA^T)}{dA} &#x3D; 2AB$，解得卡尔曼增益公式：</p>
+<p>$$<br>K_{k} &#x3D; \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}<br>$$</p>
+<hr>
+<h3 id="4-2-误差协方差矩阵推导-Derivation-of-Error-Covariance-Matrix"><a href="#4-2-误差协方差矩阵推导-Derivation-of-Error-Covariance-Matrix" class="headerlink" title="4.2 误差协方差矩阵推导 (Derivation of Error Covariance Matrix)"></a>4.2 误差协方差矩阵推导 (Derivation of Error Covariance Matrix)</h3><p>在上述推导中，先验误差协方差矩阵 $P_k^-$ 仍是未知的，需要从上一时刻递推得到。</p>
+<p><strong>先验误差协方差矩阵 $P_k^-$ :</strong><br>由 $e_{k}^{-} &#x3D; Ae_{k-1} + w_{k-1}$，可得：</p>
+<p>$$<br>P_{k}^{-} &#x3D; E[(Ae_{k-1} + w_{k-1})(Ae_{k-1} + w_{k-1})^{T}] &#x3D; AP_{k-1}A^{T} + Q<br>$$</p>
+<p><strong>后验误差协方差矩阵 $P_k$ (更新):</strong><br>将求得的最优 $K_k$ 代入之前 $P_k$ 的展开式，化简可得：</p>
+<p>$$<br>P_{k} &#x3D; (I - K_{k}H)P_{k}^{-}<br>$$</p>
+<p>该公式用于更新当前时刻的误差协方差，以便在下一时刻作为 $P_{k-1}$ 使用。</p>
+<hr>
+<h3 id="4-3-完整的卡尔曼滤波流程-Summary-of-KF-Algorithm"><a href="#4-3-完整的卡尔曼滤波流程-Summary-of-KF-Algorithm" class="headerlink" title="4.3 完整的卡尔曼滤波流程 (Summary of KF Algorithm)"></a>4.3 完整的卡尔曼滤波流程 (Summary of KF Algorithm)</h3><p>至此，得到完整的卡尔曼滤波 5 个核心公式:</p>
+<p><strong>I. 预测 (Prediction &#x2F; Time Update)</strong></p>
+<ol>
+<li><strong>计算先验状态估计:</strong><br>$$<br>\hat{x}<em>{k}^{-} &#x3D; A\hat{x}</em>{k-1} + Bu_{k-1}<br>$$</li>
+<li><strong>计算先验误差协方差矩阵:</strong><br>$$<br>P_{k}^{-} &#x3D; AP_{k-1}A^{T} + Q<br>$$</li>
+</ol>
+<p><strong>II. 校正 (Correction &#x2F; Measurement Update)</strong><br>3.  <strong>计算卡尔曼增益:</strong></p>
+<p>$$<br>K_{k} &#x3D; \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}<br>$$</p>
+<p><strong>计算后验状态估计:</strong></p>
+<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k}^{-} + K_{k}(z_{k} - H\hat{x}_{k}^{-})<br>$$</p>
+<p><strong>更新后验误差协方差矩阵:</strong></p>
+<p>$$<br>P_{k} &#x3D; (I - K_{k}H)P_{k}^{-}<br>$$</p>
+<hr>
+<h2 id="05-扩展卡尔曼滤波-Extended-Kalman-Filter-EKF"><a href="#05-扩展卡尔曼滤波-Extended-Kalman-Filter-EKF" class="headerlink" title="05. 扩展卡尔曼滤波 (Extended Kalman Filter, EKF)"></a>05. 扩展卡尔曼滤波 (Extended Kalman Filter, EKF)</h2><p>对于非线性系统:</p>
+<p>$$<br>\begin{cases}<br>x_{k} &#x3D; f(x_{k-1}, u_{k-1}, w_{k-1}) \<br>z_{k} &#x3D; h(x_{k}, v_{k})<br>\end{cases}<br>$$</p>
+<p><strong>核心思想:</strong><br>应用<strong>泰勒展开 (Taylor Expansion)</strong> 对非线性函数 $f$ 和 $h$ 进行线性化近似。</p>
+<p><strong>线性化结果:</strong></p>
+<p>$$<br>\begin{cases}<br>x_{k} \approx \tilde{x}<em>{k} + A</em>{k}(x_{k-1} - \hat{x}<em>{k-1}) + Ww</em>{k-1} \<br>z_{k} \approx \tilde{z}<em>{k} + H</em>{k}(x_{k} - \tilde{x}<em>{k}) + Vv</em>{k}<br>\end{cases}<br>$$</p>
+<p>其中 $A, W, H, V$ 分别为对应的<strong>雅可比矩阵 (Jacobian Matrices)</strong> 。</p>
+<p>相比于线性卡尔曼滤波，EKF 的主要区别在于每一步都需要计算雅可比矩阵来更新状态转移矩阵和观测矩阵。</p>
+]]></content>
+      <categories>
+        <category>教程</category>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>kalman</tag>
+      </tags>
+  </entry>
 </search>
