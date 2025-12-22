@@ -587,7 +587,7 @@
 </div>
 
 <p><strong>如何得到真实直径？</strong><br>一个很自然的做法是：<strong>取平均值</strong>。</p>
-<p>$$<br>\hat{x}<em>{k} &#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k})<br>$$</p>
+<p>$$<br>\hat{x}_{k} &#x3D; \frac{1}{k}(z_{1} + z_{2} + \dots + z_{k})<br>$$</p>
 <p>将其转化为<strong>递归形式</strong>：</p>
 <p>$$<br>\begin{aligned}<br>\hat{x}<em>{k} &amp;&#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{1}{k} \cdot \frac{k-1}{k-1}(z_{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{k-1}{k}\hat{x}<em>{k-1} + \frac{1}{k}z</em>{k} \<br>&amp;&#x3D; \hat{x}<em>{k-1} + \frac{1}{k}(z</em>{k} - \hat{x}_{k-1})<br>\end{aligned}<br>$$</p>
 <p><strong>化为更一般的形式：</strong></p>
