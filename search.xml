@@ -1,104 +1,1090 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>技术笔记|PCL学习笔记</title>
+    <url>/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="pcl点云库学习记录">PCL点云库学习记录</h1>
+<p><a href="https://blog.csdn.net/qq_36686437/article/details/114160640?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7EPayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7EPayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&amp;utm_relevant_index=1">学习博客</a></p>
+<h2 id="滤波器">滤波器</h2>
+<h3 id="直通滤波器">直通滤波器</h3>
+<p><strong>作用</strong>：
+过滤掉在指定维度方向上取值不在给定值域内的点。</p>
+<p><strong>实现原理：</strong>
+指定一个维度以及在该维度下的值域，遍历点云数据点，保留在值域内的点，删除不在值域内的点。</p>
+<p><strong>主要函数：</strong></p>
+<ul>
+<li><code>void setFilterFieldName (const std : :string &amp;field_name)</code>：指定滤波维度，可选
+<code>“x", "y", "z", "intensity"</code>等。</li>
+<li><code>void setFilterLimits (const double &amp;limit_min, const double &amp; limit_max)</code>：指定值域。</li>
+<li><code>void setFilterLimitsNegative (bool &amp;!imit_negative)</code>：返回滤波限制条件外的点还是内的点，默认
+<code>false</code>，即指定值域内的点。</li>
+</ul>
+<p><strong>实例：</strong></p>
+<h3 id="统计滤波器">统计滤波器</h3>
+<p><strong>作用：</strong> 剔除明显离群点，稀疏点。</p>
+<p><strong>实现原理：</strong>
+计算每个点到其最近的k(自行设定)的平均距离，计算方差，剔除大于n倍（自行设定）标准差的点。</p>
+<p><strong>主要函数：</strong></p>
+<ul>
+<li><code>void  setStddevMulThresh (double stddev_mult)</code>：指定阈值：<code>平均距离+stddev_mult*标准差</code>。</li>
+<li><code>sor.setMeanK (int num)</code>：设定近邻点数。</li>
+</ul>
+<p><strong>实例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建统计滤波器</span></span><br><span class="line">pcl::StatisticalOutlierRemoval&lt;pcl::PointXYZ&gt; sor;</span><br><span class="line">sor.<span class="built_in">setInputCloud</span> (cloud);   <span class="comment">//设置待滤波的点云</span></span><br><span class="line">sor.<span class="built_in">setMeanK</span> (<span class="number">50</span>);           <span class="comment">//设置在进行统计时考虑查询点邻近点数</span></span><br><span class="line">sor.<span class="built_in">setStddevMulThresh</span> (<span class="number">1</span>);  <span class="comment">//表示标准差的倍数，1个标准差以上就是离群点。</span></span><br><span class="line">sor.<span class="built_in">filter</span> (*cloud_filtered); <span class="comment">//存储内点</span></span><br></pre></td></tr></table></figure>
+<h3 id="体素滤波器">体素滤波器</h3>
+<p><strong>作用：</strong>
+向下采样以减少点云数量，同时不破坏点云本身的几何结构。</p>
+<p><strong>实现原理：</strong>
+创建一个三维体素栅格，每个体素内用所有点的重心来近似显示体素内的其他点，这样该体素内的所有点都用一个重心点表示。（相比于用中心点表示，用重心点表示会更慢，但是更准确）。</p>
+<p><strong>主要函数：</strong></p>
+<ul>
+<li><code>void  setLeafSize (float lx, float ly, float lz)</code>：<code>lx, ly, lz</code>分别表示体素栅格在XYZ方向上的尺寸。</li>
+</ul>
+<p><strong>实例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建体素滤波器</span></span><br><span class="line">pcl::PointCloud&lt;pcl::PointXYZ&gt;::<span class="function">Ptr <span class="title">cloud_filtered</span><span class="params">(<span class="keyword">new</span>           pcl::PointCloud&lt;pcl::PointXYZ&gt;)</span></span>;  <span class="comment">// 创建点云对象</span></span><br><span class="line">pcl::VoxelGrid&lt;pcl::PointXYZ&gt; vg;  <span class="comment">// 创建体素滤波器对象</span></span><br><span class="line">vg.<span class="built_in">setInputCloud</span>(cloud);             <span class="comment">// 输入点云</span></span><br><span class="line">vg.<span class="built_in">setLeafSize</span>(<span class="number">0.01f</span>, <span class="number">0.01f</span>, <span class="number">0.01f</span>); <span class="comment">// 设置最小体素边长</span></span><br><span class="line">vg.<span class="built_in">filter</span>(*cloud_filtered);  <span class="comment">// 进行滤波</span></span><br></pre></td></tr></table></figure>
+<h3 id="半径滤波器">半径滤波器</h3>
+<p><strong>作用：</strong> 剔除稀疏点。</p>
+<p><strong>实现原理：</strong>
+在点云数据中，每个点在一定半径范围内至少要有足够多的近邻点，不满足就会被删除。</p>
+<p><strong>主要函数：</strong></p>
+<ul>
+<li><code>void  setRadiusSearch(double radius)</code>：设定半径，单位为m。</li>
+<li><code>void  setMinNeighborsInRadius(int min_pts)</code>：设定近邻点数量。</li>
+</ul>
+<p><strong>实例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">pcl::RadiusOutlierRemoval&lt;pcl::PointXYZ&gt; ror;</span><br><span class="line">ror.<span class="built_in">setInputCloud</span>(cloud_in);     <span class="comment">// 输入点云</span></span><br><span class="line">ror.<span class="built_in">setRadiusSearch</span>(<span class="number">0.1</span>);        <span class="comment">// 设置半径为0.1m范围内找临近点</span></span><br><span class="line">ror.<span class="built_in">setMinNeighborsInRadius</span>(<span class="number">200</span>); <span class="comment">// 设置查询点的邻域点集数小于10删除</span></span><br><span class="line">ror.<span class="built_in">filter</span>(*cloud_radius);       <span class="comment">// 执行滤波</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>tips：</em></strong>
+领域点设置越多，程序处理越慢，七万数据点进行200近邻点滤波将会消耗1.5s。</p>
+<h3 id="高斯滤波器">高斯滤波器</h3>
+<p><strong>作用：</strong>
+平滑点云，降低噪声，并较好的保持数据原貌。</p>
+<p><strong>实现原理：</strong>
+使用高斯核对点云进行加权平均。创建高斯核-&gt;创建KD-Tree-&gt;高斯滤波。</p>
+<p><strong>主要函数：</strong></p>
+<p><strong>实例：</strong></p>
+<h3 id="中值滤波器">中值滤波器</h3>
+<p><strong>作用：</strong> 消除毛刺。 <strong>实现原理：</strong>
+在窗口内在某一方向进行点云排序，取中值更新为当前点数据。</p>
+<p><strong>主要函数：</strong></p>
+<p><strong>实例：</strong></p>
+<h2 id="点云拟合分割">点云拟合分割</h2>
+<p>RANSAC拟合与最小二乘法拟合的不同：最小二乘法最简单最常用，但是容易受到噪点的影响。</p>
+<h3 id="ransac拟合">RANSAC拟合</h3>
+<h4 id="ransac拟合直线">RANSAC拟合直线</h4>
+<p><strong>原理：</strong>
+对拟合的直线进行不断的迭代，直到包含足够多的内点（到达该直线的距离在阈值之内）。</p>
+<h4 id="ransac拟合平面">RANSAC拟合平面</h4>
+<p><strong>原理：</strong></p>
+<ol type="1">
+<li>随机选取三个点生成一个平面。</li>
+<li>计算其他点到该平面的距离是否小于阈值，小于则认为处于同一平面。</li>
+<li>当平面上点大于n则标记该平面及其上各点。</li>
+<li>当生成的平面上的点小于n个点或未标记点少于三个，迭代终止。</li>
+</ol>
+<h4 id="ransa拟合3d球体">RANSA拟合3D球体</h4>
+<p><strong>原理：</strong> 与前者类似。</p>
+<p><strong><em>tips:</em></strong>
+对五万个点进行拟合，运行时间为不到15毫秒；对五千个点进行拟合，运行时加为不到2毫秒。</p>
+<h3 id="最小二乘法拟合">最小二乘法拟合</h3>
+<h4 id="最小二乘法拟合平面">最小二乘法拟合平面</h4>
+<p><strong>原理：</strong> 略。</p>
+<h3 id="其他分割方法">其他分割方法</h3>
+<h4 id="区域生长法">区域生长法</h4>
+<p><strong>原理：</strong> 以<strong><em>法线夹角角度差</em></strong>
+或者<strong><em>色差</em></strong> 作为种子生长条件。</p>
+<h4 id="欧式聚类">欧式聚类</h4>
+<p><strong>原理与特点：</strong>
+基于欧式距离判断点云数据点是否为同一类；基于KD-Tree的近邻查询算法是
+加速欧式聚类算法的重要预处理方法。</p>
+<h2 id="其他">其他</h2>
+<h3 id="使用积分图进行法线估计">使用积分图进行法线估计</h3>
+<p><strong>特点：</strong></p>
+<ol type="1">
+<li>计算效率非常高。</li>
+<li>只适用于有序点云。</li>
+</ol>
+<h3 id="点云边界提取">点云边界提取</h3>
+<p><strong>原理：</strong> 基于法线。</p>
+<h3 id="点云质心">点云质心</h3>
+<p><strong>概念：</strong> 在点云的质心计算公式中，mi =
+1，即各质点质量相等。</p>
+<h3 id="点云图与深度图转换">点云图与深度图转换</h3>
+<p><strong>深度图像：</strong>
+也被称为距离图像，是指将图像采集器到场景中各点的距离（深度）值作为像素值的图像，它直接反映了景物可见表面的几何形状。</p>
+<p><strong><em>tips:</em></strong>
+深度图和点云图之间可以相互转换，但是可能在转换的过程中存在数据的丢失。</p>
+]]></content>
+      <categories>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>PCL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>技术笔记|YOLOv5使用教程</title>
+    <url>/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="yolov5一夜暴富">YOLOv5：一夜暴富</h1>
+<h2 id="关于yolo">1.关于YOLO</h2>
+<h3 id="目标检测的概念与发展">1.1 目标检测的概念与发展</h3>
+<p>目标检测，也叫做目标提取，是一种基于目标几何和统计特征的图像分割。它将目标的分割和识别合二为一。在复杂的应用场景中，需要同时考虑对多个目标进行实时检测，其准确性和实时性是整个系统的一项重要能力。</p>
+<p>随着计算机技术的发展和计算机视觉原理的广泛应用，利用计算机图像处理技术对目标进行实施跟踪研究越来越热门，对目标进行动态实施跟踪定位在智能化交通系统，智能监控系统，军事目标检测及医学导航手术中手术器械定位等方面具有广泛的应用价值。</p>
+<h3 id="yolo的发展与优势">1.2 YOLO的发展与优势</h3>
+<p><strong>YOLO（You Only Look
+Once）</strong>是一种用于实时目标检测的深度学习模型。</p>
+<p>YOLO最初的创造者维护了YOLOv1，YOLOv2，YOLOv3。YOLOv4是对YOLOv3的一个改进，YOLOv4的作者与前三个版本YOLO的作者并不是同一人。YOLOv5在YOLOv4发布不久后出现，由Glenn
+Jocher使用Pytorch框架建立。</p>
+<ul>
+<li><p><strong><em>YOLO v1（2016）：</em></strong></p>
+<ul>
+<li>YOLO v1是YOLO系列的第一个版本，由Joseph
+Redmon等人于2016年提出。它采用单一神经网络，将目标检测问题转化为回归问题。YOLO
+v1将输入图像分成较小的网格，并为每个网格单独预测边界框（bounding
+box）和相应的类别概率分数。</li>
+<li>YOLO
+v1的优点是速度快，可以实现实时目标检测，但它在检测小目标和处理重叠的目标方面存在一些问题。</li>
+</ul></li>
+<li><p><em><strong>YOLO v2 / YOLO9000（2017）</strong>：</em></p>
+<ul>
+<li>YOLO v2在YOLO
+v1的基础上进行了改进，采用了更深的神经网络，称为Darknet-19。</li>
+<li>YOLO9000是YOLO
+v2的扩展版本，支持更多的目标类别。它通过引入WordTree等技术，实现了对超过9000个不同类别的目标进行检测。</li>
+</ul></li>
+<li><p><strong><em>YOLO v3（2018）：</em></strong></p>
+<ul>
+<li>YOLO
+v3是YOLO系列的下一个版本，引入了多尺度预测。它使用了三个不同尺度的特征图来检测不同大小的目标。</li>
+<li>YOLO
+v3改进了目标检测的精度和稳定性，成为一种强大的目标检测算法。</li>
+</ul></li>
+<li><p><strong><em>YOLO v4（2020）：</em></strong></p>
+<ul>
+<li>YOLO v4是YOLO系列的又一重大改进，由Alexey
+Bochkovskiy等人开发。它引入了一系列技术，如CIOU损失函数、PANet、SAM块等，以提高目标检测的性能。</li>
+<li>YOLO
+v4具有更高的准确性和速度，成为了目标检测领域的领先算法之一。</li>
+</ul></li>
+<li><p><strong><em>YOLO v5（2020）：</em></strong></p>
+<ul>
+<li>YOLO
+v5由Ultralytics团队于2020年发布。它着重于轻量化和速度优化，并且具有高度可配置性。YOLO
+v5的不同版本（如Yolov5s、Yolov5m、Yolov5l和Yolov5x）可以根据需求进行选择。</li>
+<li>YOLO
+v5在速度和性能之间取得了很好的平衡，适用于各种实时目标检测应用。</li>
+</ul></li>
+</ul>
+<p><strong><em>YOLOv1/v2/v3:</em></strong></p>
+<pre><code>源码：[https://github.com/pjreddie/darknet](YOLOv1/2/3源码)
+
+论文：[https://pjreddie.com/](YOLOv1/2/3论文)</code></pre>
+<p><strong><em>YOLOv4：</em></strong></p>
+<pre><code>源码：[https://github.com/AlexeyAB/darknet](YOLOv4源码)
+
+论文：[https://arxiv.org/abs/2004.10934](YOLOv4论文)</code></pre>
+<p><strong><em>YOLOv5:</em></strong></p>
+<pre><code>源码：[https://github.com/ultralytics/yolov5](YOLOv5源码)</code></pre>
+<p><strong>YOLOv5的优势：</strong></p>
+<ul>
+<li>基于Pytorch框架，相对于Darknet框架它的扩展性更强。</li>
+<li>源码使用PYTHON，使得代码更加便于修改，非常适合使用需求。</li>
+<li>代码量更小，适合阅读，借鉴学习。</li>
+<li>更加优秀的性能表现。</li>
+</ul>
+<p><strong>YOLOv6及更高版本：</strong></p>
+<ul>
+<li><strong><em>YOLOv6:</em></strong> 由美团视觉研发部（Meituan Vision
+AI Department）于2022年开源，并应用于该公司的许多自动送货机器人中。</li>
+<li><strong><em>YOLOv7:</em></strong>
+添加了额外的任务，例如COCO关键点数据集上的姿态估计。</li>
+<li><strong><em>YOLOv8:</em></strong>
+是UItralytics推出的YOLO最新版本。作为一种最尖端，最先进的（SOTA）模型，YOLOv8建立在先前版本的成功的基础上，引入了许多新功能和改进，以增强性能，灵活性和效率。YOLOv8支持全方位的视觉AI任务，包括<strong><em>检测，分割，姿态估计，跟踪和分类</em></strong>。这种多功能性允许用户在不同的应用程序和领域中利用YOLOv8的功能。</li>
+</ul>
+<h2 id="开发环境搭建">2.开发环境搭建</h2>
+<h3 id="前期环境准备">2.1 前期环境准备</h3>
+<h4 id="关于pytorch">2.1.2 关于PyTorch</h4>
+<p>PyTorch是一个早期的深度学习框架，是深度学习领域的先驱之一。</p>
+<p>PyTorch有三个子库，安装时需要单独安装，分别为：</p>
+<ul>
+<li><strong><em>torch:</em></strong>
+PyTorch核心库，提供了深度学习框架的基本功能，可用于各种深度学习任务，包括计算机视觉，自然语言处理和强化学习等。</li>
+<li><strong><em>torchvison:</em></strong>
+PyTorch计算机视觉库，专门用于处理图像和视觉数据。包括图像数据加载器，常用的数据集，预训练的模型和图像处理工具。</li>
+<li><strong><em>torchaudio:</em></strong>
+PyTorch的音频处理库，用于处理音频数据。包括音频数据加载器，音频特征提取工具，常用的音频数据集和用于处理声音的函数和模型。</li>
+</ul>
+<h4 id="搭建yolov5的预安装环境">2.1.2 搭建YOLOv5的预安装环境</h4>
+<p>官方给出的YOLOv5的安装前提要求是：<strong>Python &gt;= 3.8.0
+&amp;&amp; PyTorch &gt;=1.8</strong></p>
+<p><strong>关于Python的安装</strong>: <a href="Python官网">https://www.python.org/</a></p>
+<p><strong>关于PyTorch的安装</strong>：<a href="Pytorch的安装">https://pytorch.org/</a></p>
+<p>当然，我自己比较满意的一个开发环境应该是：</p>
+<ul>
+<li>Ubuntu20.04及以上</li>
+<li>预先安装好ROS-neotic</li>
+<li>使用
+<code>pip3 install torch torchvision torchaudio</code>安装PyTorch</li>
+</ul>
+<p>当Ubuntu系统为20.04及以上，此时电脑的Python版本 &gt;=
+3.8，已经满足YOLOv5对于Python版本的要求。对于Pytorch版本，虽然很多人的一贯想法都是只要版本够用就不要用最新版，但是我之前一开始就是装的最新版，而且截至到目前也一直没有出现过问题，所以我觉得如果不想折腾，也不用去上面的官网去找版本下载，直接用pip3安装（<strong><em>这里值得一说的是，当python版本为python3时，建议都用pip3安装，而不要再用pip，不同的安装方式会将库装在不同的python文件夹，当使用python3去执行程序时，如果依赖的库被装在了python2的文件夹中，那么程序是无法使用这个库的</em></strong>）。</p>
+<h3 id="yolov5的安装">2.2 YOLOv5的安装</h3>
+<p>YOLOv5的安装其实非常简单：</p>
+<ul>
+<li><strong><em>下载仓库到本地：</em></strong>
+<code>git clone https://github.com/ultralytics/yolov5</code></li>
+<li><strong><em>进入yolov5文件夹：</em></strong>
+<code>cd yolov5</code></li>
+<li><strong><em>安装所需依赖：</em></strong>
+<code>pip install -r requirements.txt</code></li>
+</ul>
+<p>至此，你的计算机现在已经可以使用YOLOv5了，可以通过在yolov5文件夹打开终端运行python3
+detect.py，该程序将会利用已经训练好的模型对/data/imgs/下的图片进行目标检测，并且在/runs/detect/exp文件夹查看检测后的结果。</p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" alt="F4">
+<figcaption aria-hidden="true">F4</figcaption>
+</figure>
+<h3 id="gpu环境搭建及yolov5的使用">2.3 GPU环境搭建及YOLOv5的使用</h3>
+<p><strong>！！！！！！！！！！！！！！！安装过程中，全程不要挂梯子，并且退出后台。！！！！！！！！！！！！！！！！！！！！！！！！！！</strong></p>
+<h4 id="显卡驱动安装">2.3.1 显卡驱动安装</h4>
+<p>安装显卡驱动可以使用命令行安装，但是有一种比较方便的方式进行安装：</p>
+<ul>
+<li>进入软件与更新–&gt;附加驱动–&gt;选择对应版本的驱动</li>
+<li>应用更改后重启电脑</li>
+<li>终端输入nvidia-smi即可查看驱动信息</li>
+</ul>
+<p>例如我所选的驱动版本为：</p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" alt="驱动">
+<figcaption aria-hidden="true">驱动</figcaption>
+</figure>
+<p>显示信息为： <img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" alt="smi"></p>
+<p>此外，可以看到，终端还显示了推荐的CUDA版本，可以选择推荐的版本，也可以自行选择版本安装。</p>
+<h4 id="cuda安装">2.3.2 CUDA安装</h4>
+<p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">显卡驱动与CUDA版本对应</a></p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" alt="CUDA与驱动版本">
+<figcaption aria-hidden="true">CUDA与驱动版本</figcaption>
+</figure>
+<p><a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA版本选择与安装步骤</a></p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" alt="CUDA安装">
+<figcaption aria-hidden="true">CUDA安装</figcaption>
+</figure>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" alt="CUDA安装">
+<figcaption aria-hidden="true">CUDA安装</figcaption>
+</figure>
+<p>根据自己的显卡驱动版本选择对应的CUDA版本，推荐不要下载太低版本的CUDA，因为后面的Pytorch对CUDA的版本也有要求，太低的CUDA版本可能导致你下载的Pytorch并不能满足比如yolov5对最低版本Pytorch的要求。</p>
+<p><strong><em>tips:</em></strong>
+在安装的过程中，很大概率会在安装到99%时出现段错误（核心已转储），如下图所示：</p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" alt="段错误">
+<figcaption aria-hidden="true">段错误</figcaption>
+</figure>
+<p>原因是栈太小，解决方法如下：</p>
+<ul>
+<li>查看栈大小：ulimit -a</li>
+<li>更改stack size：ulimit -s 102400</li>
+</ul>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" alt="段错误">
+<figcaption aria-hidden="true">段错误</figcaption>
+</figure>
+<p><a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html#ubuntu-x86_64">添加环境变量</a></p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" alt="环境变量">
+<figcaption aria-hidden="true">环境变量</figcaption>
+</figure>
+<p>以上内容(注意改成自己版本的CUDA)在~/.bashrc尾行中添加。</p>
+<p><strong><em>完成以上内容后，在终端输入：</em></strong></p>
+<ul>
+<li><em>nvcc -V</em></li>
+</ul>
+<p><strong><em>查看是否安装成功。</em></strong></p>
+<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="查看"><br>
+</p>
+<p><strong>！！！！！！！安装完之后最好重启一次电脑，以验证是否能正确加载nvidia驱动，如果不能正确加载，则手动再装一次即可！！！！！！！！！！！！！</strong></p>
+<h4 id="安装torch">2.3.3 安装torch</h4>
+<p><a href="https://pytorch.org/get-started/previous-versions/">torch与CUDA版本对应及下载</a></p>
+<p>由于我装的CUDA为12.0，查看了一下，官网上没有直接支持cuda
+12的torch版本，但是翻阅社区了解到，cuda是向下兼容的，cuda
+12可以支持官网里面的CUDA 11.8。</p>
+<p>可以使用conda安装，也可以使用pip安装，我在这选择的是使用pip安装，并且将官网上给出的pip改为pip3，读者可自行去了解二者的不同。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118</span><br></pre></td></tr></table></figure>
+<h4 id="验证安装结果">2.3.4 验证安装结果</h4>
+<p>依次在终端输入：</p>
+<ul>
+<li>python3</li>
+<li>import torch</li>
+<li>print(torch.cuda.is_available())</li>
+</ul>
+<p>返回true代表安装成功。</p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="查看">
+<figcaption aria-hidden="true">查看</figcaption>
+</figure>
+<p>安装成功但是warnning:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WARNING: The script isympy is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts cmake, cpack and ctest are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The script lit is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts convert-caffe2-to-onnx, convert-onnx-to-caffe2 and torchrun are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts f2py, f2py3 and f2py3.8 are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>hahahh</p>
+<h3 id="cudnn与tensorrt">2.4 cuDNN与TensorRT</h3>
+<h4 id="cudnn">2.4.1 cuDNN</h4>
+<p>NVIDIA CUDA 深度神经网络 （cuDNN） 是用于深度神经网络的 GPU
+加速基元库</p>
+<p><a href="https://blog.csdn.net/h3c4lenovo/article/details/119003405">参考博客</a></p>
+<p><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">官方安装指引</a></p>
+<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="查看"></p>
+<p>下载对应CUDA的版本就好了，我的CUDA是12.0.0，所以我下载的是cuDNN8.9.0
+.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf cudnn-linux-x86_64-8.9.0.131_cuda12-archive.tar.xz</span><br><span class="line">sudo cp cudnn-linux-x86_64-8.9.0.131_cuda12-archive/include/cudnn*.h /usr/local/cuda/include </span><br><span class="line">sudo cp -P cudnn-linux-x86_64-8.9.0.131_cuda12-archive/lib/libcudnn* /usr/local/cuda/lib64 </span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*  </span><br></pre></td></tr></table></figure>
+<p>查看是否安装完毕：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2</span><br></pre></td></tr></table></figure>
+<h4 id="tensorrt">2.4.2 TensorRT</h4>
+<p><a href="https://blog.csdn.net/weixin_43863869/article/details/128571567">参考博客</a></p>
+<p><a href="https://developer.nvidia.com/nvidia-tensorrt-8x-download">官网下载地址</a></p>
+<p><a href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">官方安装指引</a></p>
+<p>这里注意最新版的TensorRT也只支持CUDA12.1
+。<strong>所以CUDA不要超过12.1，例如我装的就是12.0.0</strong></p>
+<figure>
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="查看">
+<figcaption aria-hidden="true">查看</figcaption>
+</figure>
+<p>我用的是Tar安装，版本是TensorRT8.6
+。用tar安装的好处是，把解压好的文件和.bashrc里面的路径删除就可以很方便的删除TensorRT了。</p>
+<p>下载好之后，将这个移动到opt文件夹中： sudo mv
+TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz /opt 方便管理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf TensorRT-$&#123;version&#125;.Linux.$&#123;arch&#125;-gnu.$&#123;cuda&#125;.tar.gz</span><br><span class="line">cd TensorRT-$&#123;version&#125;/python</span><br><span class="line">python3 -m pip install tensorrt-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_lean-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_dispatch-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/uff</span><br><span class="line">python3 -m pip install uff-0.6.9-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/graphsurgeon</span><br><span class="line">python3 -m pip install graphsurgeon-0.4.6-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/onnx_graphsurgeon</span><br><span class="line">python3 -m pip install onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
+<p>照着官方安装都安装一遍就可以了
+<strong><em>注意将命令中的x和星号改成自己需要的版本</em></strong> 。</p>
+<p>官方给的在bashrc里面的路径是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&lt;TensorRT-$&#123;version&#125;/lib&gt;</span><br></pre></td></tr></table></figure>
+<p>到我这里就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/TensorRT-8.6.1.6/lib</span><br></pre></td></tr></table></figure>
+<p>再source ~/.bashrc刷新一下，TensorRT就算装好了</p>
+<h3 id="支持cuda的opencv">2.5 支持CUDA的opencv</h3>
+<p><a href="https://blog.csdn.net/u011622208/article/details/104265206#commentBox">参考博客</a></p>
+<p>因为CUDA的版本很高，所以我的opencv也尽量装的高。我装的是：OpenCV
+4.8.1</p>
+<p>官网上把压缩包下下来，然后：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_GENERATE_PKGCONFIG=ON -D ENABLE_CXX11=1 -D OPENCV_ENABLE_NONFREE=True ..</span><br><span class="line"></span><br><span class="line">cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_GENERATE_PKGCONFIG=ON -D ENABLE_CXX11=1 -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules -D OPENCV_ENABLE_NONFREE=True -D INSTALL_PYTHON_EXAMPLES=ON -D INSTALL_C_EXAMPLES=ON -D WITH_CUDA=ON -D WITH_TBB=ON -D ENABLE_FAST_MATH=1 -D WITH_OPENMP=ON -D WITH_CUFFT=ON -D WITH_CUBLAS=ON ..</span><br><span class="line"></span><br><span class="line">make -j12</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<h2 id="训练自己的数据集">3.训练自己的数据集</h2>
+<h3 id="数据集拆分">3.1 数据集拆分</h3>
+<p>将标好的数据集划分为训练集和测试集，get_train_valid.py代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import random</span><br><span class="line">import shutil</span><br><span class="line">import copy</span><br><span class="line"></span><br><span class="line">path_root_labels = &#x27;./data_11_24/labels&#x27;    # 数据集标签路径</span><br><span class="line">path_root_imgs = &#x27;./data_11_24/images&#x27;      # 数据集图片路径</span><br><span class="line">path_splited = &#x27;./data_split&#x27;               # 数据集划分路径</span><br><span class="line"></span><br><span class="line">if not os.path.exists(path_splited):</span><br><span class="line">    os.mkdir(path_splited)</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images/train&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images/valid&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels/train&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels/valid&#x27;))</span><br><span class="line"></span><br><span class="line">file_list = os.listdir(path_root_imgs)</span><br><span class="line">origin = copy.deepcopy(file_list)</span><br><span class="line">random.shuffle(file_list)</span><br><span class="line">train_len = int(0.9 * len(file_list))   # 训练集占比</span><br><span class="line"></span><br><span class="line">for i, file in enumerate(file_list):</span><br><span class="line">    image_label = file.split(&#x27;.&#x27;)[0] + &#x27;.txt&#x27;</span><br><span class="line">    label_content = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    if i &lt; train_len:</span><br><span class="line">        img_path = &#x27;./data_split/images/train&#x27;</span><br><span class="line">        label_path = &#x27;./data_split/labels/train&#x27;</span><br><span class="line">    else:</span><br><span class="line">        img_path = &#x27;./data_split/images/valid&#x27;</span><br><span class="line">        label_path = &#x27;./data_split/labels/valid&#x27;</span><br><span class="line"></span><br><span class="line">    # 复制图像文件至划分数据集文件夹</span><br><span class="line">    shutil.copy(os.path.join(path_root_imgs, file), img_path)</span><br><span class="line"></span><br><span class="line">    # 复制标签文件至划分数据集文件夹</span><br><span class="line">    label_file_path = os.path.join(path_root_labels, image_label)</span><br><span class="line">    if os.path.exists(label_file_path):</span><br><span class="line">        shutil.copy(label_file_path, label_path)</span><br><span class="line">    else:</span><br><span class="line">        # 如果标签文件不存在，创建空文件</span><br><span class="line">        with open(os.path.join(label_path, image_label), &#x27;w&#x27;) as empty_label_file:</span><br><span class="line">            empty_label_file.write(label_content)</span><br><span class="line"></span><br><span class="line">file_list = os.listdir(&#x27;./data_11_24/images&#x27;)</span><br><span class="line">print(len(file_list))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>该代码会自动创建划分后的数据集文件夹，对于没有标签的背景图片会创建一个对应的空白标签。空白标签同样可以用于YOLOv5数据集的训练。</p>
+<h3 id="创建数据参数文件">3.2 创建数据参数文件</h3>
+<p>在data/文件夹下创建，例如创建名为ball.yaml的参数文件如下（格式可以从已有的参数文件中复制）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># YOLOv5 🚀 by Ultralytics, GPL-3.0 license</span><br><span class="line"># COCO 2017 dataset http://cocodataset.org</span><br><span class="line"># Example usage: python train.py --data coco.yaml</span><br><span class="line"># parent</span><br><span class="line"># ├── yolov5</span><br><span class="line"># └── datasets</span><br><span class="line">#     └── coco  ← downloads here</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]</span><br><span class="line">path: /home/jxj/yolov5-6.0/dataset  # 数据集文件夹父目录</span><br><span class="line">train: train_data/images  # 训练集图像位置（会在该同级目录下自动搜寻对应的标签文件）</span><br><span class="line">val: valid_data/images  # 测试集图像位置（会在该同级目录下自动搜寻对应的标签文件）</span><br><span class="line">test:   # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794</span><br><span class="line"></span><br><span class="line"># Classes</span><br><span class="line">nc: 4  # 标签数量</span><br><span class="line">names: [&#x27;purple_box&#x27;,&#x27;blue_box&#x27;,&#x27;red_box&#x27;,&#x27;granary&#x27;]  # 标签名称（与标注工具中一致）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>要修改的只有有中文注释的那部分。</p>
+<p>需要注意的是，该数据集的文件夹架构与前面用get_train_valid.py创建的文件夹架构是不一样的，需要手动将相对应的文件复制过来，或者修改一下get_train_valid.py代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yolov5                                      |	yolov5</span><br><span class="line">|——data_split          			    |	|——dataset</span><br><span class="line">  |——images				    |	  |——train_data</span><br><span class="line">    |——train				    |	    |——images</span><br><span class="line">      |——rgb_0.png			    |	      |——rgb_0.png</span><br><span class="line">      ...				    |	      ...</span><br><span class="line">    |——valid				    |	    |——labels</span><br><span class="line">      |——rgb_1.png			    |	      |——rgb_0.txt						  </span><br><span class="line">      ...				    |	      ...</span><br><span class="line">  |——labels				    |	  |——valid_data</span><br><span class="line">    |——train				    |	    |——images</span><br><span class="line">      |——rgb_0.txt			    |	      |——rgb_1.png</span><br><span class="line">      ...				    |	      ...</span><br><span class="line">    |——valid				    |	    |——labels</span><br><span class="line">      |——rgb_1.txt			    |	      |——rgb_1.txt</span><br><span class="line">      ...				    |	      ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="创建模型参数文件">3.3 创建模型参数文件</h3>
+<p>在models/文件夹下创建，例如创建名为yolov5s_ball.yaml的参数文件如下（先自行选择一个模型，比如yolov5s或者yolov5l，然后以该文件为基础进行修改）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># YOLOv5 🚀 by Ultralytics, GPL-3.0 license</span><br><span class="line"></span><br><span class="line"># Parameters</span><br><span class="line">nc: 4  # 标签数量</span><br><span class="line">depth_multiple: 0.33  # model depth multiple</span><br><span class="line">width_multiple: 0.50  # layer channel multiple</span><br><span class="line">anchors:</span><br><span class="line">  - [10,13, 16,30, 33,23]  # P3/8</span><br><span class="line">  - [30,61, 62,45, 59,119]  # P4/16</span><br><span class="line">  - [116,90, 156,198, 373,326]  # P5/32</span><br><span class="line"></span><br><span class="line"># YOLOv5 v6.0 backbone</span><br><span class="line">backbone:</span><br><span class="line">  # [from, number, module, args]</span><br><span class="line">  [[-1, 1, Conv, [64, 6, 2, 2]],  # 0-P1/2</span><br><span class="line">   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4</span><br><span class="line">   [-1, 3, C3, [128]],</span><br><span class="line">   [-1, 1, Conv, [256, 3, 2]],  # 3-P3/8</span><br><span class="line">   [-1, 6, C3, [256]],</span><br><span class="line">   [-1, 1, Conv, [512, 3, 2]],  # 5-P4/16</span><br><span class="line">   [-1, 9, C3, [512]],</span><br><span class="line">   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32</span><br><span class="line">   [-1, 3, C3, [1024]],</span><br><span class="line">   [-1, 1, SPPF, [1024, 5]],  # 9</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line"># YOLOv5 v6.0 head</span><br><span class="line">head:</span><br><span class="line">  [[-1, 1, Conv, [512, 1, 1]],</span><br><span class="line">   [-1, 1, nn.Upsample, [None, 2, &#x27;nearest&#x27;]],</span><br><span class="line">   [[-1, 6], 1, Concat, [1]],  # cat backbone P4</span><br><span class="line">   [-1, 3, C3, [512, False]],  # 13</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [256, 1, 1]],</span><br><span class="line">   [-1, 1, nn.Upsample, [None, 2, &#x27;nearest&#x27;]],</span><br><span class="line">   [[-1, 4], 1, Concat, [1]],  # cat backbone P3</span><br><span class="line">   [-1, 3, C3, [256, False]],  # 17 (P3/8-small)</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [256, 3, 2]],</span><br><span class="line">   [[-1, 14], 1, Concat, [1]],  # cat head P4</span><br><span class="line">   [-1, 3, C3, [512, False]],  # 20 (P4/16-medium)</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [512, 3, 2]],</span><br><span class="line">   [[-1, 10], 1, Concat, [1]],  # cat head P5</span><br><span class="line">   [-1, 3, C3, [1024, False]],  # 23 (P5/32-large)</span><br><span class="line"></span><br><span class="line">   [[17, 20, 23], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)</span><br><span class="line">  ]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>要修改的地方只有标签数量那一块，与先前创建的训练数据文件中的值一致。其余地方不用修改。</p>
+<h3 id="修改train.py程序">3.4 修改train.py程序</h3>
+<p>大概在文件的434行，可以对训练时的参数进行修改，包括是否采用预训练参数、先前创建的训练参数文件名称、训练次数等等。部分参数解释如下：</p>
+<ul>
+<li>–weights：预训练模型，它可以保留原有的训练权重继续训练</li>
+<li>–cfg：模型参数文件</li>
+<li>–data：数据参数文件</li>
+<li>–epochs：训练次数</li>
+<li>–batch-size：每次训练的图像数量，越大训练的越快，但是越消耗显存</li>
+<li>–imgsz：训练输入图片大小，yolo会根据这个参数压缩图片，越大训练效果越好，但是越消耗显存</li>
+<li>–devices：训练时使用的设备，数字表示GPU号，用CPU则改为’cpu’</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def parse_opt(known=False):</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(&#x27;--weights&#x27;, type=str, default=ROOT / &#x27;yolov5s.pt&#x27;, help=&#x27;initial weights path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--cfg&#x27;, type=str, default=ROOT / &#x27;models/yolov5s_ball.yaml&#x27;, help=&#x27;model.yaml path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--data&#x27;, type=str, default=ROOT / &#x27;data/ball.yaml&#x27;, help=&#x27;dataset.yaml path&#x27;) ###</span><br><span class="line">    parser.add_argument(&#x27;--hyp&#x27;, type=str, default=ROOT / &#x27;data/hyps/hyp.scratch.yaml&#x27;, help=&#x27;hyperparameters path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--epochs&#x27;, type=int, default=500)</span><br><span class="line">    parser.add_argument(&#x27;--batch-size&#x27;, type=int, default=16, help=&#x27;total batch size for all GPUs&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--imgsz&#x27;, &#x27;--img&#x27;, &#x27;--img-size&#x27;, type=int, default=640, help=&#x27;train, val image size (pixels)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--rect&#x27;, action=&#x27;store_true&#x27;, help=&#x27;rectangular training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--resume&#x27;, nargs=&#x27;?&#x27;, const=True, default=False, help=&#x27;resume most recent training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--nosave&#x27;, action=&#x27;store_true&#x27;, help=&#x27;only save final checkpoint&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--noval&#x27;, action=&#x27;store_true&#x27;, help=&#x27;only validate final epoch&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--noautoanchor&#x27;, action=&#x27;store_true&#x27;, help=&#x27;disable autoanchor check&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--evolve&#x27;, type=int, nargs=&#x27;?&#x27;, const=300, help=&#x27;evolve hyperparameters for x generations&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--bucket&#x27;, type=str, default=&#x27;&#x27;, help=&#x27;gsutil bucket&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--cache&#x27;, type=str, nargs=&#x27;?&#x27;, const=&#x27;ram&#x27;, help=&#x27;--cache images in &quot;ram&quot; (default) or &quot;disk&quot;&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--image-weights&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use weighted image selection for training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--device&#x27;, default=&#x27;0&#x27;, help=&#x27;cuda device, i.e. 0 or 0,1,2,3 or cpu&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--multi-scale&#x27;, action=&#x27;store_true&#x27;, help=&#x27;vary img-size +/- 50%%&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--single-cls&#x27;, action=&#x27;store_true&#x27;, help=&#x27;train multi-class data as single-class&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--adam&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use torch.optim.Adam() optimizer&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--sync-bn&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use SyncBatchNorm, only available in DDP mode&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--workers&#x27;, type=int, default=8, help=&#x27;maximum number of dataloader workers&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--project&#x27;, default=ROOT / &#x27;runs/train&#x27;, help=&#x27;save to project/name&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--name&#x27;, default=&#x27;exp&#x27;, help=&#x27;save to project/name&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--exist-ok&#x27;, action=&#x27;store_true&#x27;, help=&#x27;existing project/name ok, do not increment&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--quad&#x27;, action=&#x27;store_true&#x27;, help=&#x27;quad dataloader&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--linear-lr&#x27;, action=&#x27;store_true&#x27;, help=&#x27;linear LR&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--label-smoothing&#x27;, type=float, default=0.0, help=&#x27;Label smoothing epsilon&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--patience&#x27;, type=int, default=100, help=&#x27;EarlyStopping patience (epochs without improvement)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--freeze&#x27;, type=int, default=0, help=&#x27;Number of layers to freeze. backbone=10, all=24&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--save-period&#x27;, type=int, default=-1, help=&#x27;Save checkpoint every x epochs (disabled if &lt; 1)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--local_rank&#x27;, type=int, default=-1, help=&#x27;DDP parameter, do not modify&#x27;)</span><br><span class="line"></span><br><span class="line">    # Weights &amp; Biases arguments</span><br><span class="line">    parser.add_argument(&#x27;--entity&#x27;, default=None, help=&#x27;W&amp;B: Entity&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--upload_dataset&#x27;, action=&#x27;store_true&#x27;, help=&#x27;W&amp;B: Upload dataset as artifact table&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--bbox_interval&#x27;, type=int, default=-1, help=&#x27;W&amp;B: Set bounding-box image logging interval&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--artifact_alias&#x27;, type=str, default=&#x27;latest&#x27;, help=&#x27;W&amp;B: Version of dataset artifact to use&#x27;)</span><br><span class="line"></span><br><span class="line">    opt = parser.parse_known_args()[0] if known else parser.parse_args()</span><br><span class="line">    return opt</span><br></pre></td></tr></table></figure>
+<h3 id="训练模型">3.5 训练模型</h3>
+<p>当做好以上工作后，可以直接在终端运行python3
+train.py进行数据集训练。</p>
+<p><strong>训练过程可视化：</strong></p>
+<p>在yolo.py程序中找到 <img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="查看"></p>
+<p>将该部分取消注释。</p>
+<p>在yolov5文件夹终端下输入：tensorboard
+–logdir=./runs，然后在浏览器访问http://localhost:6006/即可查看训练过程。
+<img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="查看"></p>
+<h3 id="训练结果">3.6 训练结果</h3>
+<p>训练后的结果会被保存在runs/train/exp_xx下 <img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" alt="查看"></p>
+<ul>
+<li>weights文件夹下保存训练的模型参数，包括best.pt和last.pt</li>
+<li>result.png表示训练效果：
+<ul>
+<li>Box：</li>
+</ul></li>
+</ul>
+<p>将模型导出为torchscripts和onnx模型（可以将训练好的best.pt文件放到yolov5目录下，或者改为runs/train/exp_xx/weights/best.pt）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 export.py --weight best.pt --include torchscript onnx</span><br></pre></td></tr></table></figure>
+<h2 id="应用与检测">4.应用与检测</h2>
+]]></content>
+      <categories>
+        <category>教程</category>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>YOLOv5</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>技术笔记|ROS1核心编程</title>
+    <url>/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="ros1核心编程">ROS1核心编程</h1>
+<h2 id="前言">0. 前言</h2>
+<p>ROS的教程推荐绝对会是古月居：</p>
+<p><a href="https://www.bilibili.com/video/BV1zt411G7Vn/?spm_id_from=333.337.search-card.all.click">【古月居】古月·ROS入门21讲
+| 一学就会的ROS机器人入门教程_哔哩哔哩_bilibili</a></p>
+<p>关于此篇文章的写法我不想按照如ROS通信机制、节点句柄、回调函数、发布者与订阅者等来写，关于这些内容，在古月居的ROS21讲中有非常详细的讲解。</p>
+<p>ROS的最大作用其实是话题的发布与接收，尤其是自定义话题，其实网上教程很多，但是当你真正需要用ROS进行项目开发时，最核心的一个问题在于：
+<strong>如何自定义话题并且完成其消息的接收与发布</strong> 。</p>
+<p><strong>因此，本文将记录，该如何利用ROS实现话题通信。</strong></p>
+<h2 id="工作空间与功能包的创建">1. 工作空间与功能包的创建</h2>
+<h3 id="工作空间的创建">1.1 工作空间的创建</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 依次建立两个文件夹，分别为工作空间文件夹和src文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/ros_ws/src</span><br><span class="line"><span class="comment"># 进入src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ~/ros_ws/src</span><br><span class="line"><span class="comment"># 初始化工作空间</span></span><br><span class="line">catkin_init_workspace</span><br></pre></td></tr></table></figure>
+<p>以上命令执行完后将会在src文件夹下生成CMakeLists.txt文件，该文件一般不可修改，该文件的生成表示工作空间的成功创建，如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(4).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<p>可以执行以下命令对工作空间进行编译，以进一步验证工作空间是否创建成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间根目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/</span><br><span class="line"><span class="comment"># 编译工作空间</span></span><br><span class="line">catkin_make</span><br><span class="line"><span class="comment"># 该命令执行后应无报错信息出现</span></span><br></pre></td></tr></table></figure>
+<h3 id="功能包的创建">1.2 功能包的创建</h3>
+<p>创建功能包的命令为：<code>catkin_create_pkg &lt;功能包名&gt; [依赖1] [依赖2] …</code></p>
+<p>我们实操如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间内src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/src</span><br><span class="line"><span class="comment"># 创建功能包并添加必需的依赖</span></span><br><span class="line">catkin_create_pkg test_pkg std_msgs rospy roscpp</span><br></pre></td></tr></table></figure>
+<p>此时，工作空间结构如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(5).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<h2 id="自定义消息内容">2. 自定义消息内容</h2>
+<h3 id="创建msg文件">2.1 创建msg文件</h3>
+<p>可以在功能包目录下创建一个msg文件夹，用于存储自定义的消息文件，如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(6).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<p>接着，在msg文件中定义你想在话题中传输的内容，即消息的内容，比如我在这里创建了一个消息话题内容包含：名字，力矩，长度，速度：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(7).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<h3 id="修改package.xml文件">2.2 修改package.xml文件</h3>
+<p>在所创建的功能包文件夹内，包含两个文件package.xml文件和CMakeLists.txt文件，我们首先修改package.xml文件，在该文件内添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;build_export_depend&gt;message_generation&lt;/build_export_depend&gt;</span><br><span class="line">&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="修改cmakelists.txt文件">2.3 修改CMakeLists.txt文件</h3>
+<p>CMakeLists.txt文件一共有三处需要修改：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在find_package()内添加message_generation，如下：</span></span><br><span class="line">find_package(catkin REQUIRED COMPONENTS</span><br><span class="line">  roscpp</span><br><span class="line">  rospy</span><br><span class="line">  std_msgs</span><br><span class="line">  message_generation</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在add_message_files()内添加(FILE 消息文件名.msg)和在generate_messages()内添加(DEPENDENCIES std_msgs），如下：</span></span><br><span class="line">add_message_files(</span><br><span class="line">  FILES</span><br><span class="line">  test_msg.msg</span><br><span class="line">)</span><br><span class="line">generate_messages(</span><br><span class="line">  DEPENDENCIES</span><br><span class="line">  std_msgs</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在catkin_package()添加message_runtiome，如下：</span></span><br><span class="line">catkin_package(</span><br><span class="line"> CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="编译生成消息对应头文件">2.4 编译生成消息对应头文件</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws</span><br><span class="line"><span class="comment"># 编译生成消息头文件</span></span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
+<p>此时，在工作空间中即可搜索到以刚才创建的消息文件命名的头文件，如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(8).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<h2 id="消息的发布与接收">3. 消息的发布与接收</h2>
+<h3 id="消息的发布">3.1 消息的发布</h3>
+<p>在这里我直接附上一份写有详细注释的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的发布</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_pub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_pub的发布者，发布名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Publisher test_msg_pub = nh.<span class="built_in">advertise</span>&lt;test_pkg::test_msg&gt;(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="comment">// 设置循环的频率10Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 循环发布消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 初始化消息变量</span></span><br><span class="line">        test_pkg::test_msg test_msg;</span><br><span class="line">        test_msg.name = <span class="string">&quot;test_msg&quot;</span>;</span><br><span class="line">        test_msg.torque = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.length = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.speed = <span class="number">100.0</span> + count;</span><br><span class="line">        <span class="comment">// 发布消息</span></span><br><span class="line">        test_msg_pub.<span class="built_in">publish</span>(test_msg);</span><br><span class="line">        <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Publish test_msg: %d&quot;</span>, count);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在功能包内创建任何一个新程序，都需要在CMakeLists.txt文件中添加相关内容，以实现对其的编译，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"># 添加可执行文件</span><br><span class="line"><span class="built_in">add_executable</span>(test_message_pub </span><br><span class="line">src/test_message_pub.cpp)</span><br><span class="line"><span class="built_in">target_link_libraries</span>(test_message_pub PUBLIC $&#123;catkin_LIBRARIES&#125;)</span><br></pre></td></tr></table></figure>
+<p>对该程序进行编译，并且运行，查看如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(9).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<h3 id="消息的接收">3.2 消息的接收</h3>
+<p>同样的，在这里我直接附上一份写有详细注释的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的订阅</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"><span class="comment">// 定义一些用于存储消息的变量</span></span><br><span class="line">std::string global_name = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="type">int</span> global_torque = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> global_length = <span class="number">0</span>;</span><br><span class="line"><span class="type">float</span> global_speed = <span class="number">0.0</span>;</span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testMsgCallback</span><span class="params">(<span class="type">const</span> test_pkg::test_msg::ConstPtr&amp; msg)</span> </span>&#123;</span><br><span class="line">    global_name = msg-&gt;name;</span><br><span class="line">    global_torque = msg-&gt;torque;</span><br><span class="line">    global_length = msg-&gt;length;</span><br><span class="line">    global_speed = msg-&gt;speed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UseData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg name: %s&quot;</span>, global_name.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg torque: %d&quot;</span>, global_torque);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg length: %d&quot;</span>, global_length);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg speed: %f&quot;</span>, global_speed);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;----------------------------------&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_sub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_sub的订阅者，订阅名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Subscriber test_msg_sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>, testMsgCallback);</span><br><span class="line">    <span class="comment">// 设置循环的频率1Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 循环订阅消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 使用数据</span></span><br><span class="line">        <span class="built_in">UseData</span>();</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">        <span class="comment">// 处理ROS回调函数--该函数至关重要！！！！</span></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改CMakeLists.txt文件，并且编译运行，如下：</p>
+<figure>
+<img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(10).png" alt="haha">
+<figcaption aria-hidden="true">haha</figcaption>
+</figure>
+<h2 id="总结">4. 总结</h2>
+<p>本文面向工程开发，讲述实操内容，中间关于ROS的很多概念没有展开细讲，比如
+<code>ros::spin()</code>和
+<code>ros::spinonce()</code>的区别，比如自定义消息时使用的何种语言，比如何为话题何为句柄等等。</p>
+<p>若需要进一步对ROS进行学习，仍然是推荐大家返回去本文最初推荐的《古月居ROS21讲》。</p>
+<hr>
+<p><strong>更新日志</strong></p>
+<p>2025.3.10 20:48：文章初次完成</p>
+<p>2025.4.26 10:38：文章从notion移至hexo个人博客网站</p>
+]]></content>
+      <tags>
+        <tag>ROS</tag>
+        <tag>技能学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>技术笔记-卡尔曼滤波</title>
+    <url>/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
+    <content><![CDATA[<h1 id="状态估计---卡尔曼滤波器-state-estimation---kalman-filter">状态估计 -
+卡尔曼滤波器 (State Estimation - Kalman Filter)</h1>
+<hr>
+<h2 id="概述">01. 概述</h2>
+<h3 id="为什么要使用卡尔曼滤波器">1.1 为什么要使用卡尔曼滤波器?</h3>
+<p>工程中面临的“不确定性”主要体现在以下三个方面：</p>
+<ol type="1">
+<li><strong>不存在完美的数学模型：</strong>
+物理世界太复杂，模型总是基于各种前提进行简化的。</li>
+<li><strong>系统的扰动不可控：</strong>
+如风、摩擦、打滑、电流波动等。</li>
+<li><strong>测量传感器存在误差：</strong>
+噪声是常态，传感器的读数总在跳变。</li>
+</ol>
+<p><strong>核心定义：</strong>
+一种最优化的递归数字处理算法，在存在噪声的数据中估计系统的最优状态。</p>
+<h3 id="一个形象的例子">1.2 一个形象的例子</h3>
+<p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为
+<span class="math inline"><em>Z</em><sub><em>k</em></sub></span>（下标
+<span class="math inline"><em>k</em></span> 表示第 <span class="math inline"><em>k</em></span>
+次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
+<p><strong>测量数据示例：</strong></p>
+<div data-align="center">
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">测量次数</th>
+<th style="text-align: center;">测量结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50.1 mm</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">50.2 mm</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">49.8 mm</td>
+</tr>
+<tr>
+<td style="text-align: center;">…</td>
+<td style="text-align: center;">…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>如何得到真实直径？</strong>
+一个很自然的做法是：<strong>取平均值</strong>。</p>
+<p><span class="math display">$$
+\hat{x}_{k} = \frac{1}{k}(z_{1} + z_{2} + \dots + z_{k})
+$$</span></p>
+<p>将其转化为<strong>递归形式</strong>：</p>
+<p><span class="math display">$$
+\begin{aligned}
+\hat{x}_{k} &amp;= \frac{1}{k}(z_{1} + z_{2} + \dots + z_{k-1}) +
+\frac{1}{k}z_{k} \\
+&amp;= \frac{1}{k} \cdot \frac{k-1}{k-1}(z_{1} + z_{2} + \dots +
+z_{k-1}) + \frac{1}{k}z_{k} \\
+&amp;= \frac{k-1}{k}\hat{x}_{k-1} + \frac{1}{k}z_{k} \\
+&amp;= \hat{x}_{k-1} + \frac{1}{k}(z_{k} - \hat{x}_{k-1})
+\end{aligned}
+$$</span></p>
+<p><strong>化为更一般的形式：</strong></p>
+<p><span class="math display"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em> − 1</sub> + <em>K</em><sub><em>k</em></sub>(<em>z</em><sub><em>k</em></sub> − <em>x̂</em><sub><em>k</em> − 1</sub>)</span></p>
+<ul>
+<li><strong>含义：</strong> 当前的估计值 = 上一次的估计值 + 系数 <span class="math inline">×</span> (当前的测量值 - 上一次的估计值)。</li>
+<li><strong>系数 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>：</strong>
+Kalman Gain，即卡尔曼增益/因数。</li>
+<li>在上述硬币例子中，<span class="math inline"><em>K</em><sub><em>k</em></sub> = 1/<em>k</em></span>，即对应均值滤波。</li>
+</ul>
+<hr>
+<h2 id="初识卡尔曼滤波">02. 初识卡尔曼滤波</h2>
+<h3 id="单变量卡尔曼滤波的一般流程">2.1 单变量卡尔曼滤波的一般流程</h3>
+<p><strong>定义：</strong></p>
+<ul>
+<li><strong>估计误差：</strong> <span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em></sub></span></li>
+<li><strong>测量误差：</strong> <span class="math inline"><em>e</em><sub><em>M</em><em>E</em><em>A</em></sub></span></li>
+<li><strong>卡尔曼增益：</strong> <span class="math inline">$K_{k} =
+\frac{e_{EST_{k-1}}}{e_{EST_{k-1}} + e_{MEA_{k}}}$</span></li>
+</ul>
+<p><strong>分析：</strong></p>
+<ol type="1">
+<li>若 <span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em></sub> ≫ <em>e</em><sub><em>M</em><em>E</em><em>A</em></sub></span>，则
+<span class="math inline"><em>K</em><sub><em>k</em></sub> → 1</span>，此时
+<span class="math inline"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em> − 1</sub> + <em>z</em><sub><em>k</em></sub> − <em>x̂</em><sub><em>k</em> − 1</sub> = <em>z</em><sub><em>k</em></sub></span>（更相信测量值）。</li>
+<li>若 <span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em></sub> ≪ <em>e</em><sub><em>M</em><em>E</em><em>A</em></sub></span>，则
+<span class="math inline"><em>K</em><sub><em>k</em></sub> → 0</span>，此时
+<span class="math inline"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em> − 1</sub></span>（更相信上一次的估计值）。</li>
+</ol>
+<p><strong>计算步骤：</strong></p>
+<ol type="1">
+<li>计算卡尔曼增益 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>。</li>
+<li>计算当前估计值：<span class="math inline"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em> − 1</sub> + <em>K</em><sub><em>k</em></sub>(<em>z</em><sub><em>k</em></sub> − <em>x̂</em><sub><em>k</em> − 1</sub>)</span>。</li>
+<li>更新估计误差：<span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em><sub><em>k</em></sub></sub> = (1 − <em>K</em><sub><em>k</em></sub>)<em>e</em><sub><em>E</em><em>S</em><em>T</em><sub><em>k</em> − 1</sub></sub></span>。</li>
+</ol>
+<h3 id="例1硬币测量计算">2.2 例1：硬币测量计算</h3>
+<p>设定：实际长度 <span class="math inline"><em>x</em> = 50<em>m</em><em>m</em></span>，初始估计
+<span class="math inline"><em>x̂</em><sub>0</sub> = 40<em>m</em><em>m</em></span>，初始估计误差
+<span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em><sub>0</sub></sub> = 5<em>m</em><em>m</em></span>，测量误差
+<span class="math inline"><em>e</em><sub><em>M</em><em>E</em><em>A</em></sub> = 3<em>m</em><em>m</em></span>。</p>
+<table>
+<colgroup>
+<col style="width: 0%">
+<col style="width: 12%">
+<col style="width: 23%">
+<col style="width: 31%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr>
+<th>k</th>
+<th>测量值<span class="math inline"><em>z</em><sub><em>k</em></sub></span></th>
+<th>卡尔曼增益<span class="math inline"><em>K</em><sub><em>k</em></sub></span></th>
+<th>估计值<span class="math inline"><em>x̂</em><sub><em>k</em></sub></span></th>
+<th>估计误差<span class="math inline"><em>e</em><sub><em>E</em><em>S</em><em>T</em><sub><em>k</em></sub></sub></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>40</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>51</td>
+<td><span class="math inline">5/(5 + 3) = 0.625</span></td>
+<td><span class="math inline">40 + 0.625(51 − 40) = 46.875</span></td>
+<td><span class="math inline">(1 − 0.625) × 5 = 1.875</span></td>
+</tr>
+<tr>
+<td>2</td>
+<td>48</td>
+<td><span class="math inline">1.875/(1.875 + 3) = 0.385</span></td>
+<td><span class="math inline">46.875 + 0.385(48 − 46.875) = 47.320</span></td>
+<td><span class="math inline">(1 − 0.385) × 1.875 = 1.153</span></td>
+</tr>
+<tr>
+<td>3</td>
+<td>52</td>
+<td><span class="math inline">1.153/(1.153 + 3) = 0.278</span></td>
+<td><span class="math inline">47.320 + 0.278(52 − 47.320) = 48.621</span></td>
+<td><span class="math inline">(1 − 0.278) × 1.153 = 0.832</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="例2数据融合-data-fusion">2.3 例2：数据融合 (Data Fusion)</h3>
+<p>假设使用视觉里程计 (VO) 和惯性里程计 (IO) 分别进行机器人定位。</p>
+<ul>
+<li><span class="math inline"><em>Z</em><sub><em>v</em><em>o</em></sub> = 30, <em>σ</em><sub><em>v</em><em>o</em></sub> = 2</span></li>
+<li><span class="math inline"><em>Z</em><sub><em>i</em><em>o</em></sub> = 32, <em>σ</em><sub><em>i</em><em>o</em></sub> = 4</span></li>
+</ul>
+<p><strong>问题分析：</strong> 以 VO 数据为测量，IO 数据为预测（假设 IO
+频率更高）。 根据卡尔曼滤波公式：<span class="math inline"><em>ẑ</em> = <em>z</em><sub><em>v</em><em>o</em></sub> + <em>K</em>(<em>z</em><sub><em>i</em><em>o</em></sub> − <em>z</em><sub><em>v</em><em>o</em></sub>)</span>，其中
+<span class="math inline"><em>K</em> ∈ [0, 1]</span>。</p>
+<p><strong>目标：</strong> 求 <span class="math inline"><em>K</em></span> 使 <span class="math inline"><em>σ</em><sub><em>ẑ</em></sub><sup>2</sup></span>（即
+<span class="math inline"><em>V</em><em>a</em><em>r</em>(<em>ẑ</em>)</span>）最小。</p>
+<p><strong>推导过程：</strong></p>
+<p><span class="math display">$$
+\begin{aligned}
+\sigma_{\hat{z}}^2 &amp;= Var(\hat{z}) = Var(z_{vo} + K(z_{io} -
+z_{vo})) \\
+&amp;= Var((1-K)z_{vo} + Kz_{io}) \\
+&amp;= (1-K)^2\sigma_{vo}^2 + K^2\sigma_{io}^2
+\end{aligned}
+$$</span></p>
+<p>令 <span class="math inline">$\frac{d\sigma_{\hat{z}}^2}{dK} =
+0$</span>，有：</p>
+<p><span class="math display">$$
+2(1-K)(-1)\sigma_{vo}^2 + 2K\sigma_{io}^2 = 0 \\
+2\sigma_{io}^2 K - (1-K)2\sigma_{vo}^2 = 0
+$$</span></p>
+<p>解得：</p>
+<p><span class="math display">$$
+K = \frac{\sigma_{vo}^2}{\sigma_{vo}^2 + \sigma_{io}^2} =
+\frac{2^2}{2^2+4^2} = 0.2
+$$</span></p>
+<p><strong>计算结果：</strong></p>
+<p><span class="math display"><em>ẑ</em> = 30 + 0.2 × (32 − 30) = 30.4</span></p>
+<p><strong>验证标准差：</strong></p>
+<p><span class="math display">$$
+\sigma_{\hat{z}} = \sqrt{(1-0.2)^2 \cdot 2^2 + 0.2^2 \cdot 4^2} =
+\sqrt{3.2} = 1.79
+$$</span></p>
+<p>结果小于 <span class="math inline"><em>σ</em><sub><em>v</em><em>o</em></sub></span> (2)
+和 <span class="math inline"><em>σ</em><sub><em>i</em><em>o</em></sub></span>
+(4)，说明融合后的精度提高了。 <img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/正态分布.png" alt="查看"></p>
+<h2 id="协方差矩阵与状态空间-covariance-matrix-state-space">03.
+协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2>
+<h3 id="协方差矩阵">3.1 协方差矩阵</h3>
+<p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
+<ul>
+<li>在刚才的例子中，VO 与 IO
+互相独立，所以在融合时只考虑它们各自的方差即可。</li>
+<li>但若在数据融合时二者（或更多）存在关联，在融合时就必须考虑这种关联，具体的联动关系则以协方差矩阵来描述。</li>
+</ul>
+<p><strong>定义公式：</strong></p>
+<p><span class="math display"><em>σ</em><sub><em>x</em><sub>1</sub><em>x</em><sub>2</sub></sub> = <em>C</em><em>o</em><em>v</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>) = <em>E</em>[(<em>x</em><sub>1</sub> − <em>E</em>(<em>x</em><sub>1</sub>))(<em>x</em><sub>2</sub> − <em>E</em>(<em>x</em><sub>2</sub>))] = <em>E</em>(<em>x</em><sub>1</sub><em>x</em><sub>2</sub>) − <em>E</em>(<em>x</em><sub>1</sub>)<em>E</em>(<em>x</em><sub>2</sub>)</span></p>
+<p><strong>矩阵形式：</strong> 对于随机变量向量 <span class="math inline">$X = \begin{bmatrix} x_1 \\ x_2
+\end{bmatrix}$</span>，协方差矩阵为：</p>
+<p><span class="math display">$$
+C(X) = E[(X - E(X))(X - E(X))^T] = \begin{bmatrix} \sigma_{x_1}^2 &amp;
+\sigma_{x_1 x_2} \\ \sigma_{x_2 x_1} &amp; \sigma_{x_2}^2 \end{bmatrix}
+$$</span></p>
+<h3 id="状态空间表达">3.2 状态空间表达</h3>
+<figure>
+<img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/弹簧阻尼系统.png" alt="查看">
+<figcaption aria-hidden="true">查看</figcaption>
+</figure>
+<p>以弹簧-阻尼-质量块系统为例，通过受力分析建立系统的数学表达：</p>
+<p><span class="math display">$$
+m\ddot{x} + B\dot{x} + kx = F(u:input)
+$$</span></p>
+<p>即：</p>
+<p><span class="math display">$$
+\ddot{x} = \frac{1}{m}u - \frac{B}{m}\dot{x} - \frac{k}{m}x
+$$</span></p>
+<p><strong>选取状态变量：</strong> 令 <span class="math inline"><em>x</em><sub>1</sub> = <em>x</em></span>
+(位移)，<span class="math inline"><em>x</em><sub>2</sub> = <em>ẋ</em></span> (速度)。
+则一阶微分方程组为：</p>
+<p><span class="math display">$$
+\begin{cases}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = \frac{1}{m}u - \frac{B}{m}x_2 - \frac{k}{m}x_1
+\end{cases}
+$$</span></p>
+<p><strong>矩阵形式 (连续系统)：</strong></p>
+<p><span class="math display">$$
+\begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} =
+\begin{bmatrix} 0 &amp; 1 \\ -\frac{k}{m} &amp; -\frac{B}{m}
+\end{bmatrix}
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} +
+\begin{bmatrix} 0 \\ \frac{1}{m} \end{bmatrix} u
+$$</span></p>
+<p>即 <span class="math inline"><em>Ẋ</em>(<em>t</em>) = <em>A</em><em>X</em>(<em>t</em>) + <em>B</em><em>u</em>(<em>t</em>)</span>。</p>
+<p><strong>对应的离散形式：</strong></p>
+<p><span class="math display">$$
+\begin{cases}
+X_k = AX_{k-1} + Bu_{k-1} + w_{k-1} \\
+Z_k = HX_k + v_k
+\end{cases}
+$$</span></p>
+<p>该方程体现了上一步到当前的变化。</p>
+<p><strong>噪声定义：</strong></p>
+<ul>
+<li><strong>过程噪声：</strong> <span class="math inline"><em>w</em> ∼ <em>N</em>(0, <em>Q</em>)</span></li>
+<li><strong>测量噪声：</strong> <span class="math inline"><em>v</em> ∼ <em>N</em>(0, <em>R</em>)</span> 其中
+<span class="math inline"><em>Q</em></span> 和 <span class="math inline"><em>R</em></span>
+分别为对应的协方差矩阵。卡尔曼滤波器的目的就是从不太准确的估计结果 <span class="math inline"><em>X</em><sub><em>k</em></sub></span>
+和也不太准确的测量结果 <span class="math inline"><em>Z</em><sub><em>k</em></sub></span>
+中，估计得到一个相对较准的结果。</li>
+</ul>
+<h2 id="卡尔曼滤波的数学推导-mathematical-derivation-of-kalman-filter">04.
+卡尔曼滤波的数学推导 (Mathematical Derivation of Kalman Filter)</h2>
+<h3 id="卡尔曼增益的推导-derivation-of-kalman-gain">4.1 卡尔曼增益的推导
+(Derivation of Kalman Gain)</h3>
+<p>对于状态空间方程:</p>
+<p><span class="math display">$$
+\begin{cases}
+X_{k} = AX_{k-1} + Bu_{k-1} + w_{k-1}, &amp; P(w) \sim (0, Q) \\
+Z_{k} = HX_{k} + v_{k}, &amp; P(v) \sim (0, R)
+\end{cases}
+$$</span></p>
+<p><strong>过程噪声协方差矩阵 <span class="math inline"><em>Q</em></span> (以二维为例):</strong></p>
+<p><span class="math display">$$
+Q = E(ww^{T}) = \begin{bmatrix} \sigma_{w_{1}}^{2} &amp; 0 \\ 0 &amp;
+\sigma_{w_{2}}^{2} \end{bmatrix}
+$$</span></p>
+<p>(假设变量间相互独立，且期望为0)</p>
+<p><strong>测量噪声协方差矩阵 <span class="math inline"><em>R</em></span>:</strong></p>
+<p><span class="math display">$$
+R = \begin{bmatrix} \sigma_{v_{1}}^{2} &amp; 0 \\ 0 &amp;
+\sigma_{v_{2}}^{2} \end{bmatrix}
+$$</span></p>
+<p><strong>先验与后验状态估计:</strong>
+由于噪声项无法建模，我们需要定义：</p>
+<ul>
+<li><strong>先验状态估计 (Predicted/A Priori):</strong> <span class="math inline"><em>x̂</em><sub><em>k</em></sub><sup>−</sup> = <em>A</em><em>x̂</em><sub><em>k</em> − 1</sub> + <em>B</em><em>u</em><sub><em>k</em> − 1</sub></span>
+<ul>
+<li>这是“算出来”的值，基于上一时刻的后验估计进行预测。</li>
+</ul></li>
+<li><strong>测量估计:</strong> <span class="math inline"><em>x̂</em><sub><em>k</em><sub><em>m</em><em>e</em><em>a</em></sub></sub> = <em>H</em><sup>−1</sup><em>z</em><sub><em>k</em></sub></span>
+(理想化表达，实际通过增益融合)</li>
+</ul>
+<p><strong>后验状态估计 (Corrected/A Posteriori):</strong>
+沿用递归思想，定义后验状态估计为预测值与测量新息(Innovation)的加权和：</p>
+<p><span class="math display"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em></sub><sup>−</sup> + <em>K</em><sub><em>k</em></sub>(<em>Z</em><sub><em>k</em></sub> − <em>H</em><em>x̂</em><sub><em>k</em></sub><sup>−</sup>)</span></p>
+<p>其中 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>
+为待求的卡尔曼增益。</p>
+<p>[cite_start]<strong>目标:</strong> 寻找 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>，使得估计值
+<span class="math inline"><em>x̂</em><sub><em>k</em></sub></span>
+逼近真实值 <span class="math inline"><em>x</em><sub><em>k</em></sub></span>，即误差 <span class="math inline"><em>e</em><sub><em>k</em></sub> = <em>x</em><sub><em>k</em></sub> − <em>x̂</em><sub><em>k</em></sub></span>
+的方差最小 [cite: 202, 207]。</p>
+<p>[cite_start]<strong>寻找最优增益 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>[cite: 213,
+217]:</strong> 定义误差的协方差矩阵 <span class="math inline"><em>P</em><sub><em>k</em></sub> = <em>E</em>[<em>e</em><sub><em>k</em></sub><em>e</em><sub><em>k</em></sub><sup><em>T</em></sup>]</span>。若要误差最小，则需矩阵
+<span class="math inline"><em>P</em><sub><em>k</em></sub></span> 的迹
+<span class="math inline"><em>t</em><em>r</em>(<em>P</em><sub><em>k</em></sub>)</span>
+最小。</p>
+<p>展开 <span class="math inline"><em>P</em><sub><em>k</em></sub></span>:</p>
+<p><span class="math display">$$
+\begin{aligned}
+P_{k} &amp;= E[(x_{k} - \hat{x}_{k})(x_{k} - \hat{x}_{k})^{T}] \\
+&amp;= (I - K_{k}H)P_{k}^{-}(I - K_{k}H)^{T} + K_{k}RK_{k}^{T}
+\end{aligned}
+$$</span></p>
+<p>对 <span class="math inline"><em>K</em><sub><em>k</em></sub></span>
+求导并令其为 0: 利用矩阵求导公式 <span class="math inline">$\frac{d
+tr(ABA^T)}{dA} = 2AB$</span>，解得卡尔曼增益公式：</p>
+<p><span class="math display">$$
+K_{k} = \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}
+$$</span></p>
+<hr>
+<h3 id="误差协方差矩阵推导-derivation-of-error-covariance-matrix">4.2
+误差协方差矩阵推导 (Derivation of Error Covariance Matrix)</h3>
+<p>在上述推导中，先验误差协方差矩阵 <span class="math inline"><em>P</em><sub><em>k</em></sub><sup>−</sup></span>
+仍是未知的，需要从上一时刻递推得到。</p>
+<p><strong>先验误差协方差矩阵 <span class="math inline"><em>P</em><sub><em>k</em></sub><sup>−</sup></span>
+:</strong> 由 <span class="math inline"><em>e</em><sub><em>k</em></sub><sup>−</sup> = <em>A</em><em>e</em><sub><em>k</em> − 1</sub> + <em>w</em><sub><em>k</em> − 1</sub></span>，可得：</p>
+<p><span class="math display"><em>P</em><sub><em>k</em></sub><sup>−</sup> = <em>E</em>[(<em>A</em><em>e</em><sub><em>k</em> − 1</sub> + <em>w</em><sub><em>k</em> − 1</sub>)(<em>A</em><em>e</em><sub><em>k</em> − 1</sub> + <em>w</em><sub><em>k</em> − 1</sub>)<sup><em>T</em></sup>] = <em>A</em><em>P</em><sub><em>k</em> − 1</sub><em>A</em><sup><em>T</em></sup> + <em>Q</em></span></p>
+<p><strong>后验误差协方差矩阵 <span class="math inline"><em>P</em><sub><em>k</em></sub></span>
+(更新):</strong> 将求得的最优 <span class="math inline"><em>K</em><sub><em>k</em></sub></span> 代入之前
+<span class="math inline"><em>P</em><sub><em>k</em></sub></span>
+的展开式，化简可得：</p>
+<p><span class="math display"><em>P</em><sub><em>k</em></sub> = (<em>I</em> − <em>K</em><sub><em>k</em></sub><em>H</em>)<em>P</em><sub><em>k</em></sub><sup>−</sup></span></p>
+<p>该公式用于更新当前时刻的误差协方差，以便在下一时刻作为 <span class="math inline"><em>P</em><sub><em>k</em> − 1</sub></span>
+使用。</p>
+<hr>
+<h3 id="完整的卡尔曼滤波流程-summary-of-kf-algorithm">4.3
+完整的卡尔曼滤波流程 (Summary of KF Algorithm)</h3>
+<p>至此，得到完整的卡尔曼滤波 5 个核心公式:</p>
+<p><strong>I. 预测 (Prediction / Time Update)</strong></p>
+<ol type="1">
+<li><strong>计算先验状态估计:</strong> <span class="math display"><em>x̂</em><sub><em>k</em></sub><sup>−</sup> = <em>A</em><em>x̂</em><sub><em>k</em> − 1</sub> + <em>B</em><em>u</em><sub><em>k</em> − 1</sub></span></li>
+<li><strong>计算先验误差协方差矩阵:</strong> <span class="math display"><em>P</em><sub><em>k</em></sub><sup>−</sup> = <em>A</em><em>P</em><sub><em>k</em> − 1</sub><em>A</em><sup><em>T</em></sup> + <em>Q</em></span></li>
+</ol>
+<p><strong>II. 校正 (Correction / Measurement Update)</strong> 3.
+<strong>计算卡尔曼增益:</strong></p>
+<p><span class="math display">$$
+K_{k} = \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}
+$$</span></p>
+<p><strong>计算后验状态估计:</strong></p>
+<p><span class="math display"><em>x̂</em><sub><em>k</em></sub> = <em>x̂</em><sub><em>k</em></sub><sup>−</sup> + <em>K</em><sub><em>k</em></sub>(<em>z</em><sub><em>k</em></sub> − <em>H</em><em>x̂</em><sub><em>k</em></sub><sup>−</sup>)</span></p>
+<p><strong>更新后验误差协方差矩阵:</strong></p>
+<p><span class="math display"><em>P</em><sub><em>k</em></sub> = (<em>I</em> − <em>K</em><sub><em>k</em></sub><em>H</em>)<em>P</em><sub><em>k</em></sub><sup>−</sup></span></p>
+<hr>
+<h2 id="扩展卡尔曼滤波-extended-kalman-filter-ekf">05. 扩展卡尔曼滤波
+(Extended Kalman Filter, EKF)</h2>
+<p>对于非线性系统:</p>
+<p><span class="math display">$$
+\begin{cases}
+x_{k} = f(x_{k-1}, u_{k-1}, w_{k-1}) \\
+z_{k} = h(x_{k}, v_{k})
+\end{cases}
+$$</span></p>
+<p><strong>核心思想:</strong> 应用<strong>泰勒展开 (Taylor
+Expansion)</strong> 对非线性函数 <span class="math inline"><em>f</em></span> 和 <span class="math inline"><em>h</em></span> 进行线性化近似。</p>
+<p><strong>线性化结果:</strong></p>
+<p><span class="math display">$$
+\begin{cases}
+x_{k} \approx \tilde{x}_{k} + A_{k}(x_{k-1} - \hat{x}_{k-1}) + Ww_{k-1}
+\\
+z_{k} \approx \tilde{z}_{k} + H_{k}(x_{k} - \tilde{x}_{k}) + Vv_{k}
+\end{cases}
+$$</span></p>
+<p>其中 <span class="math inline"><em>A</em>, <em>W</em>, <em>H</em>, <em>V</em></span>
+分别为对应的<strong>雅可比矩阵 (Jacobian Matrices)</strong> 。</p>
+<p>相比于线性卡尔曼滤波，EKF
+的主要区别在于每一步都需要计算雅可比矩阵来更新状态转移矩阵和观测矩阵。</p>
+]]></content>
+      <categories>
+        <category>教程</category>
+        <category>技能学习</category>
+      </categories>
+      <tags>
+        <tag>kalman</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>生活记录|分享一组生活的照片</title>
+    <url>/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/</url>
+    <content><![CDATA[<p>最近好喜欢到处拍拍拍，如果能通过相机表达出看到那些景色时的心情真的是一件很能令我满足的事情。</p>
+<p><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/001.jpg" alt="001"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/002.jpg" alt="002"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/003.jpg" alt="003"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/004.jpg" alt="004"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/005.jpg" alt="005"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/006.jpg" alt="006"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/007.jpg" alt="007"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/008.jpg" alt="008"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/009.jpg" alt="009"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/010.jpg" alt="010"> <img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/012.jpg" alt="012"></p>
+]]></content>
+      <tags>
+        <tag>生活记录</tag>
+        <tag>摄影</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阅读分享|勇敢结束的人会被奖励一个新的开始</title>
+    <url>/2025/06/03/%E9%98%85%E8%AF%BB%E5%88%86%E4%BA%AB-%E5%8B%87%E6%95%A2%E7%BB%93%E6%9D%9F%E7%9A%84%E4%BA%BA%E4%BC%9A%E8%A2%AB%E5%A5%96%E5%8A%B1%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<h3 id="我在很平常的一天放弃了一个很重要的人虽然有点舍不得但总是要告一段落的">“我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”</h3>
+<p>村上春树说：“我动了离开你的念头，不是因为你不好，也不是因为不爱了，只是你对我的态度，让我觉得你的世界并不缺我。其实我可以厚着脸皮在纠缠你，但是没有任何意义。</p>
+<p>因为和你在一起的时候，我的状态不好，会激发我的脆弱焦躁和极度不安，会不断吸引出我人格里最不好的一面，与其和你在一起相互消耗，不如就算了吧。</p>
+<p>内心期待的东西一点点落空，慢慢就不想要了，重复的话也不想再说了，对不起的事多了也无所谓，当我发现你一点都不理解我的委屈时，我一句话也不想说了。</p>
+<p>你有你的立场，我有我的底线，我终究还是发现我不应该迷失自我去爱你。</p>
+<p>我不想纠结在没有意义的事情上。伸手要的糖和你主动给的是两个味道。我常常深思熟虑，考虑这份关系，还要不要继续，反复问自己，其实我一点也不后悔遇见你，但是我们终究还是没翻过那座山。我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”</p>
+<p><em>tips: 内容转载自网络，侵权请联系删除。</em></p>
+]]></content>
+      <categories>
+        <category>分享</category>
+      </categories>
+      <tags>
+        <tag>阅读</tag>
+        <tag>村上春树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>技术笔记|HEXO网站开发教程</title>
     <url>/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h1><p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
-<h1 id="1-开发环境搭建"><a href="#1-开发环境搭建" class="headerlink" title="1. 开发环境搭建"></a>1. 开发环境搭建</h1><p>开发平台支持Ubuntu&#x2F;Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
+    <content><![CDATA[<h1 id="前言">0. 前言</h1>
+<p>我本以为我写作这么一篇教程是多余的，但是当我约二十多天没有更新这个博客网站后，再次打开网站的源码工程，我竟然感觉有些陌生了，有些操作我还是需要翻阅之前零星记录的一些内容才能想起，于是，在写作下一篇内容《研究生阶段生活总结-开学版》之前，我决定先写完本文，一方面是记一份笔记给自己看，免得以后出现类似前面讲到的尴尬处境；另一方面，如果有朋友感兴趣的话，不妨学习一下。</p>
+<h1 id="开发环境搭建">1. 开发环境搭建</h1>
+<p>开发平台支持Ubuntu/Windows，我在个人电脑上均成功测试，相关操作基本一致；</p>
 <p>开发环境的搭建包括Git，Node.js以及Hexo的安装。</p>
-<p>值得一提的是，下面我写的安装步骤比较偏向于技巧部分，更加简单清晰的教程大家可以参考一个B站视频：<a href="https://www.bilibili.com/video/BV1Ju4m1c7WR/?spm_id_from=333.337.search-card.all.click&vd_source=a3ce7565d1e7532a49f56b5a3ebd1d61">HEXO开发环境搭建</a></p>
-<h2 id="1-1-工具安装"><a href="#1-1-工具安装" class="headerlink" title="1.1 工具安装"></a>1.1 工具安装</h2><p>参考： <a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85">官方安装教程</a></p>
-<p><strong>1. Git安装：</strong> ubuntu系统打开终端后执行：<code>&lt;pip install git&gt;</code>; windows端：与一般exe文件安装方式一致，请点击<a href="https://git-scm.com/downloads/win">下载链接</a></p>
+<p>值得一提的是，下面我写的安装步骤比较偏向于技巧部分，更加简单清晰的教程大家可以参考一个B站视频：<a href="https://www.bilibili.com/video/BV1Ju4m1c7WR/?spm_id_from=333.337.search-card.all.click&amp;vd_source=a3ce7565d1e7532a49f56b5a3ebd1d61">HEXO开发环境搭建</a></p>
+<h2 id="工具安装">1.1 工具安装</h2>
+<p>参考： <a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85">官方安装教程</a></p>
+<p><strong>1. Git安装：</strong>
+ubuntu系统打开终端后执行：<code>&lt;pip install git&gt;</code>;
+windows端：与一般exe文件安装方式一致，请点击<a href="https://git-scm.com/downloads/win">下载链接</a></p>
 <p><strong>2. Node.js安装：</strong> 进入<a href="https://nodejs.org/zh-cn/download/package-manager">Node.js安装界面</a>，选择适用于你电脑版本的选项，根据网页内容依次执行命令即可。</p>
 <p><strong>3. hexo安装： <code>npm install hexo</code></strong></p>
-<p><em><strong>TIPS:</strong></em></p>
+<p><strong><em>TIPS:</em></strong></p>
 <ul>
-<li>ubuntu用户安装Node.js时：需要注意一下的是，第一步其实就是在安装nvm，在安装完后直接运行第二行命令可能会出错，需要更新一下环境变量：source ~&#x2F;.bashrc</li>
-<li>安装完hexo后，对于linux用户来说依然需要添加环境变量，并且通过source ~&#x2F;.profile更新</li>
+<li>ubuntu用户安装Node.js时：需要注意一下的是，第一步其实就是在安装nvm，在安装完后直接运行第二行命令可能会出错，需要更新一下环境变量：source
+~/.bashrc</li>
+<li>安装完hexo后，对于linux用户来说依然需要添加环境变量，并且通过source
+~/.profile更新</li>
 </ul>
-<h2 id="1-2-本地文件夹初始化"><a href="#1-2-本地文件夹初始化" class="headerlink" title="1.2 本地文件夹初始化"></a>1.2 本地文件夹初始化</h2><p>利用HEXO开发网站的好处在于你的网站的全部内容其实本质上一个本地的文件夹，所谓的部署网站即可以让别人在网络上检索并看到你的网站，其实是将该本地文件夹的部分内容上传至你所依赖的发布工具（如github，gitee等）。你可以通过对本地文件夹的修改直接实现对网站的修改。</p>
+<h2 id="本地文件夹初始化">1.2 本地文件夹初始化</h2>
+<p>利用HEXO开发网站的好处在于你的网站的全部内容其实本质上一个本地的文件夹，所谓的部署网站即可以让别人在网络上检索并看到你的网站，其实是将该本地文件夹的部分内容上传至你所依赖的发布工具（如github，gitee等）。你可以通过对本地文件夹的修改直接实现对网站的修改。</p>
 <p>不过这个文件夹并不是一个简单的文件夹，它有些类似于git的仓库，同样的，它也要进行一些初始化，以让我们知道：这是一个属于hexo的网站文件夹。</p>
 <p>初始化具体步骤如下：</p>
 <ul>
-<li>hexo init <code>&lt;网站文件夹名称&gt;</code>：进入一个文件夹，并且在该文件夹下打开终端输入以上命令，则会在该文件夹下生成一个网站文件夹，以后你的所有开发步骤都是在这个文件夹中进行的</li>
-<li>npm install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
+<li>hexo init
+<code>&lt;网站文件夹名称&gt;</code>：进入一个文件夹，并且在该文件夹下打开终端输入以上命令，则会在该文件夹下生成一个网站文件夹，以后你的所有开发步骤都是在这个文件夹中进行的</li>
+<li>npm
+install：进入网站文件夹，在网站文件夹下打开终端并输入以上命令</li>
 </ul>
-<p>正确执行以上命令后，输入hexo s，即可在浏览器中通过 <code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹"></p>
-<p><em><strong>TIPS:</strong></em></p>
+<p>正确执行以上命令后，输入hexo s，即可在浏览器中通过
+<code>http://localhost:4000/</code>访问该网站（目前尚为空白网页）</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/5.png" alt="初始化本地文件夹">
+<figcaption aria-hidden="true">初始化本地文件夹</figcaption>
+</figure>
+<p><strong><em>TIPS:</em></strong></p>
 <ul>
-<li>在进行npm init <code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
+<li>在进行npm init
+<code>&lt;网站文件夹名称&gt;</code>时会卡住，其实这一步就在执行两个东西，一是从git上下载一个仓库，二是使用npm
+install安装一些东西，其中就是卡在了npm上，可以使用以下方式更换为国内镜像源：<code>npm config set registry https://registry.npmmirror.com</code>，然后重新执行该命令即可</li>
 <li>如果你想删除重新试一次，那么你应该删除整个blog文件夹，然后重新初始化一个blog，而不是单纯的删除掉里面的内容</li>
 </ul>
-<h1 id="2-个人博客教程"><a href="#2-个人博客教程" class="headerlink" title="2. 个人博客教程"></a>2. 个人博客教程</h1><h2 id="2-1-创建一篇自己的博客"><a href="#2-1-创建一篇自己的博客" class="headerlink" title="2.1 创建一篇自己的博客"></a>2.1 创建一篇自己的博客</h2><p><strong>Ⅰ：hexo new “文章名称”</strong></p>
-<p>在终端输入该命令，将会在路径source&#x2F;_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
+<h1 id="个人博客教程">2. 个人博客教程</h1>
+<h2 id="创建一篇自己的博客">2.1 创建一篇自己的博客</h2>
+<p><strong>Ⅰ：hexo new “文章名称”</strong></p>
+<p>在终端输入该命令，将会在路径source/_posts下生成一个”文章名称.md”的文件，该文件的编写遵循MarkDown语法。</p>
 <p>在.md文件的最前面会有一些关于该文章的描述，比如标签、封面、创建时间、描述等信息，以我曾经写的一篇名为《技术笔记|YOLOv5使用教程》为例，相关设置为：</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置"></p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/4.png" alt="文章设置">
+<figcaption aria-hidden="true">文章设置</figcaption>
+</figure>
 <p><strong>Ⅱ：书写文章</strong></p>
-<p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 | MarkDown官方教程</a></p>
+<p>文章需用MarkDown语法进行书写，语法规则非常简单，教程可以参考：<a href="https://markdown.com.cn/basic-syntax/">MarkDown基本语法 |
+MarkDown官方教程</a></p>
 <p><strong>Ⅲ：hexo g &amp; hexo s</strong></p>
 <p>hexo g: 生成网页</p>
 <p>hexo s: 运行网站</p>
-<p>至此，可以在 <code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
+<p>至此，可以在
+<code>http://localhost:4000/</code>下进行本地访问你搭建的网站，不过这时也仅限于在你当前电脑上，并且你的终端不可关闭。</p>
 <p>hexo d: 部署网站</p>
-<p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3 网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
-<h2 id="2-2-如何完美的插入图片"><a href="#2-2-如何完美的插入图片" class="headerlink" title="2.2 如何完美的插入图片"></a>2.2 如何完美的插入图片</h2><h3 id="2-2-1-在文章中插入图片"><a href="#2-2-1-在文章中插入图片" class="headerlink" title="2.2.1 在文章中插入图片"></a>2.2.1 在文章中插入图片</h3><p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
+<p>执行该命令后，将真正的实现了将网站发布到网络上。此时，通过任意一台电脑，使用任意一款浏览器，皆可访问你的网站（网址在本文“3
+网站的发布”中会有说明），并且你网站中的内容，比如你写的某一篇文章，是可以通过搜索引擎在网络上被检索到的。</p>
+<h2 id="如何完美的插入图片">2.2 如何完美的插入图片</h2>
+<h3 id="在文章中插入图片">2.2.1 在文章中插入图片</h3>
+<p>由于网站中的文章本质上还是使用MarkDown语法写的，所以在文章中插入图片还是主要依据MarkDown语法的规则。</p>
 <p>网络上关于在使用HEXO创建的文章中插入图片的教程非常多，不过有许多教程并不能成功插入图片，经过实践，我探索出一种较为简单且能够成功插入图片的方法。</p>
 <p><strong>Ⅰ：在配置文件_config.yaml文件中的post_asset_folder项设置为true</strong></p>
 <p>注意是博客的_config.yaml文件，而不是你使用的主题的配置文件。如果在配置文件中没有post_asset_folder这个值，则可以自行添加。该指令设为true后，在创建新文章后，会自动在同级目录下创建一个同名的文件夹，你可以将你写文章时用到的所有图片放到这个文件夹中。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构"></p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/1.png" alt="文章结构">
+<figcaption aria-hidden="true">文章结构</figcaption>
+</figure>
 <p><strong>Ⅱ：引用图片</strong></p>
 <p>这时可以使用MarkDown语法实现插入图片，具体方法为：</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87.png" alt="图片描述"></p>
-<p>至此，即可在文章中优雅的插入图片。(后面hexo-image-link这个插件似乎升级了，导致语法发生了改变，需要在“文章名称”前加“&#x2F;”，即“&#x2F;文章名称&#x2F;图片名称.jpg”))</p>
-<h3 id="2-2-2-插入文章封面"><a href="#2-2-2-插入文章封面" class="headerlink" title="2.2.2 插入文章封面"></a>2.2.2 插入文章封面</h3><p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/插入图片.png" alt="图片描述">
+<figcaption aria-hidden="true">图片描述</figcaption>
+</figure>
+<p>至此，即可在文章中优雅的插入图片。(后面hexo-image-link这个插件似乎升级了，导致语法发生了改变，需要在“文章名称”前加“/”，即“/文章名称/图片名称.jpg”))</p>
+<h3 id="插入文章封面">2.2.2 插入文章封面</h3>
+<p>文章封面中使用的图片与文章中使用的图片对HEXO来说是两种不同的调用方式。</p>
 <p>下述方法为在本人进行网站搭建时自行摸索发现的，方法非常简单。</p>
 <p><strong>Ⅰ：添加封面图片至主题img文件夹</strong></p>
-<p>以我使用的butterfly主题为例，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放"></p>
+<p>以我使用的butterfly主题为例，在路径themes/butterfly/source/img下存放了这个主题在对网站进行搭建时使用到的图片，而文章的封面图也需要存放到该文件夹下面。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/2.png" alt="图片存放">
+<figcaption aria-hidden="true">图片存放</figcaption>
+</figure>
 <p><strong>Ⅱ：引用图片</strong></p>
 <p>在每一篇文章的最前面，会有一些关于该文章的描述，其中可以添加如下行：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cover: /img/文章封面图名称.jpg</span><br></pre></td></tr></table></figure>
-
-<p>当运行hexo g命令发布网站时，在路径themes&#x2F;butterfly&#x2F;source&#x2F;img下的图片将会在public&#x2F;img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
-<p><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public"></p>
+<p>当运行hexo
+g命令发布网站时，在路径themes/butterfly/source/img下的图片将会在public/img文件夹中被复制一份，顾名思义，public文件夹即公开文件夹。</p>
+<figure>
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/3.png" alt="public">
+<figcaption aria-hidden="true">public</figcaption>
+</figure>
 <p>在本文后面会提到，使用github进行网站的部署发布，实质上是将网站的因素存到github仓库，然后当我们输入网址进行访问网站时，其实就是在访问这个仓库。该文件夹在部署发布时会被放置到github仓库中。</p>
-<h2 id="2-3-选择一个舒服的主题"><a href="#2-3-选择一个舒服的主题" class="headerlink" title="2.3 选择一个舒服的主题"></a>2.3 选择一个舒服的主题</h2><p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/"> Butterfly 文檔(一) 快速開始 | Butterfly</a></p>
+<h2 id="选择一个舒服的主题">2.3 选择一个舒服的主题</h2>
+<p>本网站使用模板：<a href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 文檔(一)
+快速開始 | Butterfly</a></p>
 <p>在HEXO中自己从零开始搭建一个具备较为完善的功能的网站是比较麻烦且需要一定的编程基础的，不过，对于大多数人来说，其实是可以参考别人已经开源的模板的，然后按照自己的喜好进行修改。这类似于你去做一份PPT，你当然可以从一张一张的空白页开始，慢慢的插入线条，设置背景，添加动画等等，但是，我相信大家其实都更倾向于先从一个别人已经做好的PPT模板开始，按照自己的需求进行修改。</p>
-<p>HEXO官网提供了模板的功能，里面汇集了几乎所有的热门的网站模板：<a href="https://hexo.io/themes/"> HEXO主题</a></p>
+<p>HEXO官网提供了模板的功能，里面汇集了几乎所有的热门的网站模板：<a href="https://hexo.io/themes/">HEXO主题</a></p>
 <p>每一个模板的安装方式类似，一般在主题github仓库内会写该如何安装，其实就是下载到blog内的theme文件夹下，然后打开blog文件夹下的_config.yaml文件，将最下面的theme换成你要用的主题的名字（theme文件夹下）</p>
-<h1 id="3-网站的发布"><a href="#3-网站的发布" class="headerlink" title="3. 网站的发布"></a>3. 网站的发布</h1><p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
-<h2 id="3-1-必须项：基于github的网站部署与发布"><a href="#3-1-必须项：基于github的网站部署与发布" class="headerlink" title="3.1 必须项：基于github的网站部署与发布"></a>3.1 必须项：基于github的网站部署与发布</h2><p>目前gitee pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
+<h1 id="网站的发布">3. 网站的发布</h1>
+<p>我认为这部分是使用HEXO搭建个人博客网站中最有意思或者说最酷的一部分，因为：写在你本地的东西终于可以发布到了网上并且可以被任何网络检索到啦！</p>
+<h2 id="必须项基于github的网站部署与发布">3.1
+必须项：基于github的网站部署与发布</h2>
+<p>目前gitee
+pages服务已经停止了，所以现在就只能使用github进行网站的发布了。前文其实已经多次提到，所谓的通过github将网站发布出去，实质上是你建立了一个公开的github仓库，并且将你本地的网站文件夹与该仓库进行链接，每次的网站部署发布，其实就是将本地的网站文件夹中的部分内容上传到该公开的仓库，别人对你的网站的访问，实质上是在访问你的仓库。因此，用户所使用的网络应该具备访问github的能力，否则，将无法访问通过此方式搭建的网站。<a href="https://blog.csdn.net/qq_62928039/article/details/130248518">参考博客</a></p>
 <p><strong>Ⅰ：创建一个github仓库</strong></p>
-<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
+<p>仓库名称必须遵守xxxx.github.io的格式，并且该名称即以后的访问个人博客网站的网址；注意将仓库选择为public，如下图为例：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/6.png" alt="初始化本地文件夹"></p>
 <p><strong>Ⅱ：建立本地电脑与远程仓库的连接</strong></p>
 <p>这部分其实对于经常使用git的人来说并不陌生。平时我们在github上找别人的代码时，那么别人的仓库一定是公开的，但是我们只具备访问这个仓库的权限，却无法对仓库的内容进行修改。同理，如果你是这个仓库的开发者，你又该如何使自己能够对这个仓库进行修改呢？答案就是：添加密钥。</p>
 <p>如何添加密钥呢？这其实分三步：一是生成一份与本地电脑挂钩的密钥；二是将该密钥添加到远程仓库中，使本地电脑具备对该仓库的修改权限；三是绑定邮箱。</p>
 <p>①生成密钥：</p>
-<p>在git终端下输入 <code>ssh-keygen -t rsa -C &quot;注册时的邮箱地址&quot;</code>然后即会在一个名为~&#x2F;.ssh&#x2F;id_rsa下生成一份密钥。</p>
-<p>同样在git终端下输入 <code>cat ~/.ssh/id_rsa.pub</code>，即会在终端打印出密钥。</p>
+<p>在git终端下输入
+<code>ssh-keygen -t rsa -C "注册时的邮箱地址"</code>然后即会在一个名为~/.ssh/id_rsa下生成一份密钥。</p>
+<p>同样在git终端下输入
+<code>cat ~/.ssh/id_rsa.pub</code>，即会在终端打印出密钥。</p>
 <p>②添加密钥：</p>
-<p>进入github的Setting-&gt;SSH and GPG keys，点击New SSH key，然后将复制的密钥粘贴到github中即可。</p>
-<p>可以在git终端下输入 <code>ssh -T git@github.com</code>以验证是否成功。</p>
+<p>进入github的Setting-&gt;SSH and GPG keys，点击New SSH
+key，然后将复制的密钥粘贴到github中即可。</p>
+<p>可以在git终端下输入
+<code>ssh -T git@github.com</code>以验证是否成功。</p>
 <p>③绑定邮箱：</p>
 <p>在git终端下输入两个命令：</p>
-<p><code>git config --global user.name &quot;注册时用户名&quot;</code></p>
-<p><code>git config --global user.email &quot;注册时邮箱&quot;</code></p>
-<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
+<p><code>git config --global user.name "注册时用户名"</code></p>
+<p><code>git config --global user.email "注册时邮箱"</code></p>
+<p>至此，完成本地电脑与远程仓库的连接，下面附一张我当时建立连接是的终端运行截图(ubuntu环境下)：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/7.png" alt="初始化本地文件夹"></p>
 <p><strong>Ⅲ：建立博客与仓库的连接并上传博客</strong></p>
 <p>还记得当时创建仓库时生成的HTTPS或者SSH链接吗？你可以认为它们就是仓库的身份证，此时我们只需要将这个链接添加到我们的本地博客文件夹中，即告诉你的博客：部署网站时就往这个仓库里面上传就行啦！</p>
-<p>可以在如下位置找到该链接，这里推荐使用SSH：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
+<p>可以在如下位置找到该链接，这里推荐使用SSH： <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/8.png" alt="初始化本地文件夹"></p>
 <p>找到你的网站文件夹，里面有一个我们前面提到过的_config.yml文件，在该文件的最末尾处添加以下内容（以我的这个仓库的SSH为例）：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: &#x27;git&#x27;</span><br><span class="line">  repository: git@github.com:xiaozan-hust/xiaozan-hust.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code><br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
-<p>可以看到，hexo d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
-<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：<br><img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
-<h2 id="3-2-可选项：基于仓库的多终端下的网站更新"><a href="#3-2-可选项：基于仓库的多终端下的网站更新" class="headerlink" title="3.2 可选项：基于仓库的多终端下的网站更新"></a>3.2 可选项：基于仓库的多终端下的网站更新</h2><p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
+<p>运行 <code>hexo clean &amp; hexo g &amp; hexo d</code> <img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/9.png" alt="初始化本地文件夹"></p>
+<p>可以看到，hexo
+d（部署网站）时，其实就是将网站中的内容上传至我们刚刚新建的仓库中。</p>
+<p>至此，我们即可访问我们的博客网站，网址即仓库名，刚刚部署好的网站往往需要等一分钟左右才会更新：
+<img src="/2024/10/21/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-HEXO%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/10.png" alt="初始化本地文件夹"></p>
+<h2 id="可选项基于仓库的多终端下的网站更新">3.2
+可选项：基于仓库的多终端下的网站更新</h2>
+<p>由于我有一台主机和一台笔记本，并且两台电脑都同时安装了windows和ubuntu系统，为了满足在多台电脑或系统下同时对网站进行更新的需求，其实质上就是将整个网站本地文件夹建立为一个github仓库，所以这部分的内容其实就是如何对一个github仓库进行维护。</p>
 <p>这一部分暂时搁置吧，感兴趣的朋友可以直接参考git的教程：<a href="https://liaoxuefeng.com/books/git/introduction/index.html">廖雪峰Git教程</a></p>
-<h1 id="4-总结与展望"><a href="#4-总结与展望" class="headerlink" title="4. 总结与展望"></a>4. 总结与展望</h1><p>现在是2024&#x2F;11&#x2F;26 15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
+<h1 id="总结与展望">4. 总结与展望</h1>
+<p>现在是2024/11/26
+15:17，我总算把这篇文章写的七七八八了，虽然还是有一些内容并没有完全加上去。或许并不是平时的杂事太多，而是我太懒了，迟迟不愿沉下心来对该网站进行维护（每篇文章都有记录创建时期和最近一次修改时间）。</p>
 <p>本文介绍了使用HEXO搭建个人博客网站的基本内容，后面将可能会包括但不限于以下的教程更新：</p>
-<ol>
+<ol type="1">
 <li>个人网站字体设置</li>
 <li>如何新增文章评论功能</li>
 <li>如何添加全局搜索功能</li>
@@ -114,427 +1100,84 @@
       </tags>
   </entry>
   <entry>
-    <title>技术笔记|PCL学习笔记</title>
-    <url>/2024/08/18/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-PCL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="PCL点云库学习记录"><a href="#PCL点云库学习记录" class="headerlink" title="PCL点云库学习记录"></a>PCL点云库学习记录</h1><p><a href="https://blog.csdn.net/qq_36686437/article/details/114160640?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~PayColumn-1-114160640-blog-106023631.235%5Ev28%5Epc_relevant_recovery_v2&utm_relevant_index=1">学习博客</a></p>
-<h2 id="滤波器"><a href="#滤波器" class="headerlink" title="滤波器"></a>滤波器</h2><h3 id="直通滤波器"><a href="#直通滤波器" class="headerlink" title="直通滤波器"></a>直通滤波器</h3><p><strong>作用</strong>： 过滤掉在指定维度方向上取值不在给定值域内的点。</p>
-<p><strong>实现原理：</strong> 指定一个维度以及在该维度下的值域，遍历点云数据点，保留在值域内的点，删除不在值域内的点。</p>
-<p><strong>主要函数：</strong></p>
-<ul>
-<li><code>void setFilterFieldName (const std : :string &amp;field_name) </code>：指定滤波维度，可选 <code>“x&quot;, &quot;y&quot;, &quot;z&quot;, &quot;intensity&quot;</code>等。</li>
-<li><code>void setFilterLimits (const double &amp;limit_min, const double &amp; limit_max)</code>：指定值域。</li>
-<li><code>void setFilterLimitsNegative (bool &amp;!imit_negative)</code>：返回滤波限制条件外的点还是内的点，默认 <code>false</code>，即指定值域内的点。</li>
-</ul>
-<p><strong>实例：</strong></p>
-<h3 id="统计滤波器"><a href="#统计滤波器" class="headerlink" title="统计滤波器"></a>统计滤波器</h3><p><strong>作用：</strong> 剔除明显离群点，稀疏点。</p>
-<p><strong>实现原理：</strong> 计算每个点到其最近的k(自行设定)的平均距离，计算方差，剔除大于n倍（自行设定）标准差的点。</p>
-<p><strong>主要函数：</strong></p>
-<ul>
-<li><code>void  setStddevMulThresh (double stddev_mult)</code>：指定阈值：<code>平均距离+stddev_mult*标准差</code>。</li>
-<li><code>sor.setMeanK (int num)</code>：设定近邻点数。</li>
-</ul>
-<p><strong>实例：</strong></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建统计滤波器</span></span><br><span class="line">pcl::StatisticalOutlierRemoval&lt;pcl::PointXYZ&gt; sor;</span><br><span class="line">sor.<span class="built_in">setInputCloud</span> (cloud);   <span class="comment">//设置待滤波的点云</span></span><br><span class="line">sor.<span class="built_in">setMeanK</span> (<span class="number">50</span>);           <span class="comment">//设置在进行统计时考虑查询点邻近点数</span></span><br><span class="line">sor.<span class="built_in">setStddevMulThresh</span> (<span class="number">1</span>);  <span class="comment">//表示标准差的倍数，1个标准差以上就是离群点。</span></span><br><span class="line">sor.<span class="built_in">filter</span> (*cloud_filtered); <span class="comment">//存储内点</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="体素滤波器"><a href="#体素滤波器" class="headerlink" title="体素滤波器"></a>体素滤波器</h3><p><strong>作用：</strong> 向下采样以减少点云数量，同时不破坏点云本身的几何结构。</p>
-<p><strong>实现原理：</strong> 创建一个三维体素栅格，每个体素内用所有点的重心来近似显示体素内的其他点，这样该体素内的所有点都用一个重心点表示。（相比于用中心点表示，用重心点表示会更慢，但是更准确）。</p>
-<p><strong>主要函数：</strong></p>
-<ul>
-<li><code>void  setLeafSize (float lx, float ly, float lz)</code>：<code>lx, ly, lz</code>分别表示体素栅格在XYZ方向上的尺寸。</li>
-</ul>
-<p><strong>实例：</strong></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建体素滤波器</span></span><br><span class="line">pcl::PointCloud&lt;pcl::PointXYZ&gt;::<span class="function">Ptr <span class="title">cloud_filtered</span><span class="params">(<span class="keyword">new</span>           pcl::PointCloud&lt;pcl::PointXYZ&gt;)</span></span>;  <span class="comment">// 创建点云对象</span></span><br><span class="line">pcl::VoxelGrid&lt;pcl::PointXYZ&gt; vg;  <span class="comment">// 创建体素滤波器对象</span></span><br><span class="line">vg.<span class="built_in">setInputCloud</span>(cloud);             <span class="comment">// 输入点云</span></span><br><span class="line">vg.<span class="built_in">setLeafSize</span>(<span class="number">0.01f</span>, <span class="number">0.01f</span>, <span class="number">0.01f</span>); <span class="comment">// 设置最小体素边长</span></span><br><span class="line">vg.<span class="built_in">filter</span>(*cloud_filtered);  <span class="comment">// 进行滤波</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="半径滤波器"><a href="#半径滤波器" class="headerlink" title="半径滤波器"></a>半径滤波器</h3><p><strong>作用：</strong> 剔除稀疏点。</p>
-<p><strong>实现原理：</strong> 在点云数据中，每个点在一定半径范围内至少要有足够多的近邻点，不满足就会被删除。</p>
-<p><strong>主要函数：</strong></p>
-<ul>
-<li><code>void  setRadiusSearch(double radius)</code>：设定半径，单位为m。</li>
-<li><code>void  setMinNeighborsInRadius(int min_pts)</code>：设定近邻点数量。</li>
-</ul>
-<p><strong>实例：</strong></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">pcl::RadiusOutlierRemoval&lt;pcl::PointXYZ&gt; ror;</span><br><span class="line">ror.<span class="built_in">setInputCloud</span>(cloud_in);     <span class="comment">// 输入点云</span></span><br><span class="line">ror.<span class="built_in">setRadiusSearch</span>(<span class="number">0.1</span>);        <span class="comment">// 设置半径为0.1m范围内找临近点</span></span><br><span class="line">ror.<span class="built_in">setMinNeighborsInRadius</span>(<span class="number">200</span>); <span class="comment">// 设置查询点的邻域点集数小于10删除</span></span><br><span class="line">ror.<span class="built_in">filter</span>(*cloud_radius);       <span class="comment">// 执行滤波</span></span><br></pre></td></tr></table></figure>
-
-<p><em><strong>tips：</strong></em> 领域点设置越多，程序处理越慢，七万数据点进行200近邻点滤波将会消耗1.5s。</p>
-<h3 id="高斯滤波器"><a href="#高斯滤波器" class="headerlink" title="高斯滤波器"></a>高斯滤波器</h3><p><strong>作用：</strong> 平滑点云，降低噪声，并较好的保持数据原貌。</p>
-<p><strong>实现原理：</strong> 使用高斯核对点云进行加权平均。创建高斯核-&gt;创建KD-Tree-&gt;高斯滤波。</p>
-<p><strong>主要函数：</strong></p>
-<p><strong>实例：</strong></p>
-<h3 id="中值滤波器"><a href="#中值滤波器" class="headerlink" title="中值滤波器"></a>中值滤波器</h3><p><strong>作用：</strong> 消除毛刺。<br><strong>实现原理：</strong> 在窗口内在某一方向进行点云排序，取中值更新为当前点数据。</p>
-<p><strong>主要函数：</strong></p>
-<p><strong>实例：</strong></p>
-<h2 id="点云拟合分割"><a href="#点云拟合分割" class="headerlink" title="点云拟合分割"></a>点云拟合分割</h2><p>RANSAC拟合与最小二乘法拟合的不同：最小二乘法最简单最常用，但是容易受到噪点的影响。</p>
-<h3 id="RANSAC拟合"><a href="#RANSAC拟合" class="headerlink" title="RANSAC拟合"></a>RANSAC拟合</h3><h4 id="RANSAC拟合直线"><a href="#RANSAC拟合直线" class="headerlink" title="RANSAC拟合直线"></a>RANSAC拟合直线</h4><p><strong>原理：</strong> 对拟合的直线进行不断的迭代，直到包含足够多的内点（到达该直线的距离在阈值之内）。</p>
-<h4 id="RANSAC拟合平面"><a href="#RANSAC拟合平面" class="headerlink" title="RANSAC拟合平面"></a>RANSAC拟合平面</h4><p><strong>原理：</strong></p>
-<ol>
-<li>随机选取三个点生成一个平面。</li>
-<li>计算其他点到该平面的距离是否小于阈值，小于则认为处于同一平面。</li>
-<li>当平面上点大于n则标记该平面及其上各点。</li>
-<li>当生成的平面上的点小于n个点或未标记点少于三个，迭代终止。</li>
-</ol>
-<h4 id="RANSA拟合3D球体"><a href="#RANSA拟合3D球体" class="headerlink" title="RANSA拟合3D球体"></a>RANSA拟合3D球体</h4><p><strong>原理：</strong> 与前者类似。</p>
-<p><em><strong>tips:</strong></em> 对五万个点进行拟合，运行时间为不到15毫秒；对五千个点进行拟合，运行时加为不到2毫秒。</p>
-<h3 id="最小二乘法拟合"><a href="#最小二乘法拟合" class="headerlink" title="最小二乘法拟合"></a>最小二乘法拟合</h3><h4 id="最小二乘法拟合平面"><a href="#最小二乘法拟合平面" class="headerlink" title="最小二乘法拟合平面"></a>最小二乘法拟合平面</h4><p><strong>原理：</strong> 略。</p>
-<h3 id="其他分割方法"><a href="#其他分割方法" class="headerlink" title="其他分割方法"></a>其他分割方法</h3><h4 id="区域生长法"><a href="#区域生长法" class="headerlink" title="区域生长法"></a>区域生长法</h4><p><strong>原理：</strong> 以<em><strong>法线夹角角度差</strong></em> 或者<em><strong>色差</strong></em> 作为种子生长条件。</p>
-<h4 id="欧式聚类"><a href="#欧式聚类" class="headerlink" title="欧式聚类"></a>欧式聚类</h4><p><strong>原理与特点：</strong> 基于欧式距离判断点云数据点是否为同一类；基于KD-Tree的近邻查询算法是 加速欧式聚类算法的重要预处理方法。</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="使用积分图进行法线估计"><a href="#使用积分图进行法线估计" class="headerlink" title="使用积分图进行法线估计"></a>使用积分图进行法线估计</h3><p><strong>特点：</strong></p>
-<ol>
-<li>计算效率非常高。</li>
-<li>只适用于有序点云。</li>
-</ol>
-<h3 id="点云边界提取"><a href="#点云边界提取" class="headerlink" title="点云边界提取"></a>点云边界提取</h3><p><strong>原理：</strong> 基于法线。</p>
-<h3 id="点云质心"><a href="#点云质心" class="headerlink" title="点云质心"></a>点云质心</h3><p><strong>概念：</strong> 在点云的质心计算公式中，mi &#x3D; 1，即各质点质量相等。</p>
-<h3 id="点云图与深度图转换"><a href="#点云图与深度图转换" class="headerlink" title="点云图与深度图转换"></a>点云图与深度图转换</h3><p><strong>深度图像：</strong> 也被称为距离图像，是指将图像采集器到场景中各点的距离（深度）值作为像素值的图像，它直接反映了景物可见表面的几何形状。</p>
-<p><em><strong>tips:</strong></em> 深度图和点云图之间可以相互转换，但是可能在转换的过程中存在数据的丢失。</p>
-]]></content>
-      <categories>
-        <category>技能学习</category>
-      </categories>
-      <tags>
-        <tag>PCL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>技术笔记|ROS1核心编程</title>
-    <url>/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="ROS1核心编程"><a href="#ROS1核心编程" class="headerlink" title="ROS1核心编程"></a>ROS1核心编程</h1><h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><p>ROS的教程推荐绝对会是古月居：</p>
-<p><a href="https://www.bilibili.com/video/BV1zt411G7Vn/?spm_id_from=333.337.search-card.all.click">【古月居】古月·ROS入门21讲 | 一学就会的ROS机器人入门教程_哔哩哔哩_bilibili</a></p>
-<p>关于此篇文章的写法我不想按照如ROS通信机制、节点句柄、回调函数、发布者与订阅者等来写，关于这些内容，在古月居的ROS21讲中有非常详细的讲解。</p>
-<p>ROS的最大作用其实是话题的发布与接收，尤其是自定义话题，其实网上教程很多，但是当你真正需要用ROS进行项目开发时，最核心的一个问题在于： <strong>如何自定义话题并且完成其消息的接收与发布</strong> 。</p>
-<p><strong>因此，本文将记录，该如何利用ROS实现话题通信。</strong></p>
-<h2 id="1-工作空间与功能包的创建"><a href="#1-工作空间与功能包的创建" class="headerlink" title="1. 工作空间与功能包的创建"></a>1. 工作空间与功能包的创建</h2><h3 id="1-1-工作空间的创建"><a href="#1-1-工作空间的创建" class="headerlink" title="1.1 工作空间的创建"></a>1.1 工作空间的创建</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 依次建立两个文件夹，分别为工作空间文件夹和src文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/ros_ws/src</span><br><span class="line"><span class="comment"># 进入src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ~/ros_ws/src</span><br><span class="line"><span class="comment"># 初始化工作空间</span></span><br><span class="line">catkin_init_workspace</span><br></pre></td></tr></table></figure>
-
-<p>以上命令执行完后将会在src文件夹下生成CMakeLists.txt文件，该文件一般不可修改，该文件的生成表示工作空间的成功创建，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(4).png" alt="haha"></p>
-<p>可以执行以下命令对工作空间进行编译，以进一步验证工作空间是否创建成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间根目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/</span><br><span class="line"><span class="comment"># 编译工作空间</span></span><br><span class="line">catkin_make</span><br><span class="line"><span class="comment"># 该命令执行后应无报错信息出现</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-功能包的创建"><a href="#1-2-功能包的创建" class="headerlink" title="1.2 功能包的创建"></a>1.2 功能包的创建</h3><p>创建功能包的命令为：<code>catkin_create_pkg &lt;功能包名&gt; [依赖1] [依赖2] …</code></p>
-<p>我们实操如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间内src文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws/src</span><br><span class="line"><span class="comment"># 创建功能包并添加必需的依赖</span></span><br><span class="line">catkin_create_pkg test_pkg std_msgs rospy roscpp</span><br></pre></td></tr></table></figure>
-
-<p>此时，工作空间结构如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(5).png" alt="haha"></p>
-<h2 id="2-自定义消息内容"><a href="#2-自定义消息内容" class="headerlink" title="2. 自定义消息内容"></a>2. 自定义消息内容</h2><h3 id="2-1-创建msg文件"><a href="#2-1-创建msg文件" class="headerlink" title="2.1 创建msg文件"></a>2.1 创建msg文件</h3><p>可以在功能包目录下创建一个msg文件夹，用于存储自定义的消息文件，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(6).png" alt="haha"></p>
-<p>接着，在msg文件中定义你想在话题中传输的内容，即消息的内容，比如我在这里创建了一个消息话题内容包含：名字，力矩，长度，速度：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(7).png" alt="haha"></p>
-<h3 id="2-2-修改package-xml文件"><a href="#2-2-修改package-xml文件" class="headerlink" title="2.2 修改package.xml文件"></a>2.2 修改package.xml文件</h3><p>在所创建的功能包文件夹内，包含两个文件package.xml文件和CMakeLists.txt文件，我们首先修改package.xml文件，在该文件内添加以下内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;build_export_depend&gt;message_generation&lt;/build_export_depend&gt;</span><br><span class="line">&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-修改CMakeLists-txt文件"><a href="#2-3-修改CMakeLists-txt文件" class="headerlink" title="2.3 修改CMakeLists.txt文件"></a>2.3 修改CMakeLists.txt文件</h3><p>CMakeLists.txt文件一共有三处需要修改：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在find_package()内添加message_generation，如下：</span></span><br><span class="line">find_package(catkin REQUIRED COMPONENTS</span><br><span class="line">  roscpp</span><br><span class="line">  rospy</span><br><span class="line">  std_msgs</span><br><span class="line">  message_generation</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在add_message_files()内添加(FILE 消息文件名.msg)和在generate_messages()内添加(DEPENDENCIES std_msgs），如下：</span></span><br><span class="line">add_message_files(</span><br><span class="line">  FILES</span><br><span class="line">  test_msg.msg</span><br><span class="line">)</span><br><span class="line">generate_messages(</span><br><span class="line">  DEPENDENCIES</span><br><span class="line">  std_msgs</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 在catkin_package()添加message_runtiome，如下：</span></span><br><span class="line">catkin_package(</span><br><span class="line"> CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-4-编译生成消息对应头文件"><a href="#2-4-编译生成消息对应头文件" class="headerlink" title="2.4 编译生成消息对应头文件"></a>2.4 编译生成消息对应头文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入工作空间目录</span></span><br><span class="line"><span class="built_in">cd</span> ros_ws</span><br><span class="line"><span class="comment"># 编译生成消息头文件</span></span><br><span class="line">catkin_make</span><br></pre></td></tr></table></figure>
-
-<p>此时，在工作空间中即可搜索到以刚才创建的消息文件命名的头文件，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(8).png" alt="haha"></p>
-<h2 id="3-消息的发布与接收"><a href="#3-消息的发布与接收" class="headerlink" title="3. 消息的发布与接收"></a>3. 消息的发布与接收</h2><h3 id="3-1-消息的发布"><a href="#3-1-消息的发布" class="headerlink" title="3.1 消息的发布"></a>3.1 消息的发布</h3><p>在这里我直接附上一份写有详细注释的代码：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的发布</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_pub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_pub的发布者，发布名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Publisher test_msg_pub = nh.<span class="built_in">advertise</span>&lt;test_pkg::test_msg&gt;(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="comment">// 设置循环的频率10Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 循环发布消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 初始化消息变量</span></span><br><span class="line">        test_pkg::test_msg test_msg;</span><br><span class="line">        test_msg.name = <span class="string">&quot;test_msg&quot;</span>;</span><br><span class="line">        test_msg.torque = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.length = <span class="number">100</span> + count;</span><br><span class="line">        test_msg.speed = <span class="number">100.0</span> + count;</span><br><span class="line">        <span class="comment">// 发布消息</span></span><br><span class="line">        test_msg_pub.<span class="built_in">publish</span>(test_msg);</span><br><span class="line">        <span class="built_in">ROS_INFO</span>(<span class="string">&quot;Publish test_msg: %d&quot;</span>, count);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在功能包内创建任何一个新程序，都需要在CMakeLists.txt文件中添加相关内容，以实现对其的编译，如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"># 添加可执行文件</span><br><span class="line"><span class="built_in">add_executable</span>(test_message_pub </span><br><span class="line">src/test_message_pub.cpp)</span><br><span class="line"><span class="built_in">target_link_libraries</span>(test_message_pub PUBLIC $&#123;catkin_LIBRARIES&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>对该程序进行编译，并且运行，查看如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(9).png" alt="haha"></p>
-<h3 id="3-2-消息的接收"><a href="#3-2-消息的接收" class="headerlink" title="3.2 消息的接收"></a>3.2 消息的接收</h3><p>同样的，在这里我直接附上一份写有详细注释的代码：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 该代码用于test_msg消息的订阅</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ros/ros.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_pkg/test_msg.h&quot;</span>  <span class="comment">// 消息头文件，命名方式为“功能包名/自定义消息名.h”</span></span></span><br><span class="line"><span class="comment">// 定义一些用于存储消息的变量</span></span><br><span class="line">std::string global_name = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="type">int</span> global_torque = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> global_length = <span class="number">0</span>;</span><br><span class="line"><span class="type">float</span> global_speed = <span class="number">0.0</span>;</span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testMsgCallback</span><span class="params">(<span class="type">const</span> test_pkg::test_msg::ConstPtr&amp; msg)</span> </span>&#123;</span><br><span class="line">    global_name = msg-&gt;name;</span><br><span class="line">    global_torque = msg-&gt;torque;</span><br><span class="line">    global_length = msg-&gt;length;</span><br><span class="line">    global_speed = msg-&gt;speed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UseData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg name: %s&quot;</span>, global_name.<span class="built_in">c_str</span>());</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg torque: %d&quot;</span>, global_torque);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg length: %d&quot;</span>, global_length);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;test_msg speed: %f&quot;</span>, global_speed);</span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;----------------------------------&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化ROS节点</span></span><br><span class="line">    ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;test_msg_sub&quot;</span>);</span><br><span class="line">    <span class="comment">// 创建节点句柄</span></span><br><span class="line">    ros::NodeHandle nh;</span><br><span class="line">    <span class="comment">// 创建一个名为test_msg_sub的订阅者，订阅名为/test_msg_topic的消息，消息类型为自定义的test_pkg::test_msg</span></span><br><span class="line">    ros::Subscriber test_msg_sub = nh.<span class="built_in">subscribe</span>(<span class="string">&quot;test_msg_topic&quot;</span>, <span class="number">10</span>, testMsgCallback);</span><br><span class="line">    <span class="comment">// 设置循环的频率1Hz</span></span><br><span class="line">    <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 循环订阅消息</span></span><br><span class="line">    <span class="keyword">while</span> (ros::<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="comment">// 使用数据</span></span><br><span class="line">        <span class="built_in">UseData</span>();</span><br><span class="line">        <span class="comment">// 按照循环的频率延时</span></span><br><span class="line">        loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">        <span class="comment">// 处理ROS回调函数--该函数至关重要！！！！</span></span><br><span class="line">        ros::<span class="built_in">spinOnce</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改CMakeLists.txt文件，并且编译运行，如下：</p>
-<p><img src="/2025/04/23/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-ROS1%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/image%20(10).png" alt="haha"></p>
-<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>本文面向工程开发，讲述实操内容，中间关于ROS的很多概念没有展开细讲，比如 <code>ros::spin()</code>和 <code>ros::spinonce()</code>的区别，比如自定义消息时使用的何种语言，比如何为话题何为句柄等等。</p>
-<p>若需要进一步对ROS进行学习，仍然是推荐大家返回去本文最初推荐的《古月居ROS21讲》。</p>
-<hr>
-<p><strong>更新日志</strong></p>
-<p>2025.3.10 20:48：文章初次完成</p>
-<p>2025.4.26 10:38：文章从notion移至hexo个人博客网站</p>
-]]></content>
-      <tags>
-        <tag>ROS</tag>
-        <tag>技能学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>技术笔记|YOLOv5使用教程</title>
-    <url>/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="YOLOv5：一夜暴富"><a href="#YOLOv5：一夜暴富" class="headerlink" title="YOLOv5：一夜暴富"></a>YOLOv5：一夜暴富</h1><h2 id="1-关于YOLO"><a href="#1-关于YOLO" class="headerlink" title="1.关于YOLO"></a>1.关于YOLO</h2><h3 id="1-1-目标检测的概念与发展"><a href="#1-1-目标检测的概念与发展" class="headerlink" title="1.1 目标检测的概念与发展"></a>1.1 目标检测的概念与发展</h3><p>目标检测，也叫做目标提取，是一种基于目标几何和统计特征的图像分割。它将目标的分割和识别合二为一。在复杂的应用场景中，需要同时考虑对多个目标进行实时检测，其准确性和实时性是整个系统的一项重要能力。</p>
-<p>随着计算机技术的发展和计算机视觉原理的广泛应用，利用计算机图像处理技术对目标进行实施跟踪研究越来越热门，对目标进行动态实施跟踪定位在智能化交通系统，智能监控系统，军事目标检测及医学导航手术中手术器械定位等方面具有广泛的应用价值。</p>
-<h3 id="1-2-YOLO的发展与优势"><a href="#1-2-YOLO的发展与优势" class="headerlink" title="1.2 YOLO的发展与优势"></a>1.2 YOLO的发展与优势</h3><p>**YOLO（You Only Look Once）**是一种用于实时目标检测的深度学习模型。</p>
-<p>YOLO最初的创造者维护了YOLOv1，YOLOv2，YOLOv3。YOLOv4是对YOLOv3的一个改进，YOLOv4的作者与前三个版本YOLO的作者并不是同一人。YOLOv5在YOLOv4发布不久后出现，由Glenn Jocher使用Pytorch框架建立。</p>
-<ul>
-<li><p><em><strong>YOLO v1（2016）：</strong></em></p>
-<ul>
-<li>YOLO v1是YOLO系列的第一个版本，由Joseph Redmon等人于2016年提出。它采用单一神经网络，将目标检测问题转化为回归问题。YOLO v1将输入图像分成较小的网格，并为每个网格单独预测边界框（bounding box）和相应的类别概率分数。</li>
-<li>YOLO v1的优点是速度快，可以实现实时目标检测，但它在检测小目标和处理重叠的目标方面存在一些问题。</li>
-</ul>
-</li>
-<li><p><em><strong>YOLO v2 &#x2F; YOLO9000（2017）</strong>：</em></p>
-<ul>
-<li>YOLO v2在YOLO v1的基础上进行了改进，采用了更深的神经网络，称为Darknet-19。</li>
-<li>YOLO9000是YOLO v2的扩展版本，支持更多的目标类别。它通过引入WordTree等技术，实现了对超过9000个不同类别的目标进行检测。</li>
-</ul>
-</li>
-<li><p><em><strong>YOLO v3（2018）：</strong></em></p>
-<ul>
-<li>YOLO v3是YOLO系列的下一个版本，引入了多尺度预测。它使用了三个不同尺度的特征图来检测不同大小的目标。</li>
-<li>YOLO v3改进了目标检测的精度和稳定性，成为一种强大的目标检测算法。</li>
-</ul>
-</li>
-<li><p><em><strong>YOLO v4（2020）：</strong></em></p>
-<ul>
-<li>YOLO v4是YOLO系列的又一重大改进，由Alexey Bochkovskiy等人开发。它引入了一系列技术，如CIOU损失函数、PANet、SAM块等，以提高目标检测的性能。</li>
-<li>YOLO v4具有更高的准确性和速度，成为了目标检测领域的领先算法之一。</li>
-</ul>
-</li>
-<li><p><em><strong>YOLO v5（2020）：</strong></em></p>
-<ul>
-<li>YOLO v5由Ultralytics团队于2020年发布。它着重于轻量化和速度优化，并且具有高度可配置性。YOLO v5的不同版本（如Yolov5s、Yolov5m、Yolov5l和Yolov5x）可以根据需求进行选择。</li>
-<li>YOLO v5在速度和性能之间取得了很好的平衡，适用于各种实时目标检测应用。</li>
-</ul>
-</li>
-</ul>
-<p><em><strong>YOLOv1&#x2F;v2&#x2F;v3:</strong></em></p>
-<pre><code>源码：[https://github.com/pjreddie/darknet](YOLOv1/2/3源码)
-
-论文：[https://pjreddie.com/](YOLOv1/2/3论文)
-</code></pre>
-<p><em><strong>YOLOv4：</strong></em></p>
-<pre><code>源码：[https://github.com/AlexeyAB/darknet](YOLOv4源码)
-
-论文：[https://arxiv.org/abs/2004.10934](YOLOv4论文)
-</code></pre>
-<p><em><strong>YOLOv5:</strong></em></p>
-<pre><code>源码：[https://github.com/ultralytics/yolov5](YOLOv5源码)
-</code></pre>
-<p><strong>YOLOv5的优势：</strong></p>
-<ul>
-<li>基于Pytorch框架，相对于Darknet框架它的扩展性更强。</li>
-<li>源码使用PYTHON，使得代码更加便于修改，非常适合使用需求。</li>
-<li>代码量更小，适合阅读，借鉴学习。</li>
-<li>更加优秀的性能表现。</li>
-</ul>
-<p><strong>YOLOv6及更高版本：</strong></p>
-<ul>
-<li><em><strong>YOLOv6:</strong></em> 由美团视觉研发部（Meituan Vision AI Department）于2022年开源，并应用于该公司的许多自动送货机器人中。</li>
-<li><em><strong>YOLOv7:</strong></em> 添加了额外的任务，例如COCO关键点数据集上的姿态估计。</li>
-<li><em><strong>YOLOv8:</strong></em> 是UItralytics推出的YOLO最新版本。作为一种最尖端，最先进的（SOTA）模型，YOLOv8建立在先前版本的成功的基础上，引入了许多新功能和改进，以增强性能，灵活性和效率。YOLOv8支持全方位的视觉AI任务，包括<em><strong>检测，分割，姿态估计，跟踪和分类</strong></em>。这种多功能性允许用户在不同的应用程序和领域中利用YOLOv8的功能。</li>
-</ul>
-<h2 id="2-开发环境搭建"><a href="#2-开发环境搭建" class="headerlink" title="2.开发环境搭建"></a>2.开发环境搭建</h2><h3 id="2-1-前期环境准备"><a href="#2-1-前期环境准备" class="headerlink" title="2.1 前期环境准备"></a>2.1 前期环境准备</h3><h4 id="2-1-2-关于PyTorch"><a href="#2-1-2-关于PyTorch" class="headerlink" title="2.1.2 关于PyTorch"></a>2.1.2 关于PyTorch</h4><p>PyTorch是一个早期的深度学习框架，是深度学习领域的先驱之一。</p>
-<p>PyTorch有三个子库，安装时需要单独安装，分别为：</p>
-<ul>
-<li><em><strong>torch:</strong></em> PyTorch核心库，提供了深度学习框架的基本功能，可用于各种深度学习任务，包括计算机视觉，自然语言处理和强化学习等。</li>
-<li><em><strong>torchvison:</strong></em> PyTorch计算机视觉库，专门用于处理图像和视觉数据。包括图像数据加载器，常用的数据集，预训练的模型和图像处理工具。</li>
-<li><em><strong>torchaudio:</strong></em> PyTorch的音频处理库，用于处理音频数据。包括音频数据加载器，音频特征提取工具，常用的音频数据集和用于处理声音的函数和模型。</li>
-</ul>
-<h4 id="2-1-2-搭建YOLOv5的预安装环境"><a href="#2-1-2-搭建YOLOv5的预安装环境" class="headerlink" title="2.1.2 搭建YOLOv5的预安装环境"></a>2.1.2 搭建YOLOv5的预安装环境</h4><p>官方给出的YOLOv5的安装前提要求是：<strong>Python &gt;&#x3D; 3.8.0 &amp;&amp; PyTorch &gt;&#x3D;1.8</strong></p>
-<p><strong>关于Python的安装</strong>: <a href="Python%E5%AE%98%E7%BD%91">https://www.python.org/</a></p>
-<p><strong>关于PyTorch的安装</strong>：<a href="Pytorch%E7%9A%84%E5%AE%89%E8%A3%85">https://pytorch.org/</a></p>
-<p>当然，我自己比较满意的一个开发环境应该是：</p>
-<ul>
-<li>Ubuntu20.04及以上</li>
-<li>预先安装好ROS-neotic</li>
-<li>使用 <code>pip3 install torch torchvision torchaudio</code>安装PyTorch</li>
-</ul>
-<p>当Ubuntu系统为20.04及以上，此时电脑的Python版本 &gt;&#x3D; 3.8，已经满足YOLOv5对于Python版本的要求。对于Pytorch版本，虽然很多人的一贯想法都是只要版本够用就不要用最新版，但是我之前一开始就是装的最新版，而且截至到目前也一直没有出现过问题，所以我觉得如果不想折腾，也不用去上面的官网去找版本下载，直接用pip3安装（<em><strong>这里值得一说的是，当python版本为python3时，建议都用pip3安装，而不要再用pip，不同的安装方式会将库装在不同的python文件夹，当使用python3去执行程序时，如果依赖的库被装在了python2的文件夹中，那么程序是无法使用这个库的</strong></em>）。</p>
-<h3 id="2-2-YOLOv5的安装"><a href="#2-2-YOLOv5的安装" class="headerlink" title="2.2 YOLOv5的安装"></a>2.2 YOLOv5的安装</h3><p>YOLOv5的安装其实非常简单：</p>
-<ul>
-<li><em><strong>下载仓库到本地：</strong></em> <code>git clone https://github.com/ultralytics/yolov5</code></li>
-<li><em><strong>进入yolov5文件夹：</strong></em> <code>cd yolov5</code></li>
-<li><em><strong>安装所需依赖：</strong></em> <code>pip install -r requirements.txt</code></li>
-</ul>
-<p>至此，你的计算机现在已经可以使用YOLOv5了，可以通过在yolov5文件夹打开终端运行python3 detect.py，该程序将会利用已经训练好的模型对&#x2F;data&#x2F;imgs&#x2F;下的图片进行目标检测，并且在&#x2F;runs&#x2F;detect&#x2F;exp文件夹查看检测后的结果。</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1694479671537.png" alt="F4"></p>
-<h3 id="2-3-GPU环境搭建及YOLOv5的使用"><a href="#2-3-GPU环境搭建及YOLOv5的使用" class="headerlink" title="2.3 GPU环境搭建及YOLOv5的使用"></a>2.3 GPU环境搭建及YOLOv5的使用</h3><p><strong>！！！！！！！！！！！！！！！安装过程中，全程不要挂梯子，并且退出后台。！！！！！！！！！！！！！！！！！！！！！！！！！！</strong></p>
-<h4 id="2-3-1-显卡驱动安装"><a href="#2-3-1-显卡驱动安装" class="headerlink" title="2.3.1 显卡驱动安装"></a>2.3.1 显卡驱动安装</h4><p>安装显卡驱动可以使用命令行安装，但是有一种比较方便的方式进行安装：</p>
-<ul>
-<li>进入软件与更新–&gt;附加驱动–&gt;选择对应版本的驱动</li>
-<li>应用更改后重启电脑</li>
-<li>终端输入nvidia-smi即可查看驱动信息</li>
-</ul>
-<p>例如我所选的驱动版本为：</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02.png" alt="驱动"></p>
-<p>显示信息为：<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03.png" alt="smi"></p>
-<p>此外，可以看到，终端还显示了推荐的CUDA版本，可以选择推荐的版本，也可以自行选择版本安装。</p>
-<h4 id="2-3-2-CUDA安装"><a href="#2-3-2-CUDA安装" class="headerlink" title="2.3.2 CUDA安装"></a>2.3.2 CUDA安装</h4><p><a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">显卡驱动与CUDA版本对应</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04.png" alt="CUDA与驱动版本"></p>
-<p><a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA版本选择与安装步骤</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05.png" alt="CUDA安装"></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06.png" alt="CUDA安装"></p>
-<p>根据自己的显卡驱动版本选择对应的CUDA版本，推荐不要下载太低版本的CUDA，因为后面的Pytorch对CUDA的版本也有要求，太低的CUDA版本可能导致你下载的Pytorch并不能满足比如yolov5对最低版本Pytorch的要求。</p>
-<p><em><strong>tips:</strong></em> 在安装的过程中，很大概率会在安装到99%时出现段错误（核心已转储），如下图所示：</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/08.png" alt="段错误"></p>
-<p>原因是栈太小，解决方法如下：</p>
-<ul>
-<li>查看栈大小：ulimit -a</li>
-<li>更改stack size：ulimit -s 102400</li>
-</ul>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/09.png" alt="段错误"></p>
-<p><a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html#ubuntu-x86_64">添加环境变量</a></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07.png" alt="环境变量"></p>
-<p>以上内容(注意改成自己版本的CUDA)在~&#x2F;.bashrc尾行中添加。</p>
-<p><em><strong>完成以上内容后，在终端输入：</strong></em></p>
-<ul>
-<li><em>nvcc -V</em></li>
-</ul>
-<p><em><strong>查看是否安装成功。</strong></em></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="查看">\</p>
-<p><strong>！！！！！！！安装完之后最好重启一次电脑，以验证是否能正确加载nvidia驱动，如果不能正确加载，则手动再装一次即可！！！！！！！！！！！！！</strong></p>
-<h4 id="2-3-3-安装torch"><a href="#2-3-3-安装torch" class="headerlink" title="2.3.3 安装torch"></a>2.3.3 安装torch</h4><p><a href="https://pytorch.org/get-started/previous-versions/">torch与CUDA版本对应及下载</a></p>
-<p>由于我装的CUDA为12.0，查看了一下，官网上没有直接支持cuda 12的torch版本，但是翻阅社区了解到，cuda是向下兼容的，cuda 12可以支持官网里面的CUDA 11.8。</p>
-<p>可以使用conda安装，也可以使用pip安装，我在这选择的是使用pip安装，并且将官网上给出的pip改为pip3，读者可自行去了解二者的不同。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip3 install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-3-4-验证安装结果"><a href="#2-3-4-验证安装结果" class="headerlink" title="2.3.4 验证安装结果"></a>2.3.4 验证安装结果</h4><p>依次在终端输入：</p>
-<ul>
-<li>python3</li>
-<li>import torch</li>
-<li>print(torch.cuda.is_available())</li>
-</ul>
-<p>返回true代表安装成功。</p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="查看"></p>
-<p>安装成功但是warnning:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WARNING: The script isympy is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts cmake, cpack and ctest are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The script lit is installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts convert-caffe2-to-onnx, convert-onnx-to-caffe2 and torchrun are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line">WARNING: The scripts f2py, f2py3 and f2py3.8 are installed in &#x27;/home/jiu/.local/bin&#x27; which is not on PATH.</span><br><span class="line">Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>hahahh</p>
-<h3 id="2-4-cuDNN与TensorRT"><a href="#2-4-cuDNN与TensorRT" class="headerlink" title="2.4 cuDNN与TensorRT"></a>2.4 cuDNN与TensorRT</h3><h4 id="2-4-1-cuDNN"><a href="#2-4-1-cuDNN" class="headerlink" title="2.4.1 cuDNN"></a>2.4.1 cuDNN</h4><p>NVIDIA CUDA 深度神经网络 （cuDNN） 是用于深度神经网络的 GPU 加速基元库</p>
-<p><a href="https://blog.csdn.net/h3c4lenovo/article/details/119003405">参考博客</a></p>
-<p><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">官方安装指引</a></p>
-<p><a href="https://developer.nvidia.com/rdp/cudnn-archive">官方下载</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="查看"></p>
-<p>下载对应CUDA的版本就好了，我的CUDA是12.0.0，所以我下载的是cuDNN8.9.0 .</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xvf cudnn-linux-x86_64-8.9.0.131_cuda12-archive.tar.xz</span><br><span class="line">sudo cp cudnn-linux-x86_64-8.9.0.131_cuda12-archive/include/cudnn*.h /usr/local/cuda/include </span><br><span class="line">sudo cp -P cudnn-linux-x86_64-8.9.0.131_cuda12-archive/lib/libcudnn* /usr/local/cuda/lib64 </span><br><span class="line">sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*  </span><br></pre></td></tr></table></figure>
-
-<p>查看是否安装完毕：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-4-2-TensorRT"><a href="#2-4-2-TensorRT" class="headerlink" title="2.4.2 TensorRT"></a>2.4.2 TensorRT</h4><p><a href="https://blog.csdn.net/weixin_43863869/article/details/128571567">参考博客</a></p>
-<p><a href="https://developer.nvidia.com/nvidia-tensorrt-8x-download">官网下载地址</a></p>
-<p><a href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">官方安装指引</a></p>
-<p>这里注意最新版的TensorRT也只支持CUDA12.1 。<strong>所以CUDA不要超过12.1，例如我装的就是12.0.0</strong></p>
-<p><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="查看"></p>
-<p>我用的是Tar安装，版本是TensorRT8.6 。用tar安装的好处是，把解压好的文件和.bashrc里面的路径删除就可以很方便的删除TensorRT了。</p>
-<p>下载好之后，将这个移动到opt文件夹中： sudo mv TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz &#x2F;opt 方便管理</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar -xzvf TensorRT-$&#123;version&#125;.Linux.$&#123;arch&#125;-gnu.$&#123;cuda&#125;.tar.gz</span><br><span class="line">cd TensorRT-$&#123;version&#125;/python</span><br><span class="line">python3 -m pip install tensorrt-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_lean-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">python3 -m pip install tensorrt_dispatch-*-cp3x-none-linux_x86_64.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/uff</span><br><span class="line">python3 -m pip install uff-0.6.9-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/graphsurgeon</span><br><span class="line">python3 -m pip install graphsurgeon-0.4.6-py2.py3-none-any.whl</span><br><span class="line">cd TensorRT-$&#123;version&#125;/onnx_graphsurgeon</span><br><span class="line">python3 -m pip install onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
-
-<p>照着官方安装都安装一遍就可以了 <em><strong>注意将命令中的x和星号改成自己需要的版本</strong></em> 。</p>
-<p>官方给的在bashrc里面的路径是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&lt;TensorRT-$&#123;version&#125;/lib&gt;</span><br></pre></td></tr></table></figure>
-
-<p>到我这里就是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/TensorRT-8.6.1.6/lib</span><br></pre></td></tr></table></figure>
-
-<p>再source ~&#x2F;.bashrc刷新一下，TensorRT就算装好了</p>
-<h3 id="2-5-支持CUDA的opencv"><a href="#2-5-支持CUDA的opencv" class="headerlink" title="2.5 支持CUDA的opencv"></a>2.5 支持CUDA的opencv</h3><p><a href="https://blog.csdn.net/u011622208/article/details/104265206#commentBox">参考博客</a></p>
-<p>因为CUDA的版本很高，所以我的opencv也尽量装的高。我装的是：OpenCV 4.8.1</p>
-<p>官网上把压缩包下下来，然后：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_GENERATE_PKGCONFIG=ON -D ENABLE_CXX11=1 -D OPENCV_ENABLE_NONFREE=True ..</span><br><span class="line"></span><br><span class="line">cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D CMAKE_BUILD_TYPE=Release -D OPENCV_GENERATE_PKGCONFIG=ON -D ENABLE_CXX11=1 -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules -D OPENCV_ENABLE_NONFREE=True -D INSTALL_PYTHON_EXAMPLES=ON -D INSTALL_C_EXAMPLES=ON -D WITH_CUDA=ON -D WITH_TBB=ON -D ENABLE_FAST_MATH=1 -D WITH_OPENMP=ON -D WITH_CUFFT=ON -D WITH_CUBLAS=ON ..</span><br><span class="line"></span><br><span class="line">make -j12</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-训练自己的数据集"><a href="#3-训练自己的数据集" class="headerlink" title="3.训练自己的数据集"></a>3.训练自己的数据集</h2><h3 id="3-1-数据集拆分"><a href="#3-1-数据集拆分" class="headerlink" title="3.1 数据集拆分"></a>3.1 数据集拆分</h3><p>将标好的数据集划分为训练集和测试集，get_train_valid.py代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import random</span><br><span class="line">import shutil</span><br><span class="line">import copy</span><br><span class="line"></span><br><span class="line">path_root_labels = &#x27;./data_11_24/labels&#x27;    # 数据集标签路径</span><br><span class="line">path_root_imgs = &#x27;./data_11_24/images&#x27;      # 数据集图片路径</span><br><span class="line">path_splited = &#x27;./data_split&#x27;               # 数据集划分路径</span><br><span class="line"></span><br><span class="line">if not os.path.exists(path_splited):</span><br><span class="line">    os.mkdir(path_splited)</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images/train&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;images/valid&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels/train&#x27;))</span><br><span class="line">    os.mkdir(os.path.join(path_splited, &#x27;labels/valid&#x27;))</span><br><span class="line"></span><br><span class="line">file_list = os.listdir(path_root_imgs)</span><br><span class="line">origin = copy.deepcopy(file_list)</span><br><span class="line">random.shuffle(file_list)</span><br><span class="line">train_len = int(0.9 * len(file_list))   # 训练集占比</span><br><span class="line"></span><br><span class="line">for i, file in enumerate(file_list):</span><br><span class="line">    image_label = file.split(&#x27;.&#x27;)[0] + &#x27;.txt&#x27;</span><br><span class="line">    label_content = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    if i &lt; train_len:</span><br><span class="line">        img_path = &#x27;./data_split/images/train&#x27;</span><br><span class="line">        label_path = &#x27;./data_split/labels/train&#x27;</span><br><span class="line">    else:</span><br><span class="line">        img_path = &#x27;./data_split/images/valid&#x27;</span><br><span class="line">        label_path = &#x27;./data_split/labels/valid&#x27;</span><br><span class="line"></span><br><span class="line">    # 复制图像文件至划分数据集文件夹</span><br><span class="line">    shutil.copy(os.path.join(path_root_imgs, file), img_path)</span><br><span class="line"></span><br><span class="line">    # 复制标签文件至划分数据集文件夹</span><br><span class="line">    label_file_path = os.path.join(path_root_labels, image_label)</span><br><span class="line">    if os.path.exists(label_file_path):</span><br><span class="line">        shutil.copy(label_file_path, label_path)</span><br><span class="line">    else:</span><br><span class="line">        # 如果标签文件不存在，创建空文件</span><br><span class="line">        with open(os.path.join(label_path, image_label), &#x27;w&#x27;) as empty_label_file:</span><br><span class="line">            empty_label_file.write(label_content)</span><br><span class="line"></span><br><span class="line">file_list = os.listdir(&#x27;./data_11_24/images&#x27;)</span><br><span class="line">print(len(file_list))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>该代码会自动创建划分后的数据集文件夹，对于没有标签的背景图片会创建一个对应的空白标签。空白标签同样可以用于YOLOv5数据集的训练。</p>
-<h3 id="3-2-创建数据参数文件"><a href="#3-2-创建数据参数文件" class="headerlink" title="3.2 创建数据参数文件"></a>3.2 创建数据参数文件</h3><p>在data&#x2F;文件夹下创建，例如创建名为ball.yaml的参数文件如下（格式可以从已有的参数文件中复制）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># YOLOv5 🚀 by Ultralytics, GPL-3.0 license</span><br><span class="line"># COCO 2017 dataset http://cocodataset.org</span><br><span class="line"># Example usage: python train.py --data coco.yaml</span><br><span class="line"># parent</span><br><span class="line"># ├── yolov5</span><br><span class="line"># └── datasets</span><br><span class="line">#     └── coco  ← downloads here</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]</span><br><span class="line">path: /home/jxj/yolov5-6.0/dataset  # 数据集文件夹父目录</span><br><span class="line">train: train_data/images  # 训练集图像位置（会在该同级目录下自动搜寻对应的标签文件）</span><br><span class="line">val: valid_data/images  # 测试集图像位置（会在该同级目录下自动搜寻对应的标签文件）</span><br><span class="line">test:   # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794</span><br><span class="line"></span><br><span class="line"># Classes</span><br><span class="line">nc: 4  # 标签数量</span><br><span class="line">names: [&#x27;purple_box&#x27;,&#x27;blue_box&#x27;,&#x27;red_box&#x27;,&#x27;granary&#x27;]  # 标签名称（与标注工具中一致）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>要修改的只有有中文注释的那部分。</p>
-<p>需要注意的是，该数据集的文件夹架构与前面用get_train_valid.py创建的文件夹架构是不一样的，需要手动将相对应的文件复制过来，或者修改一下get_train_valid.py代码。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yolov5                                      |	yolov5</span><br><span class="line">|——data_split          			    |	|——dataset</span><br><span class="line">  |——images				    |	  |——train_data</span><br><span class="line">    |——train				    |	    |——images</span><br><span class="line">      |——rgb_0.png			    |	      |——rgb_0.png</span><br><span class="line">      ...				    |	      ...</span><br><span class="line">    |——valid				    |	    |——labels</span><br><span class="line">      |——rgb_1.png			    |	      |——rgb_0.txt						  </span><br><span class="line">      ...				    |	      ...</span><br><span class="line">  |——labels				    |	  |——valid_data</span><br><span class="line">    |——train				    |	    |——images</span><br><span class="line">      |——rgb_0.txt			    |	      |——rgb_1.png</span><br><span class="line">      ...				    |	      ...</span><br><span class="line">    |——valid				    |	    |——labels</span><br><span class="line">      |——rgb_1.txt			    |	      |——rgb_1.txt</span><br><span class="line">      ...				    |	      ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-3-创建模型参数文件"><a href="#3-3-创建模型参数文件" class="headerlink" title="3.3 创建模型参数文件"></a>3.3 创建模型参数文件</h3><p>在models&#x2F;文件夹下创建，例如创建名为yolov5s_ball.yaml的参数文件如下（先自行选择一个模型，比如yolov5s或者yolov5l，然后以该文件为基础进行修改）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># YOLOv5 🚀 by Ultralytics, GPL-3.0 license</span><br><span class="line"></span><br><span class="line"># Parameters</span><br><span class="line">nc: 4  # 标签数量</span><br><span class="line">depth_multiple: 0.33  # model depth multiple</span><br><span class="line">width_multiple: 0.50  # layer channel multiple</span><br><span class="line">anchors:</span><br><span class="line">  - [10,13, 16,30, 33,23]  # P3/8</span><br><span class="line">  - [30,61, 62,45, 59,119]  # P4/16</span><br><span class="line">  - [116,90, 156,198, 373,326]  # P5/32</span><br><span class="line"></span><br><span class="line"># YOLOv5 v6.0 backbone</span><br><span class="line">backbone:</span><br><span class="line">  # [from, number, module, args]</span><br><span class="line">  [[-1, 1, Conv, [64, 6, 2, 2]],  # 0-P1/2</span><br><span class="line">   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4</span><br><span class="line">   [-1, 3, C3, [128]],</span><br><span class="line">   [-1, 1, Conv, [256, 3, 2]],  # 3-P3/8</span><br><span class="line">   [-1, 6, C3, [256]],</span><br><span class="line">   [-1, 1, Conv, [512, 3, 2]],  # 5-P4/16</span><br><span class="line">   [-1, 9, C3, [512]],</span><br><span class="line">   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32</span><br><span class="line">   [-1, 3, C3, [1024]],</span><br><span class="line">   [-1, 1, SPPF, [1024, 5]],  # 9</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line"># YOLOv5 v6.0 head</span><br><span class="line">head:</span><br><span class="line">  [[-1, 1, Conv, [512, 1, 1]],</span><br><span class="line">   [-1, 1, nn.Upsample, [None, 2, &#x27;nearest&#x27;]],</span><br><span class="line">   [[-1, 6], 1, Concat, [1]],  # cat backbone P4</span><br><span class="line">   [-1, 3, C3, [512, False]],  # 13</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [256, 1, 1]],</span><br><span class="line">   [-1, 1, nn.Upsample, [None, 2, &#x27;nearest&#x27;]],</span><br><span class="line">   [[-1, 4], 1, Concat, [1]],  # cat backbone P3</span><br><span class="line">   [-1, 3, C3, [256, False]],  # 17 (P3/8-small)</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [256, 3, 2]],</span><br><span class="line">   [[-1, 14], 1, Concat, [1]],  # cat head P4</span><br><span class="line">   [-1, 3, C3, [512, False]],  # 20 (P4/16-medium)</span><br><span class="line"></span><br><span class="line">   [-1, 1, Conv, [512, 3, 2]],</span><br><span class="line">   [[-1, 10], 1, Concat, [1]],  # cat head P5</span><br><span class="line">   [-1, 3, C3, [1024, False]],  # 23 (P5/32-large)</span><br><span class="line"></span><br><span class="line">   [[17, 20, 23], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)</span><br><span class="line">  ]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>要修改的地方只有标签数量那一块，与先前创建的训练数据文件中的值一致。其余地方不用修改。</p>
-<h3 id="3-4-修改train-py程序"><a href="#3-4-修改train-py程序" class="headerlink" title="3.4 修改train.py程序"></a>3.4 修改train.py程序</h3><p>大概在文件的434行，可以对训练时的参数进行修改，包括是否采用预训练参数、先前创建的训练参数文件名称、训练次数等等。部分参数解释如下：</p>
-<ul>
-<li>–weights：预训练模型，它可以保留原有的训练权重继续训练</li>
-<li>–cfg：模型参数文件</li>
-<li>–data：数据参数文件</li>
-<li>–epochs：训练次数</li>
-<li>–batch-size：每次训练的图像数量，越大训练的越快，但是越消耗显存</li>
-<li>–imgsz：训练输入图片大小，yolo会根据这个参数压缩图片，越大训练效果越好，但是越消耗显存</li>
-<li>–devices：训练时使用的设备，数字表示GPU号，用CPU则改为’cpu’</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def parse_opt(known=False):</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(&#x27;--weights&#x27;, type=str, default=ROOT / &#x27;yolov5s.pt&#x27;, help=&#x27;initial weights path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--cfg&#x27;, type=str, default=ROOT / &#x27;models/yolov5s_ball.yaml&#x27;, help=&#x27;model.yaml path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--data&#x27;, type=str, default=ROOT / &#x27;data/ball.yaml&#x27;, help=&#x27;dataset.yaml path&#x27;) ###</span><br><span class="line">    parser.add_argument(&#x27;--hyp&#x27;, type=str, default=ROOT / &#x27;data/hyps/hyp.scratch.yaml&#x27;, help=&#x27;hyperparameters path&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--epochs&#x27;, type=int, default=500)</span><br><span class="line">    parser.add_argument(&#x27;--batch-size&#x27;, type=int, default=16, help=&#x27;total batch size for all GPUs&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--imgsz&#x27;, &#x27;--img&#x27;, &#x27;--img-size&#x27;, type=int, default=640, help=&#x27;train, val image size (pixels)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--rect&#x27;, action=&#x27;store_true&#x27;, help=&#x27;rectangular training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--resume&#x27;, nargs=&#x27;?&#x27;, const=True, default=False, help=&#x27;resume most recent training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--nosave&#x27;, action=&#x27;store_true&#x27;, help=&#x27;only save final checkpoint&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--noval&#x27;, action=&#x27;store_true&#x27;, help=&#x27;only validate final epoch&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--noautoanchor&#x27;, action=&#x27;store_true&#x27;, help=&#x27;disable autoanchor check&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--evolve&#x27;, type=int, nargs=&#x27;?&#x27;, const=300, help=&#x27;evolve hyperparameters for x generations&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--bucket&#x27;, type=str, default=&#x27;&#x27;, help=&#x27;gsutil bucket&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--cache&#x27;, type=str, nargs=&#x27;?&#x27;, const=&#x27;ram&#x27;, help=&#x27;--cache images in &quot;ram&quot; (default) or &quot;disk&quot;&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--image-weights&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use weighted image selection for training&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--device&#x27;, default=&#x27;0&#x27;, help=&#x27;cuda device, i.e. 0 or 0,1,2,3 or cpu&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--multi-scale&#x27;, action=&#x27;store_true&#x27;, help=&#x27;vary img-size +/- 50%%&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--single-cls&#x27;, action=&#x27;store_true&#x27;, help=&#x27;train multi-class data as single-class&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--adam&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use torch.optim.Adam() optimizer&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--sync-bn&#x27;, action=&#x27;store_true&#x27;, help=&#x27;use SyncBatchNorm, only available in DDP mode&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--workers&#x27;, type=int, default=8, help=&#x27;maximum number of dataloader workers&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--project&#x27;, default=ROOT / &#x27;runs/train&#x27;, help=&#x27;save to project/name&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--name&#x27;, default=&#x27;exp&#x27;, help=&#x27;save to project/name&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--exist-ok&#x27;, action=&#x27;store_true&#x27;, help=&#x27;existing project/name ok, do not increment&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--quad&#x27;, action=&#x27;store_true&#x27;, help=&#x27;quad dataloader&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--linear-lr&#x27;, action=&#x27;store_true&#x27;, help=&#x27;linear LR&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--label-smoothing&#x27;, type=float, default=0.0, help=&#x27;Label smoothing epsilon&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--patience&#x27;, type=int, default=100, help=&#x27;EarlyStopping patience (epochs without improvement)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--freeze&#x27;, type=int, default=0, help=&#x27;Number of layers to freeze. backbone=10, all=24&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--save-period&#x27;, type=int, default=-1, help=&#x27;Save checkpoint every x epochs (disabled if &lt; 1)&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--local_rank&#x27;, type=int, default=-1, help=&#x27;DDP parameter, do not modify&#x27;)</span><br><span class="line"></span><br><span class="line">    # Weights &amp; Biases arguments</span><br><span class="line">    parser.add_argument(&#x27;--entity&#x27;, default=None, help=&#x27;W&amp;B: Entity&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--upload_dataset&#x27;, action=&#x27;store_true&#x27;, help=&#x27;W&amp;B: Upload dataset as artifact table&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--bbox_interval&#x27;, type=int, default=-1, help=&#x27;W&amp;B: Set bounding-box image logging interval&#x27;)</span><br><span class="line">    parser.add_argument(&#x27;--artifact_alias&#x27;, type=str, default=&#x27;latest&#x27;, help=&#x27;W&amp;B: Version of dataset artifact to use&#x27;)</span><br><span class="line"></span><br><span class="line">    opt = parser.parse_known_args()[0] if known else parser.parse_args()</span><br><span class="line">    return opt</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-5-训练模型"><a href="#3-5-训练模型" class="headerlink" title="3.5 训练模型"></a>3.5 训练模型</h3><p>当做好以上工作后，可以直接在终端运行python3 train.py进行数据集训练。</p>
-<p><strong>训练过程可视化：</strong></p>
-<p>在yolo.py程序中找到<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="查看"></p>
-<p>将该部分取消注释。</p>
-<p>在yolov5文件夹终端下输入：tensorboard –logdir&#x3D;.&#x2F;runs，然后在浏览器访问<a href="http://localhost:6006/%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E3%80%82">http://localhost:6006/即可查看训练过程。</a><br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="查看"></p>
-<h3 id="3-6-训练结果"><a href="#3-6-训练结果" class="headerlink" title="3.6 训练结果"></a>3.6 训练结果</h3><p>训练后的结果会被保存在runs&#x2F;train&#x2F;exp_xx下<br><img src="/2024/08/17/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-YOLOv5%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/results.png" alt="查看"></p>
-<ul>
-<li>weights文件夹下保存训练的模型参数，包括best.pt和last.pt</li>
-<li>result.png表示训练效果：<ul>
-<li>Box：</li>
-</ul>
-</li>
-</ul>
-<p>将模型导出为torchscripts和onnx模型（可以将训练好的best.pt文件放到yolov5目录下，或者改为runs&#x2F;train&#x2F;exp_xx&#x2F;weights&#x2F;best.pt）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 export.py --weight best.pt --include torchscript onnx</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-应用与检测"><a href="#4-应用与检测" class="headerlink" title="4.应用与检测"></a>4.应用与检测</h2>]]></content>
-      <categories>
-        <category>教程</category>
-        <category>技能学习</category>
-      </categories>
-      <tags>
-        <tag>YOLOv5</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>技术笔记|创建一个你自己的工程</title>
     <url>/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="第一个可以运行的VSCode工程"><a href="#第一个可以运行的VSCode工程" class="headerlink" title="第一个可以运行的VSCode工程"></a>第一个可以运行的VSCode工程</h1><p><strong>写在前面</strong></p>
+    <content><![CDATA[<h1 id="第一个可以运行的vscode工程">第一个可以运行的VSCode工程</h1>
+<p><strong>写在前面</strong></p>
 <p><em>关于在Linux系统下的代码编辑器，大家应该都会听到一个词，那就是VsCode，坦白讲，这个软件的资源在我还是大二的时候，也就是一年前，还基本上在CSDN上找不到什么教程，B站上面的貌似也不是很多，而且大多数都是讲Windows下面的使用教程，其实坦白来说在Linux下面用的比较多的还有一个东西，那就是CMake，但是即使是用CMake，也十分有必要学会使用VsCode，因为CMake终究是个编译工具，单独的依靠CMakeLists.txt文件是无法实现调试功能的。</em></p>
-<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong> 的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了 <strong>PCL库，realsense SDK</strong> ，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em></p>
-<p><em>不得不说，VsCode配置完确实好用，后续可以考虑实现 <strong>VsCode+CMake</strong> 的开发环境，以实现更加简便高效的代码编译与调试功能，还可以给VsCode加上Markdown和git等其他的插件，进一步提高生产力。</em></p>
-<h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0. 前言"></a>0. 前言</h2><ul>
-<li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04   VsCode</strong></li>
+<p><em>之前十分痛苦的配置了一次 <strong>OpenCV&amp;C++</strong>
+的开发环境，后来一直不愿意再碰VsCode，但是最近不断的接触到了
+<strong>PCL库，realsense SDK</strong>
+，而且需要自己写一个工程，加之后来电脑系统重装，从Ubuntu18.04升级到了Ubuntu20.04，于是便从头开始理了一次使用VsCode创建一个工程并且配置的具体方法，在此做个总结。</em></p>
+<p><em>不得不说，VsCode配置完确实好用，后续可以考虑实现
+<strong>VsCode+CMake</strong>
+的开发环境，以实现更加简便高效的代码编译与调试功能，还可以给VsCode加上Markdown和git等其他的插件，进一步提高生产力。</em></p>
+<h2 id="前言">0. 前言</h2>
+<ul>
+<li>开发平台：<strong>Ubuntu18.04 &amp; Ubuntu20.04 VsCode</strong></li>
 <li>配置实例：<strong>OpenCV &amp; C++</strong></li>
 </ul>
-<h2 id="1-创建一个你自己的工程"><a href="#1-创建一个你自己的工程" class="headerlink" title="1. 创建一个你自己的工程"></a>1. 创建一个你自己的工程</h2><h3 id="1-1-第一步：创建你的工程文件夹"><a href="#1-1-第一步：创建你的工程文件夹" class="headerlink" title="1.1 第一步：创建你的工程文件夹"></a>1.1 第一步：创建你的工程文件夹</h3><p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份 <strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
-<p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code .（code和 .之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
-<h3 id="1-3-第二步：安装C-拓展"><a href="#1-3-第二步：安装C-拓展" class="headerlink" title="1.3 第二步：安装C++拓展"></a>1.3 第二步：安装C++拓展</h3><p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
-<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如**<code>&lt;iostream&gt;</code>**时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
+<h2 id="创建一个你自己的工程">1. 创建一个你自己的工程</h2>
+<h3 id="第一步创建你的工程文件夹">1.1 第一步：创建你的工程文件夹</h3>
+<p>以一套识别图片轮廓的代码为例，你可以考虑创建一个总文件夹命名为str2dots，然后考虑到对于一个识别图片轮廓点的工程来说，包含要素一般有：待识别的图片，包含识别后的轮廓点坐标的文件，源代码，使用的字体（也可没有），此外还可以写一份
+<strong>.md说明文件</strong>。本人工程树示例如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/1.jpg" alt="img"></p>
+<p>创建完自己的文件夹之后，在主文件夹打开终端，输入 <strong>code
+.（code和
+.之间有个空格）</strong>，即可通过VsCode打开自己的工程文件夹</p>
+<h3 id="第二步安装c拓展">1.3 第二步：安装C++拓展</h3>
+<p>打开后的VsCode的界面如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/2.jpg" alt="img"></p>
+<p>是不是感觉单调的一？？？没错，这时候的VsCode跟一个记事本的功能差不多，只能查看或者修改代码，其他的事情它啥也干不了。安装C++拓展的步骤为：点击最左侧最下面的图标（或者<strong>Ctrl+shift+X</strong>），在搜索框输入C++，选中第一个就行，然后点击安装。这样C++的拓展就安装好了，你要是觉得这个拓展不好用，想换成其他拓展，你也可以随时禁用或卸载它。这个拓展应该是包含了C++中的标准库和一些编译功能，所以你在调用比如<strong><code>&lt;iostream&gt;</code></strong>时并不用像配置第三方库那样去操作。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/3.jpg" alt="img"></p>
 <p>最后挖一个坑：这种拓展应该可以理解为给VsCode叠buff，就是给它不断的加新功能，所以按理来说，如果我们想在工程里面添加一个第三方库的时候，应该并不需要添加拓展，但是本人之前配置ROS的开发环境的时候还是按照网上的教程安装了一个ROS的拓展，对于ROS这个东西，它应该貌似不是一个单纯的第三方库，因为它确实还有一堆东西，关于这个问题，以后配置ROS的开发环境的时候再来填吧～～</p>
-<h3 id="1-3-第三步：生成并编辑配置文件"><a href="#1-3-第三步：生成并编辑配置文件" class="headerlink" title="1.3 第三步：生成并编辑配置文件"></a>1.3 第三步：生成并编辑配置文件</h3><p>这里的配置文件一般有四个：<strong>launch.json; task.json; setting.json; c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
-<p>在你写了一个Hell World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C&#x2F;C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
-<p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个**.json<strong>文件，我们首先先把它们几个生成出来：生成</strong>launch.json<strong>文件：运行-&gt;添加配置，这时候生成的</strong>launch.json<strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成</strong>c_cpp_properties.json<strong>文件：<strong>Ctrl+shift+p</strong>打开搜索框，然后输入c++选择C&#x2F;C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个</strong>includepath**，也可以不用这个.json文件；</p>
+<h3 id="第三步生成并编辑配置文件">1.3 第三步：生成并编辑配置文件</h3>
+<p>这里的配置文件一般有四个：<strong>launch.json; task.json;
+setting.json;
+c_cpp_properties.json</strong>。我们一个一个来说。setting.json文件基本用不到，我们就不讲了。</p>
+<p>在你写了一个Hell
+World的代码之后，这时候你是不能直接调试的，因为你还没有配置上面我所说的那几个文件，我们可以直接点击运行-&gt;启动调试，这时候会出现下面的界面：我们选中：C/C++：g++生成和调试活动文件，然后这时候你会发现，你的程序顺利调试了。这时候你再去看看文件夹目录，你发现除了生成的二进制的可知性文件，还多了一个名为.vscode的文件夹，里面放着一个名为task.json的文件，没错，这个文件夹和它里面的.json文件就是我们配置VsCode的核心！！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/4.jpg" alt="img"></p>
+<p>其实到了上面那一步，我们可以使用大一学的C++的各种东西了，只不过在我们的项目开发中，我们要自己加进去很多东西，所以我们这时候就要配置其他的几个<strong>.json</strong>文件，我们首先先把它们几个生成出来：生成<strong>launch.json</strong>文件：运行-&gt;添加配置，这时候生成的<strong>launch.json</strong>文件基本上可以说是一个空文件，因为你并没有给它加东西，它主要是用来作运行和调试时的配置，比如，在调试程序的过程中是否调出终端（虽然在VsCode的下方也可以看终端的输出）；生成<strong>c_cpp_properties.json</strong>文件：<strong>Ctrl+shift+p</strong>打开搜索框，然后输入c++选择C/C++:编辑配置（JSON），其实这个文件的功能跟在设置里面添加includepath是一样的，如果直接修改了这个<strong>includepath</strong>，也可以不用这个.json文件；</p>
 <p>至此，我们的.vscode文件夹里面放了三个.json的文件：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/5.jpg" alt="img"></p>
-<h3 id="1-4-第四步：开始配置第三方库，以OpenCV为例"><a href="#1-4-第四步：开始配置第三方库，以OpenCV为例" class="headerlink" title="1.4 第四步：开始配置第三方库，以OpenCV为例"></a>1.4 第四步：开始配置第三方库，以OpenCV为例</h3><p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
-<p>这时候我们看到那个关于** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>&#x2F;usr&#x2F;include&#x2F;opencv4**，然后我把**&#x2F;usr&#x2F;include&#x2F;opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心！！）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
-<p>不过这个时候呢，你去点击那个** #include &lt;opencv2&#x2F;opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>“args”[]**后面开始添加东西：”-I”标明头文件所在路径（就是你在includepath里面添加的路径）; “-L”标明库文件所在路径; “-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
-<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是&#x2F;usr&#x2F;lib也可能是&#x2F;usr&#x2F;local&#x2F;lib也可能是lib里面的某个文件夹里面，具体方式可以直接在&#x2F;usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索**“libopencv”<strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了</strong>&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu<strong>里面，所以在task.json里面就这么写：</strong>“-L”,”&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu”<strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：</strong>“-l”,”opencv_dnn”**。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
+<h3 id="第四步开始配置第三方库以opencv为例">1.4
+第四步：开始配置第三方库，以OpenCV为例</h3>
+<p>我们在test.cpp中写一点关于opencv的东西：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/6.jpg" alt="img"></p>
+<p>这时候我们看到那个关于** #include
+&lt;opencv2/opencv.hpp&gt;<strong>是红色的欸，这是为什么呢？？其实是因为你的includepath里面没有找到这个叫做opencv2的文件，这时候我们打开</strong>c_cpp_properties.json<strong>文件，然后在includepath里面添加opencv所在的地址，以我的电脑为例，我装的是opencv4，位置为：</strong>/usr/include/opencv4<strong>，然后我把</strong>/usr/include/opencv4**加进去，因为在include文件夹下面就放着我的opencv2的包。或者你也可以直接把鼠标放到标红的地方，然后点击快速修复，它同样会更新includepath的内容（真良心！！）。<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/7.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/8.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/9.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/10.jpg" alt="img"></p>
+<p>不过这个时候呢，你去点击那个** #include
+&lt;opencv2/opencv.hpp&gt;<strong>还是会有问题，不过已经和之前的那个报错不一样了，如果这时候你启动调试，它会报错为找不到这个头文件，这是因为你这时候还没有配置</strong>task.json<strong>文件。我们在</strong>”args”[]**后面开始添加东西：“-I”标明头文件所在路径（就是你在includepath里面添加的路径）;
+“-L”标明库文件所在路径;
+“-l”标明具体的库的名称。下面我们具体来说一说这个内容究竟该怎么添加。</p>
+<p>关于头文件所在路径”-I”：这个路径就是你在includepath里面添加的路径，在这里可以直接复制粘贴；关于库文件所在路径”-L”：这个一般是在lib文件夹里面，可能是/usr/lib也可能是/usr/local/lib也可能是lib里面的某个文件夹里面，具体方式可以直接在/usr（因为你装的东西都在这）文件夹里面搜索，比如我要搜索opencv的库，我就搜索<strong>“libopencv”</strong>，然后我就知道这些库文件究竟是在哪个文件夹下面，示例如图：你要找的是.a或者.so的文件，我的就放在了<strong>/usr/lib/x86_64-linux-gnu</strong>里面，所以在task.json里面就这么写：<strong>“-L”,“/usr/lib/x86_64-linux-gnu”</strong>；关于具体的库的名字”-l”：我们前面不是已经搜到具体有哪些库了嘛，所以你只需要把这些库全加进来就ok了，不过写法要改一改，不能直接libopencvxxx，你要去掉那个lib，你应该写成如：<strong>“-l”,“opencv_dnn”</strong>。配置好的task.json文件如下：<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/11.jpg" alt="img"><img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/12.jpg" alt="img"></p>
 <p>至此，你点击启动调试，你滴代码就成功运行了！！<img src="/2024/08/24/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E5%B7%A5%E7%A8%8B/13.jpg" alt="img"></p>
 <p>再挖一个坑，关于那个具体库的名字，也就是”-l”那一项，你会发现你可以搜到同名称但是不同后缀的文件，比如<strong>libopencv_dnn.so和libopencv_dnn.a</strong>，虽然到时候并不会考虑后缀的问题，但是这是怎么回事呢？？有的还会在后面标上不同的版本号，比如<strong>librealsense2.so.2.50和librealsense2.so.5.53.1</strong>，这其实是库的类型和版本问题，读者可以自行去研究一下～～～～</p>
-<h2 id="2-写在最后"><a href="#2-写在最后" class="headerlink" title="2. 写在最后"></a>2. 写在最后</h2><p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
+<h2 id="写在最后">2. 写在最后</h2>
+<p>在这里，你可以好好的感谢一下我了，因为网上的教程，骂的就是你CSDN！！真的相互抄袭，而且错的一堆，我已经被这个玩意恶心了两年了，现在终于算是不再被它继续折磨了！！</p>
 <p>后面再强推学一手CMake，VSCode+CMake的开发环境或许更适合开发大的工程。</p>
-<h2 id="3-2023-9-8更新"><a href="#3-2023-9-8更新" class="headerlink" title="3. 2023.9.8更新"></a>3. 2023.9.8更新</h2><ol>
-<li><p>关于.so或者.a文件的寻找，其实&#x2F;usr文件夹下并不是全部的库，以ros为例，ros本身会被安装在&#x2F;opt下，然后&#x2F;opt&#x2F;ros&#x2F;noetic下又有include和lib等文件夹，所以如果要找一个第三方库的库，应该这么做：</p>
+<h2 id="更新">3. 2023.9.8更新</h2>
+<ol type="1">
+<li><p>关于.so或者.a文件的寻找，其实/usr文件夹下并不是全部的库，以ros为例，ros本身会被安装在/opt下，然后/opt/ros/noetic下又有include和lib等文件夹，所以如果要找一个第三方库的库，应该这么做：</p>
 <ul>
-<li>进入到你在includepath里面添加的路径的上一级，进入lib文件夹（以ros为例，应该是&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib&#x2F;）</li>
+<li>进入到你在includepath里面添加的路径的上一级，进入lib文件夹（以ros为例，应该是/opt/ros/noetic/lib/）</li>
 <li>搜索你需要的库的名字，比如是ros的话，输入ros即可找到ros内的全部库</li>
-</ul>
-</li>
-<li><p>关于&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu和&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib二者中都有ros相关的库，二者的区别：</p>
+</ul></li>
+<li><p>关于/usr/lib/x86_64-linux-gnu和/opt/ros/noetic/lib二者中都有ros相关的库，二者的区别：</p>
 <ul>
-<li><strong>&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu：</strong></li>
+<li><strong>/usr/lib/x86_64-linux-gnu：</strong></li>
 </ul>
-<ol>
+<ol type="1">
 <li><em>这是系统共享库的默认存储位置。它包含了与操作系统和其他软件包共享的标准系统库</em></li>
 <li><em>ROS和其他软件包可能会在这个目录中寻找一些系统依赖项，以确保它们能够与操作系统正常交互</em></li>
 <li><em>ROS本身的核心库通常不会放在这个目录下，因为它们是ROS的一部分，而不是操作系统的一部分</em></li>
 </ol>
 <ul>
-<li><strong>&#x2F;opt&#x2F;ros&#x2F;noetic&#x2F;lib</strong></li>
+<li><strong>/opt/ros/noetic/lib</strong></li>
 </ul>
-<ol>
+<ol type="1">
 <li><em>这是ROS的安装目录，包含了ROS特定的库和二进制文件</em></li>
 <li><em>在这个目录中，您会找到ROS的核心库、ROS工具、ROS节点等等。这些库是ROS运行所必需的</em></li>
 <li><em>当编译和运行ROS程序时，链接器和运行时系统会查找这个目录中的库来确保ROS程序能够正常运行</em></li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<h2 id="4-关于本文"><a href="#4-关于本文" class="headerlink" title="4. 关于本文"></a>4. 关于本文</h2><p>本文最初写作于幕布，用于记录使用VSCode进行代码调试运行的方法，由于网上关于此类问题的教程杂乱无章，特此记录。</p>
+<h2 id="关于本文">4. 关于本文</h2>
+<p>本文最初写作于幕布，用于记录使用VSCode进行代码调试运行的方法，由于网上关于此类问题的教程杂乱无章，特此记录。</p>
 <p>本文的写作风格非常稚嫩，写作本文时我接触Ubuntu系统不久，现在看来其实有很多不够深入的地方，但是对于当时的我来说，这篇文章确实对我以及我的同学们起到了一定的帮助作用。</p>
 <p>最后，希望大家多走debug之路，其实自己的能力就是在解决bug中一点点进步的。</p>
 ]]></content>
@@ -543,251 +1186,6 @@
       </categories>
       <tags>
         <tag>VSCode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>技术笔记-卡尔曼滤波</title>
-    <url>/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
-    <content><![CDATA[<h1 id="状态估计-卡尔曼滤波器-State-Estimation-Kalman-Filter"><a href="#状态估计-卡尔曼滤波器-State-Estimation-Kalman-Filter" class="headerlink" title="状态估计 - 卡尔曼滤波器 (State Estimation - Kalman Filter)"></a>状态估计 - 卡尔曼滤波器 (State Estimation - Kalman Filter)</h1><hr>
-<h2 id="01-概述"><a href="#01-概述" class="headerlink" title="01. 概述"></a>01. 概述</h2><h3 id="1-1-为什么要使用卡尔曼滤波器"><a href="#1-1-为什么要使用卡尔曼滤波器" class="headerlink" title="1.1 为什么要使用卡尔曼滤波器?"></a>1.1 为什么要使用卡尔曼滤波器?</h3><p>工程中面临的“不确定性”主要体现在以下三个方面：</p>
-<ol>
-<li><strong>不存在完美的数学模型：</strong> 物理世界太复杂，模型总是基于各种前提进行简化的。</li>
-<li><strong>系统的扰动不可控：</strong> 如风、摩擦、打滑、电流波动等。</li>
-<li><strong>测量传感器存在误差：</strong> 噪声是常态，传感器的读数总在跳变。</li>
-</ol>
-<p><strong>核心定义：</strong><br>一种最优化的递归数字处理算法，在存在噪声的数据中估计系统的最优状态。</p>
-<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 $Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
-<p><strong>测量数据示例：</strong></p>
-<div align="center">
-
-<table>
-<thead>
-<tr>
-<th align="center">测量次数</th>
-<th align="center">测量结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">50.1 mm</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">50.2 mm</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">49.8 mm</td>
-</tr>
-<tr>
-<td align="center">…</td>
-<td align="center">…</td>
-</tr>
-</tbody></table>
-</div>
-
-<p><strong>如何得到真实直径？</strong><br>一个很自然的做法是：<strong>取平均值</strong>。</p>
-<p>$$<br>\hat{x}<em>{k} &#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k})<br>$$</p>
-<p>将其转化为<strong>递归形式</strong>：</p>
-<p>$$<br>\begin{aligned}<br>\hat{x}<em>{k} &amp;&#x3D; \frac{1}{k}(z</em>{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{1}{k} \cdot \frac{k-1}{k-1}(z_{1} + z_{2} + \dots + z_{k-1}) + \frac{1}{k}z_{k} \<br>&amp;&#x3D; \frac{k-1}{k}\hat{x}<em>{k-1} + \frac{1}{k}z</em>{k} \<br>&amp;&#x3D; \hat{x}<em>{k-1} + \frac{1}{k}(z</em>{k} - \hat{x}_{k-1})<br>\end{aligned}<br>$$</p>
-<p><strong>化为更一般的形式：</strong></p>
-<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + K_{k}(z_{k} - \hat{x}_{k-1})<br>$$</p>
-<ul>
-<li><strong>含义：</strong> 当前的估计值 &#x3D; 上一次的估计值 + 系数 $\times$ (当前的测量值 - 上一次的估计值)。</li>
-<li><strong>系数 $K_k$：</strong> Kalman Gain，即卡尔曼增益&#x2F;因数。</li>
-<li>在上述硬币例子中，$K_k &#x3D; 1&#x2F;k$，即对应均值滤波。</li>
-</ul>
-<hr>
-<h2 id="02-初识卡尔曼滤波"><a href="#02-初识卡尔曼滤波" class="headerlink" title="02. 初识卡尔曼滤波"></a>02. 初识卡尔曼滤波</h2><h3 id="2-1-单变量卡尔曼滤波的一般流程"><a href="#2-1-单变量卡尔曼滤波的一般流程" class="headerlink" title="2.1 单变量卡尔曼滤波的一般流程"></a>2.1 单变量卡尔曼滤波的一般流程</h3><p><strong>定义：</strong></p>
-<ul>
-<li><strong>估计误差：</strong> $e_{EST}$</li>
-<li><strong>测量误差：</strong> $e_{MEA}$</li>
-<li><strong>卡尔曼增益：</strong> $K_{k} &#x3D; \frac{e_{EST_{k-1}}}{e_{EST_{k-1}} + e_{MEA_{k}}}$</li>
-</ul>
-<p><strong>分析：</strong></p>
-<ol>
-<li>若 $e_{EST} \gg e_{MEA}$，则 $K_k \rightarrow 1$，此时 $\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + z_{k} - \hat{x}<em>{k-1} &#x3D; z</em>{k}$（更相信测量值）。</li>
-<li>若 $e_{EST} \ll e_{MEA}$，则 $K_k \rightarrow 0$，此时 $\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1}$（更相信上一次的估计值）。</li>
-</ol>
-<p><strong>计算步骤：</strong></p>
-<ol>
-<li>计算卡尔曼增益 $K_k$。</li>
-<li>计算当前估计值：$\hat{x}<em>{k} &#x3D; \hat{x}</em>{k-1} + K_{k}(z_{k} - \hat{x}_{k-1})$。</li>
-<li>更新估计误差：$e_{EST_k} &#x3D; (1 - K_{k})e_{EST_{k-1}}$。</li>
-</ol>
-<h3 id="2-2-例1：硬币测量计算"><a href="#2-2-例1：硬币测量计算" class="headerlink" title="2.2 例1：硬币测量计算"></a>2.2 例1：硬币测量计算</h3><p>设定：实际长度 $x&#x3D;50mm$，初始估计 $\hat{x}<em>0&#x3D;40mm$，初始估计误差 $e</em>{EST_0}&#x3D;5mm$，测量误差 $e_{MEA}&#x3D;3mm$。</p>
-<table>
-<thead>
-<tr>
-<th>k</th>
-<th>测量值$z_k$</th>
-<th>卡尔曼增益$K_k$</th>
-<th>估计值$\hat{x}_k$</th>
-<th>估计误差$e_{EST_k}$</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0</td>
-<td>-</td>
-<td>-</td>
-<td>40</td>
-<td>5</td>
-</tr>
-<tr>
-<td>1</td>
-<td>51</td>
-<td>$5&#x2F;(5+3)&#x3D;0.625$</td>
-<td>$40+0.625(51-40)&#x3D;46.875$</td>
-<td>$(1-0.625) \times 5 &#x3D; 1.875$</td>
-</tr>
-<tr>
-<td>2</td>
-<td>48</td>
-<td>$1.875&#x2F;(1.875+3)&#x3D;0.385$</td>
-<td>$46.875+0.385(48-46.875)&#x3D;47.320$</td>
-<td>$(1-0.385) \times 1.875 &#x3D; 1.153$</td>
-</tr>
-<tr>
-<td>3</td>
-<td>52</td>
-<td>$1.153&#x2F;(1.153+3)&#x3D;0.278$</td>
-<td>$47.320+0.278(52-47.320)&#x3D;48.621$</td>
-<td>$(1-0.278) \times 1.153 &#x3D; 0.832$</td>
-</tr>
-</tbody></table>
-<h3 id="2-3-例2：数据融合-Data-Fusion"><a href="#2-3-例2：数据融合-Data-Fusion" class="headerlink" title="2.3 例2：数据融合 (Data Fusion)"></a>2.3 例2：数据融合 (Data Fusion)</h3><p>假设使用视觉里程计 (VO) 和惯性里程计 (IO) 分别进行机器人定位。</p>
-<ul>
-<li>$Z_{vo} &#x3D; 30, \sigma_{vo} &#x3D; 2$</li>
-<li>$Z_{io} &#x3D; 32, \sigma_{io} &#x3D; 4$</li>
-</ul>
-<p><strong>问题分析：</strong><br>以 VO 数据为测量，IO 数据为预测（假设 IO 频率更高）。<br>根据卡尔曼滤波公式：$\hat{z} &#x3D; z_{vo} + K(z_{io} - z_{vo})$，其中 $K \in [0, 1]$。</p>
-<p><strong>目标：</strong> 求 $K$ 使 $\sigma_{\hat{z}}^2$（即 $Var(\hat{z})$）最小。</p>
-<p><strong>推导过程：</strong></p>
-<p>$$<br>\begin{aligned}<br>\sigma_{\hat{z}}^2 &amp;&#x3D; Var(\hat{z}) &#x3D; Var(z_{vo} + K(z_{io} - z_{vo})) \<br>&amp;&#x3D; Var((1-K)z_{vo} + Kz_{io}) \<br>&amp;&#x3D; (1-K)^2\sigma_{vo}^2 + K^2\sigma_{io}^2<br>\end{aligned}<br>$$</p>
-<p>令 $\frac{d\sigma_{\hat{z}}^2}{dK} &#x3D; 0$，有：</p>
-<p>$$<br>2(1-K)(-1)\sigma_{vo}^2 + 2K\sigma_{io}^2 &#x3D; 0 \<br>2\sigma_{io}^2 K - (1-K)2\sigma_{vo}^2 &#x3D; 0<br>$$</p>
-<p>解得：</p>
-<p>$$<br>K &#x3D; \frac{\sigma_{vo}^2}{\sigma_{vo}^2 + \sigma_{io}^2} &#x3D; \frac{2^2}{2^2+4^2} &#x3D; 0.2<br>$$</p>
-<p><strong>计算结果：</strong></p>
-<p>$$<br>\hat{z} &#x3D; 30 + 0.2 \times (32-30) &#x3D; 30.4<br>$$</p>
-<p><strong>验证标准差：</strong></p>
-<p>$$<br>\sigma_{\hat{z}} &#x3D; \sqrt{(1-0.2)^2 \cdot 2^2 + 0.2^2 \cdot 4^2} &#x3D; \sqrt{3.2} &#x3D; 1.79<br>$$</p>
-<p>结果小于 $\sigma_{vo}$ (2) 和 $\sigma_{io}$ (4)，说明融合后的精度提高了。<br><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.png" alt="查看"></p>
-<h2 id="03-协方差矩阵与状态空间-Covariance-Matrix-State-Space"><a href="#03-协方差矩阵与状态空间-Covariance-Matrix-State-Space" class="headerlink" title="03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)"></a>03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2><h3 id="3-1-协方差矩阵"><a href="#3-1-协方差矩阵" class="headerlink" title="3.1 协方差矩阵"></a>3.1 协方差矩阵</h3><p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
-<ul>
-<li>在刚才的例子中，VO 与 IO 互相独立，所以在融合时只考虑它们各自的方差即可。</li>
-<li>但若在数据融合时二者（或更多）存在关联，在融合时就必须考虑这种关联，具体的联动关系则以协方差矩阵来描述。</li>
-</ul>
-<p><strong>定义公式：</strong></p>
-<p>$$<br>\sigma_{x_1 x_2} &#x3D; Cov(x_1, x_2) &#x3D; E[(x_1 - E(x_1))(x_2 - E(x_2))] &#x3D; E(x_1 x_2) - E(x_1)E(x_2)<br>$$</p>
-<p><strong>矩阵形式：</strong><br>对于随机变量向量 $X &#x3D; \begin{bmatrix} x_1 \ x_2 \end{bmatrix}$，协方差矩阵为：</p>
-<p>$$<br>C(X) &#x3D; E[(X - E(X))(X - E(X))^T] &#x3D; \begin{bmatrix} \sigma_{x_1}^2 &amp; \sigma_{x_1 x_2} \ \sigma_{x_2 x_1} &amp; \sigma_{x_2}^2 \end{bmatrix}<br>$$</p>
-<h3 id="3-2-状态空间表达"><a href="#3-2-状态空间表达" class="headerlink" title="3.2 状态空间表达"></a>3.2 状态空间表达</h3><p><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E5%BC%B9%E7%B0%A7%E9%98%BB%E5%B0%BC%E7%B3%BB%E7%BB%9F.png" alt="查看"></p>
-<p>以弹簧-阻尼-质量块系统为例，通过受力分析建立系统的数学表达：</p>
-<p>$$<br>m\ddot{x} + B\dot{x} + kx &#x3D; F(u:input)<br>$$</p>
-<p>即：</p>
-<p>$$<br>\ddot{x} &#x3D; \frac{1}{m}u - \frac{B}{m}\dot{x} - \frac{k}{m}x<br>$$</p>
-<p><strong>选取状态变量：</strong><br>令 $x_1 &#x3D; x$ (位移)，$x_2 &#x3D; \dot{x}$ (速度)。<br>则一阶微分方程组为：</p>
-<p>$$<br>\begin{cases}<br>\dot{x}_1 &#x3D; x_2 \<br>\dot{x}_2 &#x3D; \frac{1}{m}u - \frac{B}{m}x_2 - \frac{k}{m}x_1<br>\end{cases}<br>$$</p>
-<p><strong>矩阵形式 (连续系统)：</strong></p>
-<p>$$<br>\begin{bmatrix} \dot{x}_1 \ \dot{x}_2 \end{bmatrix} &#x3D;<br>\begin{bmatrix} 0 &amp; 1 \ -\frac{k}{m} &amp; -\frac{B}{m} \end{bmatrix}<br>\begin{bmatrix} x_1 \ x_2 \end{bmatrix} +<br>\begin{bmatrix} 0 \ \frac{1}{m} \end{bmatrix} u<br>$$</p>
-<p>即 $\dot{X}(t) &#x3D; AX(t) + Bu(t)$。</p>
-<p><strong>对应的离散形式：</strong></p>
-<p>$$<br>\begin{cases}<br>X_k &#x3D; AX_{k-1} + Bu_{k-1} + w_{k-1} \<br>Z_k &#x3D; HX_k + v_k<br>\end{cases}<br>$$</p>
-<p>该方程体现了上一步到当前的变化。</p>
-<p><strong>噪声定义：</strong></p>
-<ul>
-<li><strong>过程噪声：</strong> $w \sim N(0, Q)$</li>
-<li><strong>测量噪声：</strong> $v \sim N(0, R)$<br>其中 $Q$ 和 $R$ 分别为对应的协方差矩阵。卡尔曼滤波器的目的就是从不太准确的估计结果 $X_k$ 和也不太准确的测量结果 $Z_k$ 中，估计得到一个相对较准的结果。</li>
-</ul>
-<h2 id="04-卡尔曼滤波的数学推导-Mathematical-Derivation-of-Kalman-Filter"><a href="#04-卡尔曼滤波的数学推导-Mathematical-Derivation-of-Kalman-Filter" class="headerlink" title="04. 卡尔曼滤波的数学推导 (Mathematical Derivation of Kalman Filter)"></a>04. 卡尔曼滤波的数学推导 (Mathematical Derivation of Kalman Filter)</h2><h3 id="4-1-卡尔曼增益的推导-Derivation-of-Kalman-Gain"><a href="#4-1-卡尔曼增益的推导-Derivation-of-Kalman-Gain" class="headerlink" title="4.1 卡尔曼增益的推导 (Derivation of Kalman Gain)"></a>4.1 卡尔曼增益的推导 (Derivation of Kalman Gain)</h3><p>对于状态空间方程:</p>
-<p>$$<br>\begin{cases}<br>X_{k} &#x3D; AX_{k-1} + Bu_{k-1} + w_{k-1}, &amp; P(w) \sim (0, Q) \<br>Z_{k} &#x3D; HX_{k} + v_{k}, &amp; P(v) \sim (0, R)<br>\end{cases}<br>$$</p>
-<p><strong>过程噪声协方差矩阵 $Q$ (以二维为例):</strong></p>
-<p>$$<br>Q &#x3D; E(ww^{T}) &#x3D; \begin{bmatrix} \sigma_{w_{1}}^{2} &amp; 0 \ 0 &amp; \sigma_{w_{2}}^{2} \end{bmatrix}<br>$$</p>
-<p>(假设变量间相互独立，且期望为0)</p>
-<p><strong>测量噪声协方差矩阵 $R$:</strong></p>
-<p>$$<br>R &#x3D; \begin{bmatrix} \sigma_{v_{1}}^{2} &amp; 0 \ 0 &amp; \sigma_{v_{2}}^{2} \end{bmatrix}<br>$$</p>
-<p><strong>先验与后验状态估计:</strong><br>由于噪声项无法建模，我们需要定义：</p>
-<ul>
-<li><strong>先验状态估计 (Predicted&#x2F;A Priori):</strong> $\hat{x}<em>{k}^{-} &#x3D; A\hat{x}</em>{k-1} + Bu_{k-1}$<ul>
-<li>这是“算出来”的值，基于上一时刻的后验估计进行预测。</li>
-</ul>
-</li>
-<li><strong>测量估计:</strong> $\hat{x}<em>{k</em>{mea}} &#x3D; H^{-1}z_{k}$ (理想化表达，实际通过增益融合)</li>
-</ul>
-<p><strong>后验状态估计 (Corrected&#x2F;A Posteriori):</strong><br>沿用递归思想，定义后验状态估计为预测值与测量新息(Innovation)的加权和：</p>
-<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k}^{-} + K_{k}(Z_{k} - H\hat{x}_{k}^{-})<br>$$</p>
-<p>其中 $K_k$ 为待求的卡尔曼增益。</p>
-<p>[cite_start]<strong>目标:</strong> 寻找 $K_k$，使得估计值 $\hat{x}_k$ 逼近真实值 $x_k$，即误差 $e_k &#x3D; x_k - \hat{x}_k$ 的方差最小 [cite: 202, 207]。</p>
-<p>[cite_start]<strong>寻找最优增益 $K_k$[cite: 213, 217]:</strong><br>定义误差的协方差矩阵 $P_k &#x3D; E[e_k e_k^T]$。若要误差最小，则需矩阵 $P_k$ 的迹 $tr(P_k)$ 最小。</p>
-<p>展开 $P_k$:</p>
-<p>$$<br>\begin{aligned}<br>P_{k} &amp;&#x3D; E[(x_{k} - \hat{x}<em>{k})(x</em>{k} - \hat{x}<em>{k})^{T}] \<br>&amp;&#x3D; (I - K</em>{k}H)P_{k}^{-}(I - K_{k}H)^{T} + K_{k}RK_{k}^{T}<br>\end{aligned}<br>$$</p>
-<p>对 $K_k$ 求导并令其为 0:<br>利用矩阵求导公式 $\frac{d tr(ABA^T)}{dA} &#x3D; 2AB$，解得卡尔曼增益公式：</p>
-<p>$$<br>K_{k} &#x3D; \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}<br>$$</p>
-<hr>
-<h3 id="4-2-误差协方差矩阵推导-Derivation-of-Error-Covariance-Matrix"><a href="#4-2-误差协方差矩阵推导-Derivation-of-Error-Covariance-Matrix" class="headerlink" title="4.2 误差协方差矩阵推导 (Derivation of Error Covariance Matrix)"></a>4.2 误差协方差矩阵推导 (Derivation of Error Covariance Matrix)</h3><p>在上述推导中，先验误差协方差矩阵 $P_k^-$ 仍是未知的，需要从上一时刻递推得到。</p>
-<p><strong>先验误差协方差矩阵 $P_k^-$ :</strong><br>由 $e_{k}^{-} &#x3D; Ae_{k-1} + w_{k-1}$，可得：</p>
-<p>$$<br>P_{k}^{-} &#x3D; E[(Ae_{k-1} + w_{k-1})(Ae_{k-1} + w_{k-1})^{T}] &#x3D; AP_{k-1}A^{T} + Q<br>$$</p>
-<p><strong>后验误差协方差矩阵 $P_k$ (更新):</strong><br>将求得的最优 $K_k$ 代入之前 $P_k$ 的展开式，化简可得：</p>
-<p>$$<br>P_{k} &#x3D; (I - K_{k}H)P_{k}^{-}<br>$$</p>
-<p>该公式用于更新当前时刻的误差协方差，以便在下一时刻作为 $P_{k-1}$ 使用。</p>
-<hr>
-<h3 id="4-3-完整的卡尔曼滤波流程-Summary-of-KF-Algorithm"><a href="#4-3-完整的卡尔曼滤波流程-Summary-of-KF-Algorithm" class="headerlink" title="4.3 完整的卡尔曼滤波流程 (Summary of KF Algorithm)"></a>4.3 完整的卡尔曼滤波流程 (Summary of KF Algorithm)</h3><p>至此，得到完整的卡尔曼滤波 5 个核心公式:</p>
-<p><strong>I. 预测 (Prediction &#x2F; Time Update)</strong></p>
-<ol>
-<li><strong>计算先验状态估计:</strong><br>$$<br>\hat{x}<em>{k}^{-} &#x3D; A\hat{x}</em>{k-1} + Bu_{k-1}<br>$$</li>
-<li><strong>计算先验误差协方差矩阵:</strong><br>$$<br>P_{k}^{-} &#x3D; AP_{k-1}A^{T} + Q<br>$$</li>
-</ol>
-<p><strong>II. 校正 (Correction &#x2F; Measurement Update)</strong><br>3.  <strong>计算卡尔曼增益:</strong></p>
-<p>$$<br>K_{k} &#x3D; \frac{P_{k}^{-}H^{T}}{HP_{k}^{-}H^{T} + R}<br>$$</p>
-<p><strong>计算后验状态估计:</strong></p>
-<p>$$<br>\hat{x}<em>{k} &#x3D; \hat{x}</em>{k}^{-} + K_{k}(z_{k} - H\hat{x}_{k}^{-})<br>$$</p>
-<p><strong>更新后验误差协方差矩阵:</strong></p>
-<p>$$<br>P_{k} &#x3D; (I - K_{k}H)P_{k}^{-}<br>$$</p>
-<hr>
-<h2 id="05-扩展卡尔曼滤波-Extended-Kalman-Filter-EKF"><a href="#05-扩展卡尔曼滤波-Extended-Kalman-Filter-EKF" class="headerlink" title="05. 扩展卡尔曼滤波 (Extended Kalman Filter, EKF)"></a>05. 扩展卡尔曼滤波 (Extended Kalman Filter, EKF)</h2><p>对于非线性系统:</p>
-<p>$$<br>\begin{cases}<br>x_{k} &#x3D; f(x_{k-1}, u_{k-1}, w_{k-1}) \<br>z_{k} &#x3D; h(x_{k}, v_{k})<br>\end{cases}<br>$$</p>
-<p><strong>核心思想:</strong><br>应用<strong>泰勒展开 (Taylor Expansion)</strong> 对非线性函数 $f$ 和 $h$ 进行线性化近似。</p>
-<p><strong>线性化结果:</strong></p>
-<p>$$<br>\begin{cases}<br>x_{k} \approx \tilde{x}<em>{k} + A</em>{k}(x_{k-1} - \hat{x}<em>{k-1}) + Ww</em>{k-1} \<br>z_{k} \approx \tilde{z}<em>{k} + H</em>{k}(x_{k} - \tilde{x}<em>{k}) + Vv</em>{k}<br>\end{cases}<br>$$</p>
-<p>其中 $A, W, H, V$ 分别为对应的<strong>雅可比矩阵 (Jacobian Matrices)</strong> 。</p>
-<p>相比于线性卡尔曼滤波，EKF 的主要区别在于每一步都需要计算雅可比矩阵来更新状态转移矩阵和观测矩阵。</p>
-]]></content>
-      <categories>
-        <category>教程</category>
-        <category>技能学习</category>
-      </categories>
-      <tags>
-        <tag>kalman</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生活记录|分享一组生活的照片</title>
-    <url>/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/</url>
-    <content><![CDATA[<p>最近好喜欢到处拍拍拍，如果能通过相机表达出看到那些景色时的心情真的是一件很能令我满足的事情。</p>
-<p><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/001.jpg" alt="001"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/002.jpg" alt="002"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/003.jpg" alt="003"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/004.jpg" alt="004"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/005.jpg" alt="005"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/006.jpg" alt="006"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/007.jpg" alt="007"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/008.jpg" alt="008"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/009.jpg" alt="009"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/010.jpg" alt="010"><br><img src="/2025/04/30/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95-%E5%88%86%E4%BA%AB%E4%B8%80%E7%BB%84%E7%94%9F%E6%B4%BB%E7%9A%84%E7%85%A7%E7%89%87/012.jpg" alt="012"></p>
-]]></content>
-      <tags>
-        <tag>生活记录</tag>
-        <tag>摄影</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>阅读分享|勇敢结束的人会被奖励一个新的开始</title>
-    <url>/2025/06/03/%E9%98%85%E8%AF%BB%E5%88%86%E4%BA%AB-%E5%8B%87%E6%95%A2%E7%BB%93%E6%9D%9F%E7%9A%84%E4%BA%BA%E4%BC%9A%E8%A2%AB%E5%A5%96%E5%8A%B1%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<h3 id="“我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”"><a href="#“我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”" class="headerlink" title="“我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”"></a>“我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”</h3><p>村上春树说：“我动了离开你的念头，不是因为你不好，也不是因为不爱了，只是你对我的态度，让我觉得你的世界并不缺我。其实我可以厚着脸皮在纠缠你，但是没有任何意义。</p>
-<p>因为和你在一起的时候，我的状态不好，会激发我的脆弱焦躁和极度不安，会不断吸引出我人格里最不好的一面，与其和你在一起相互消耗，不如就算了吧。</p>
-<p>内心期待的东西一点点落空，慢慢就不想要了，重复的话也不想再说了，对不起的事多了也无所谓，当我发现你一点都不理解我的委屈时，我一句话也不想说了。</p>
-<p>你有你的立场，我有我的底线，我终究还是发现我不应该迷失自我去爱你。</p>
-<p>我不想纠结在没有意义的事情上。伸手要的糖和你主动给的是两个味道。我常常深思熟虑，考虑这份关系，还要不要继续，反复问自己，其实我一点也不后悔遇见你，但是我们终究还是没翻过那座山。我在很平常的一天放弃了一个很重要的人，虽然有点舍不得，但总是要告一段落的。”</p>
-<p><em>tips: 内容转载自网络，侵权请联系删除。</em></p>
-]]></content>
-      <categories>
-        <category>分享</category>
-      </categories>
-      <tags>
-        <tag>阅读</tag>
-        <tag>村上春树</tag>
       </tags>
   </entry>
 </search>
