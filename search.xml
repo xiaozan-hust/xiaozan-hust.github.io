@@ -556,7 +556,19 @@
 <li><strong>测量传感器存在误差：</strong> 噪声是常态，传感器的读数总在跳变。</li>
 </ol>
 <p><strong>核心定义：</strong><br>一种最优化的递归数字处理算法，在存在噪声的数据中估计系统的最优状态。</p>
-<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 \\$Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
+<span>
+$$
+\begin{aligned}
+V(s)& =\mathbb{E}[G_t|S_t=s] \\
+&=\mathbb{E}[R_t+\gamma R_{t+1}+\gamma^2R_{t+2}+\ldots|S_t=s] \\
+&=\mathbb{E}[R_t+\gamma(R_{t+1}+\gamma R_{t+2}+\ldots)|S_t=s] \\
+&=\mathbb{E}[R_t+\gamma G_{t+1}|S_t=s] \\
+&=\mathbb{E}[R_t+\gamma V(S_{t+1})|S_t=s]
+\end{aligned}
+$$
+</span>
+
+<h3 id="1-2-一个形象的例子"><a href="#1-2-一个形象的例子" class="headerlink" title="1.2 一个形象的例子"></a>1.2 一个形象的例子</h3><p>假设要测量一个硬币的直径，用一把直尺对该硬币进行多次测量，其结果为 $Z_k$（下标 $k$ 表示第 $k$ 次测量）。由于测量误差和直尺制造误差，我们无法直接得到真实结果。</p>
 <p><strong>测量数据示例：</strong></p>
 <div align="center">
 
