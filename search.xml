@@ -672,7 +672,7 @@
 <p>$$<br>\hat{z} &#x3D; 30 + 0.2 \times (32-30) &#x3D; 30.4<br>$$</p>
 <p><strong>验证标准差：</strong></p>
 <p>$$<br>\sigma_{\hat{z}} &#x3D; \sqrt{(1-0.2)^2 \cdot 2^2 + 0.2^2 \cdot 4^2} &#x3D; \sqrt{3.2} &#x3D; 1.79<br>$$</p>
-<p>结果小于 $\sigma_{vo}$ (2) 和 $\sigma_{io}$ (4)，说明融合后的精度提高了。</p>
+<p>结果小于 $\sigma_{vo}$ (2) 和 $\sigma_{io}$ (4)，说明融合后的精度提高了。<br><img src="/2025/12/22/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83.png" alt="查看"></p>
 <h2 id="03-协方差矩阵与状态空间-Covariance-Matrix-State-Space"><a href="#03-协方差矩阵与状态空间-Covariance-Matrix-State-Space" class="headerlink" title="03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)"></a>03. 协方差矩阵与状态空间 (Covariance Matrix &amp; State Space)</h2><h3 id="3-1-协方差矩阵"><a href="#3-1-协方差矩阵" class="headerlink" title="3.1 协方差矩阵"></a>3.1 协方差矩阵</h3><p>将方差、协方差在一个矩阵中表现出来，反映了变量间的联动关系。</p>
 <ul>
 <li>在刚才的例子中，VO 与 IO 互相独立，所以在融合时只考虑它们各自的方差即可。</li>
